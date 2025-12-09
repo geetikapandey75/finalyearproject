@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Find a Lawyer | Legal Assist</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+  <!-- Header -->
+  <header class="bg-blue-900 text-white">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-bold">Legal Assist</h1>
+        <p class="text-sm text-blue-200">Find the right lawyer for your case</p>
+      </div>
+      <nav class="flex gap-3">
+        <a href="appointment-form.html" class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-4 py-2 rounded-full shadow hover:from-yellow-300 hover:to-yellow-400 transition">Book an Appointment</a>
+        <a href="find-lawyer.html" class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-4 py-2 rounded-full shadow hover:from-yellow-300 hover:to-yellow-400 transition">Find a Lawyer</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Search Filters -->
+  <section class="max-w-6xl mx-auto px-6 py-8">
+    <div class="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-2">Search & Filter Lawyers</h2>
+      <p class="text-sm text-gray-600 mb-6">Search by name, city or case type. Filter results to quickly find a lawyer who fits your needs.</p>
+
+      <div class="grid gap-4 sm:grid-cols-3">
+        <input id="searchInput" type="search" placeholder="Search name or keyword (e.g., property, family)"
+          class="col-span-2 p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none" />
+
+        <div class="flex gap-3">
+          <select id="areaFilter" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
+            <option value="">All Areas</option>
+            <option value="Civil">Civil</option>
+            <option value="Family">Family</option>
+            <option value="Criminal">Criminal</option>
+            <option value="Property">Property</option>
+            <option value="Corporate">Corporate</option>
+            <option value="Traffic">Traffic</option>
+          </select>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3 sm:col-span-3">
+          <select id="cityFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
+            <option value="">All Cities</option>
+            <option>Hyderabad</option>
+            <option>Secunderabad</option>
+            <option>Visakhapatnam</option>
+            <option>Bengaluru</option>
+          </select>
+
+          <select id="expFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
+            <option value="">Experience</option>
+            <option value="1">0-2 years</option>
+            <option value="3">3-6 years</option>
+            <option value="7">7+ years</option>
+          </select>
+        </div>
+
+        <div class="sm:col-span-3 flex gap-3 justify-end">
+          <button id="clearBtn" class="px-4 py-2 bg-white border rounded-lg shadow hover:bg-gray-50">Clear</button>
+          <button id="searchBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">Search</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <main class="max-w-6xl mx-auto px-6 pb-12">
+    <div id="results" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Lawyer cards injected here -->
+    </div>
+
+    <!-- Empty state -->
+    <div id="noResults" class="hidden bg-white rounded-lg p-8 text-center mt-8 shadow">
+      <p class="text-gray-600">No lawyers found. Try changing your filters or search terms.</p>
+    </div>
+  </main>
+
+  <!-- Lawyer Profiles Section -->
+<section id="lawyers" class="bg-white rounded-xl shadow-lg p-8 my-12">
+  <h3 class="text-2xl font-bold mb-6 text-center">Our Lawyers</h3>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    
+    <!-- Lawyer Card -->
+    <div class="bg-blue-50 rounded-lg p-6 shadow-md">
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="text-xl font-semibold">Adv. Priya Sharma</h4>
+        <span class="px-3 py-1 rounded-full text-sm font-medium
+          bg-green-200 text-green-800">Available Now</span>
+      </div>
+      <p><strong>Success Rate:</strong> 87%</p>
+      <p><strong>Court Affiliations:</strong> High Court, District Court</p>
+      <p><strong>Education:</strong> LL.B (Delhi University), LL.M (Harvard)</p>
+      <p><strong>Bar Membership No:</strong> DL12345</p>
+      <p><strong>Languages:</strong> English, Hindi, Telugu</p>
+      <p><strong>Accepted Payments:</strong> UPI, Credit/Debit Card, PayPal</p>
+      <p class="mt-2 italic text-gray-700">Notable Cases: Successfully defended landmark traffic violation cases.</p>
+      <button class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-400 font-semibold">
+        Free Consultation
+      </button>
+    </div>
+
+    <!-- Lawyer Card -->
+    <div class="bg-blue-50 rounded-lg p-6 shadow-md">
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="text-xl font-semibold">Adv. Rohit Sharma</h4>
+        <span class="px-3 py-1 rounded-full text-sm font-medium
+          bg-orange-200 text-orange-800">Busy</span>
+      </div>
+      <p><strong>Success Rate:</strong> 92%</p>
+      <p><strong>Court Affiliations:</strong> Supreme Court, High Court</p>
+      <p><strong>Education:</strong> LL.B (Mumbai University), LL.M (Oxford)</p>
+      <p><strong>Bar Membership No:</strong> MH98765</p>
+      <p><strong>Languages:</strong> English, Marathi, Hindi</p>
+      <p><strong>Accepted Payments:</strong> UPI, Credit/Debit Card, Net Banking</p>
+      <p class="mt-2 italic text-gray-700">Notable Cases: Successfully represented clients in traffic fines appeals and license disputes.</p>
+      <button class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-400 font-semibold">
+        Free Consultation
+      </button>
+    </div>
+ <div class="bg-blue-50 rounded-lg p-6 shadow-md">
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="text-xl font-semibold">Adv. Neha Gupta</h4>
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-200 text-green-800">Available Now</span>
+      </div>
+      <p><strong>Success Rate:</strong> 89%</p>
+      <p><strong>Court Affiliations:</strong> District Court, Family Court</p>
+      <p><strong>Education:</strong> LL.B (Delhi University)</p>
+      <p><strong>Bar Membership No:</strong> DL67890</p>
+      <p><strong>Languages:</strong> English, Hindi</p>
+      <p><strong>Accepted Payments:</strong> UPI, Credit/Debit Card</p>
+      <p class="mt-2 italic text-gray-700">Notable Cases: Successfully handled family law and traffic violation cases.</p>
+      <button class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-400 font-semibold">
+        Free Consultation
+      </button>
+    </div>
+
+    <!-- Adv. Suresh Kumar -->
+    <div class="bg-blue-50 rounded-lg p-6 shadow-md">
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="text-xl font-semibold">Adv. Suresh Kumar</h4>
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-orange-200 text-orange-800">Busy</span>
+      </div>
+      <p><strong>Success Rate:</strong> 91%</p>
+      <p><strong>Court Affiliations:</strong> High Court, Civil Court</p>
+      <p><strong>Education:</strong> LL.B (Bangalore University)</p>
+      <p><strong>Bar Membership No:</strong> KA34567</p>
+      <p><strong>Languages:</strong> English, Kannada, Hindi</p>
+      <p><strong>Accepted Payments:</strong> UPI, Net Banking</p>
+      <p class="mt-2 italic text-gray-700">Notable Cases: Successfully represented civil and traffic-related cases.</p>
+      <button class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-400 font-semibold">
+        Free Consultation
+      </button>
+    </div>
+
+    <!-- Adv. Anita Deshmukh -->
+    <div class="bg-blue-50 rounded-lg p-6 shadow-md">
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="text-xl font-semibold">Adv. Anita Deshmukh</h4>
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-200 text-red-800">Out of Office</span>
+      </div>
+      <p><strong>Success Rate:</strong> 85%</p>
+      <p><strong>Court Affiliations:</strong> District Court</p>
+      <p><strong>Education:</strong> LL.B (Pune University)</p>
+      <p><strong>Bar Membership No:</strong> MH11223</p>
+      <p><strong>Languages:</strong> English, Marathi</p>
+      <p><strong>Accepted Payments:</strong> Credit/Debit Card</p>
+      <p class="mt-2 italic text-gray-700">Notable Cases: Successfully handled traffic and consumer rights cases.</p>
+      <button class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-400 font-semibold">
+        Free Consultation
+      </button>
+    </div>
+
+    <!-- Adv. Manish Verma -->
+    <div class="bg-blue-50 rounded-lg p-6 shadow-md">
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="text-xl font-semibold">Adv. Manish Verma</h4>
+        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-200 text-green-800">Available Now</span>
+      </div>
+      <p><strong>Success Rate:</strong> 93%</p>
+      <p><strong>Court Affiliations:</strong> High Court, Supreme Court</p>
+      <p><strong>Education:</strong> LL.B (Delhi University), LL.M (Cambridge)</p>
+      <p><strong>Bar Membership No:</strong> DL55678</p>
+      <p><strong>Languages:</strong> English, Hindi</p>
+      <p><strong>Accepted Payments:</strong> UPI, Credit/Debit Card, PayPal</p>
+      <p class="mt-2 italic text-gray-700">Notable Cases: Successfully defended high-profile traffic and civil cases.</p>
+      <button class="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-400 font-semibold">
+        Free Consultation
+      </button>
+    </div>
+
+  </div>
+</section>
+    
+  </div>
+</section>
+  <!-- Footer -->
+  <footer class="bg-blue-900 text-white mt-12">
+    <div class="max-w-6xl mx-auto px-6 py-6 text-center">
+      <p>&copy; 2025 Legal Assist. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Data + JS -->
+  <script>
+    // Sample lawyer data
+    const lawyers = [
+      {
+        id: 1, name: "Priya Sharma", area: "Civil", city: "Hyderabad",
+        experience: 7, bio: "Specialist in family disputes, custody cases, and mediation.",
+        fee: "₹1500/hr", image: "priya sharma.jpg"
+      },
+      {
+        id: 2, name: "Rohit Sharma", area: "Civil", city: "Hyderabad",
+        experience: 5, bio: "Divorce, maintenance & inheritance matters.",
+        fee: "₹1200/hr", image: "rohit-sharma.jpg"
+      },
+      {
+        id: 3, name: "Neha Gupta", area: "Civil", city: "Secunderabad",
+        experience: 3, bio: "Bail, representation and criminal defence.",
+        fee: "₹1800/hr", image: "neha-gupta.png"
+      },
+      {
+        id: 4, name: "Suresh Kumar", area: "Civil", city: "Bengaluru",
+        experience: 12, bio: "Registered documents, title & boundary disputes.",
+        fee: "₹2000/hr", image: "suresh-kumar.png"
+      },
+      {
+    id: 5, name: "Anita Deshmuk", area: "Civil", city: "Hyderabad",
+    experience: 8, bio: "Corporate contracts, compliance, and startup legal advice.",
+    fee: "₹2200/hr", image: "anita-deshmuk.png"
+  },
+  {
+    id: 6, name: "Manish Verma", area: "Civil", city: "Bengaluru",
+    experience: 10, bio: "Criminal litigation, white-collar crimes, and appeals.",
+    fee: "₹2500/hr", image: "manish verma.jpg"
+  },
+    ];
+
+    const resultsEl = document.getElementById('results');
+    const noResultsEl = document.getElementById('noResults');
+
+    // Create lawyer card
+    // Create lawyer card
+
+function createCard(lawyer) {
+  const div = document.createElement('div');
+  div.className = 'bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden';
+
+  // Profile page for Priya is priya.html, others are lowercase-name-with-dashes.html
+  const profileFile = lawyer.name.toLowerCase().includes("priya")
+    ? "priya.html"
+    : lawyer.name.toLowerCase().replace(/\s+/g, '-') + '.html';
+
+  // Replace spaces in image filenames with dashes for better reliability
+  const imageFile = lawyer.image.toLowerCase().replace(/\s+/g, '-');
+
+  div.innerHTML = `
+    <img src="${imageFile}" alt="Photo of ${lawyer.name}" class="w-full h-48 object-cover rounded-t-xl">
+    <div class="p-5">
+      <h3 class="text-lg font-semibold text-gray-900 mb-1">${lawyer.name}</h3>
+      <p class="text-sm text-gray-600 mb-2">${lawyer.area} • ${lawyer.city} • ${lawyer.experience} yrs</p>
+      <p class="text-gray-700 mb-4">${lawyer.bio}</p>
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-medium text-blue-700">${lawyer.fee}</span>
+        <a href="${profileFile}" class="bg-yellow-400 text-black px-3 py-1.5 rounded-lg text-sm hover:bg-yellow-300">View Profile</a>
+      </div>
+    </div>
+  `;
+  return div;
+}
+
+
+
+
+    
+
+    // Render list
+    function renderList(list) {
+      resultsEl.innerHTML = '';
+      if (!list.length) {
+        noResultsEl.classList.remove('hidden');
+      } else {
+        noResultsEl.classList.add('hidden');
+        list.forEach(l => resultsEl.appendChild(createCard(l)));
+      }
+    }
+
+    // Initial render
+    renderList(lawyers);
+
+    // Apply filters
+    function applyFilters() {
+      const keyword = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+      const area = document.getElementById('areaFilter').value;
+      const city = document.getElementById('cityFilter').value;
+      const exp = document.getElementById('expFilter').value;
+
+      let filtered = lawyers.filter(l => {
+        let matches = true;
+        if (keyword) {
+          matches = (l.name + ' ' + l.bio + ' ' + l.area).toLowerCase().includes(keyword);
+        }
+        if (matches && area) matches = l.area === area;
+        if (matches && city) matches = l.city === city;
+        if (matches && exp) {
+          if (exp === '1') matches = l.experience <= 2;
+          else if (exp === '3') matches = l.experience >= 3 && l.experience <= 6;
+          else if (exp === '7') matches = l.experience >= 7;
+        }
+        return matches;
+      });
+
+      renderList(filtered);
+    }
+
+    // Events
+    document.getElementById('searchBtn').addEventListener('click', applyFilters);
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('areaFilter').value = '';
+      document.getElementById('cityFilter').value = '';
+      document.getElementById('expFilter').value = '';
+      renderList(lawyers);
+    });
+    document.getElementById('searchInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        applyFilters();
+      }
+    });
+  </script>
+  
+
+</body>
+</html>

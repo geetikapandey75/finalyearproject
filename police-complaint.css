@@ -1,0 +1,124 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+header.small-hero {
+  background-color: #1a237e;
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+header.small-hero h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+header.small-hero p {
+  font-size: 18px;
+}
+
+.info-section {
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.info-section h2 {
+  color: #1a237e;
+  margin-bottom: 15px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 20px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.service-box {
+  background-color: #ddd;
+  padding: 30px 20px;
+  border-radius: 15px;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Color classes */
+.orange { background-color: #10367d; }
+.green  { background-color: #10367d; }
+.blue   { background-color: #10367d; }
+.yellow { background-color:#10367d; }
+.pink   { background-color: #10367d; }
+.red    { background-color: #10367d; }
+
+.emergency {
+  background-color: #fff3f3;
+  border-left: 5px solid #e53935;
+  margin-top: 40px;
+}
+
+.emergency h3 {
+  color: #e53935;
+}
+
+.emergency-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #e53935;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+
+.footer {
+  background-color: #1a237e;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.footer a {
+  color: #ffccbc;
+  text-decoration: none;
+}
+
+
+.car-animation-container {
+  width: 100%;
+  height: 80px;
+  position: relative;
+  margin-bottom: -20px;
+}
+
+.animated-car {
+  position: absolute;
+  height: 60px;
+  animation: moveCar 10s linear infinite;
+  left: -200px;
+  bottom: 0;
+}
+
+@keyframes moveCar {
+  0% {
+    left: -200px;
+  }
+  100% {
+    left: 100%;
+  }
+}
+

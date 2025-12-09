@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Consultation | Legal Assist</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 font-sans text-gray-900">
+
+  
+
+  <!-- Hero Section -->
+  <section class="text-center py-16 bg-gradient-to-r from-blue-800 to-blue-600 text-white">
+    <h2 class="text-4xl font-bold mb-4">Book a Free Legal Consultation</h2>
+    <p class="mb-6 text-lg max-w-2xl mx-auto">
+      Get expert advice from our experienced lawyers for your traffic or legal concerns.
+    </p>
+  </section>
+
+  <!-- Consultation Form -->
+  <main class="container mx-auto px-6 py-12">
+    <section class="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+      <h3 class="text-2xl font-bold mb-6 text-center">Free Consultation Form</h3>
+      <form id="consultationForm" class="space-y-6">
+        <div>
+          <label class="block font-semibold mb-2">Full Name</label>
+          <input type="text" name="name" class="w-full p-4 border rounded-lg" placeholder="Enter your full name" required>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">Email Address</label>
+          <input type="email" name="email" class="w-full p-4 border rounded-lg" placeholder="Enter your email" required>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">Phone Number</label>
+          <input type="tel" name="phone" class="w-full p-4 border rounded-lg" placeholder="Enter your phone number" required>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">Select Lawyer</label>
+          <select name="lawyer" class="w-full p-4 border rounded-lg" required>
+            <option value="" disabled selected>Select a lawyer</option>
+            <option value="priya-sharma">Adv. Priya Sharma</option>
+            <option value="rahul-mehta">Adv. Rahul Mehta</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">Preferred Date & Time</label>
+          <input type="datetime-local" name="datetime" class="w-full p-4 border rounded-lg" required>
+        </div>
+        <div>
+          <label class="block font-semibold mb-2">Additional Message</label>
+          <textarea name="message" class="w-full p-4 border rounded-lg" placeholder="Describe your concern briefly" rows="4"></textarea>
+        </div>
+        <button type="submit" class="bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-400 w-full">
+          Book Consultation
+        </button>
+      </form>
+
+      <!-- Success Message -->
+      <p id="successMsg" class="mt-6 text-green-700 font-semibold hidden text-center">Your consultation request has been submitted successfully!</p>
+    </section>
+  </main>
+
+  <!-- JS to show success message -->
+  <script>
+    const form = document.getElementById('consultationForm');
+    const successMsg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Here you can add code to send the form data to backend
+      successMsg.classList.remove('hidden');
+      form.reset();
+    });
+  </script>
+
+</body>
+</html>

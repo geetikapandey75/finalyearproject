@@ -1,0 +1,371 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: #f9f9f9;
+  color: #333;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #0057d9;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  margin: 20px auto;
+  text-align: center;
+}
+.choice-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.choice-card {
+  background: #0057d9;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.choice-card:hover {
+  background: #003d9a;
+}
+/* Hero Banner Section */
+.hero{
+  background-image: url('hero-bg.jpg'); /* Rename your image file to this */
+  background-size: cover;
+  background-position: center;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: white;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 51, 0.6);
+  padding: 50px;
+  text-align: center;
+  border-radius: 12px;
+}
+
+/* Help Section */
+.help-section {
+  
+position: relative; /* Make sure it's positioned */
+  text-align: center;
+  padding: 60px 20px;
+  background-color: beige;
+  overflow: hidden;
+  
+}
+
+
+.help-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background:indigo(0, 0, 51, 0.6);
+  z-index: 0;
+}
+
+.help-section * {
+  position: relative;
+  z-index: 1;
+}
+
+
+.help-section h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+
+  color:indigo(0, 0, 51, 0.6);
+}
+
+.choice-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.choice-card {
+  background: #3f51b5; /* indigo */
+  color: white;
+  padding: 30px 50px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 20px;
+  transition: 0.3s ease;
+}
+
+.choice-card:hover {
+  background: #303f9f;
+}
+.footer {
+  background-color: #1e1e1e;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+ 
+/* Auth Section Container */
+.auth-container {
+  padding: 80px 20px;
+  background-color: #f8f9fd;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+/* Individual Form Boxes */
+.form-box {
+  background-color: white;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-box h2 {
+  margin-bottom: 20px;
+  color: #1a237e;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+/* Input Fields */
+.form-box form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* Buttons */
+.form-box form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #1a237e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: background 0.3s;
+}
+
+.form-box form button:hover {
+  background-color: #303f9f;
+}
+
+/* Links */
+.form-box p {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.form-box p a {
+  color: #1a237e;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.form-box p a:hover {
+  text-decoration: underline;
+}
+
+
+.footer a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.footer a:hover {
+  color: #ffc107; /* Optional hover color */
+}
+
+.top-links {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-size: 14px;
+}
+
+.top-links a {
+  text-decoration: none;
+  color: #333;
+  margin: 0 5px;
+}
+
+.top-links a:hover {
+  text-decoration: underline;
+}
+
+.top-features-bar {
+  background-color: #e0e0e0;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  font-size: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+.top-features-bar a {
+   text-decoration: none;
+  color: #1a237e;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.top-features-bar a:hover {
+  color: #0057d9;
+}
+.overlay {
+  background-color: rgba(0, 0, 51, 0.6);
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 12px;
+  max-width: 800px;
+}
+
+
+
+/* About Page Header */
+.about-hero {
+  background-image: url('hero-bg.jpg'); /* Replace with your actual image */
+  background-size: cover;
+  background-position: center;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: white;
+}
+
+.about-hero .overlay {
+  background-color: rgba(0, 0, 51, 0.6); /* Dark blue */
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 20px;
+  max-width: 700px;
+  margin: auto;
+}
+
+
+/* About Section Main Content */
+.about-section {
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: 40px auto;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  border-radius: 10px;
+}
+
+.about-section h2 {
+  font-size: 24px;
+  color: #1a237e;
+  margin-top: 30px;
+}
+
+.about-section p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #444;
+  margin-top: 10px;
+}
+
+.about-section ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.about-section ul li {
+  margin-bottom: 10px;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Links inside content */
+.about-section a {
+  color: #0057d9;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.about-section a:hover {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+
+
+
+/for police
+.help-section {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f9f9f9;
+}
+
+.help-section h2 {
+  font-size: 28px;
+  color: #1a237e;
+  margin-bottom: 30px;
+}
+
+.choice-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.choice-card {
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: #1a237e;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.3s, background-color 0.3s;
+  min-width: 200px;
+}
+
+.choice-card:hover {
+  background-color: #e3e6ff;
+  transform: translateY(-5px);
+}

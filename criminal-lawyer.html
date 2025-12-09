@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Legal Assist | Criminal Lawyer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+
+  <!-- Header -->
+  <header class="bg-red-900 text-white text-center p-6 shadow-md">
+    <h1 class="text-3xl font-bold tracking-wide">Legal Assist - Criminal Lawyer Services</h1>
+    <p class="text-sm mt-2 text-gray-200">Protecting Your Rights with Expert Legal Defence</p>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bg-gradient-to-r from-red-800 to-red-600 text-white p-4 flex justify-center gap-6 font-semibold shadow-md sticky top-0 z-10">
+    <a href="#services" class="bg-yellow-400 text-black px-4 py-2 rounded-full shadow hover:bg-yellow-300 transition">Services</a>
+    <a href="#tools" class="bg-yellow-400 text-black px-4 py-2 rounded-full shadow hover:bg-yellow-300 transition">Tools</a>
+    <a href="#team" class="bg-yellow-400 text-black px-4 py-2 rounded-full shadow hover:bg-yellow-300 transition">Our Team</a>
+    <a href="#contact" class="bg-yellow-400 text-black px-4 py-2 rounded-full shadow hover:bg-yellow-300 transition">Contact</a>
+  </nav>
+
+  <!-- Emergency Contact Widget -->
+  <div class="fixed top-20 right-4 z-50 bg-red-600 text-white p-4 rounded-lg shadow-2xl border-2 border-yellow-400 max-w-xs animate-pulse">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-2xl">🚨</span>
+      <h3 class="font-bold text-lg">Emergency Legal Help</h3>
+    </div>
+    <p class="text-sm mb-3">Available 24/7 for arrests & urgent matters</p>
+    <div class="space-y-2">
+      <a href="tel:+919876543210" class="block bg-yellow-400 text-black text-center px-4 py-2 rounded-full font-semibold hover:bg-yellow-300 transition">
+        📞 Call Now
+      </a>
+      <a href="https://wa.me/8897752518?text=URGENT%20-%20I%20need%20immediate%20legal%20help" target="_blank" class="block bg-green-600 text-white text-center px-4 py-2 rounded-full font-semibold hover:bg-green-700 transition">
+        💬 WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="bg-white text-black py-20 shadow-inner">
+    <div class="p-10 max-w-4xl mx-auto rounded-lg text-center bg-white shadow-lg border-t-4 border-yellow-400">
+      <h1 class="text-4xl font-bold mb-4 text-red-900">Expert Criminal Legal Defence for Individuals & Businesses</h1>
+      <p class="mb-6 text-gray-700 leading-relaxed">From arrests and bail applications to complex investigations, Legal Assist provides robust criminal defence and legal support. We ensure your rights are protected at every step.</p>
+      <a href="#contact" class="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-300 transition">Get Expert Help</a>
+    </div>
+  </section>
+
+  <!-- Animated Statistics -->
+  <section class="max-w-6xl mx-auto p-6 mt-6">
+    <h2 class="text-2xl font-semibold text-red-900 mb-4 text-center">Our Track Record</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-red-50 p-6 rounded-lg shadow-lg text-center border-t-4 border-yellow-400">
+        <p class="text-3xl font-bold text-red-900" id="casesWon">0</p>
+        <p class="text-gray-700 mt-1">Cases Won</p>
+      </div>
+      <div class="bg-red-50 p-6 rounded-lg shadow-lg text-center border-t-4 border-yellow-400">
+        <p class="text-3xl font-bold text-red-900" id="bailGranted">0</p>
+        <p class="text-gray-700 mt-1">Bail Applications Granted</p>
+      </div>
+      <div class="bg-red-50 p-6 rounded-lg shadow-lg text-center border-t-4 border-yellow-400">
+        <p class="text-3xl font-bold text-red-900" id="clientsSaved">0</p>
+        <p class="text-gray-700 mt-1">Clients Defended</p>
+      </div>
+      <div class="bg-red-50 p-6 rounded-lg shadow-lg text-center border-t-4 border-yellow-400">
+        <p class="text-3xl font-bold text-red-900" id="yearsExp">0</p>
+        <p class="text-gray-700 mt-1">Years Combined Experience</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="max-w-5xl mx-auto p-8">
+    <h2 class="text-3xl font-semibold text-red-900 mb-4">About Our Criminal Legal Team</h2>
+    <p class="text-gray-700 leading-relaxed mb-4">At Legal Assist, our Criminal Lawyers specialize in defending clients in a range of criminal matters including theft, assault, white-collar crime, and extradition cases.</p>
+    <p class="text-gray-700 leading-relaxed">We provide guidance, courtroom representation, and forensic coordination to safeguard your rights and interests.</p>
+    <div class="mt-6 flex justify-center gap-4">
+      <img src="https://via.placeholder.com/150" alt="Team photo 1" class="rounded-full shadow-lg">
+      <img src="https://via.placeholder.com/150" alt="Team photo 2" class="rounded-full shadow-lg">
+      <img src="https://via.placeholder.com/150" alt="Team photo 3" class="rounded-full shadow-lg">
+    </div>
+  </section>
+
+  <!-- Interactive Tools Section -->
+  <section id="tools" class="max-w-6xl mx-auto p-6 mt-6 space-y-6">
+    <h2 class="text-3xl font-semibold text-red-900 mb-8 text-center">Legal Tools & Resources</h2>
+
+    <!-- Bail Eligibility Calculator -->
+    <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-red-600">
+      <h3 class="text-2xl font-bold text-red-900 mb-4">🔓 Bail Eligibility Calculator</h3>
+      <p class="text-gray-600 mb-6">Answer these questions to get a preliminary assessment of bail eligibility</p>
+      
+      <div class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Type of Offense</label>
+            <select id="offenseType" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+              <option>Bailable Offense (e.g., simple hurt, theft under ₹50,000)</option>
+              <option>Non-Bailable Offense (e.g., murder, rape, serious assault)</option>
+              <option>Economic Offense (e.g., fraud, cheating)</option>
+              <option>Drug-Related Offense</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Previous Criminal Record?</label>
+            <select id="criminalRecord" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+              <option>No Previous Record</option>
+              <option>Minor Previous Offenses</option>
+              <option>Serious Previous Convictions</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Flight Risk?</label>
+            <select id="flightRisk" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+              <option>Strong Community Ties (stable address, employment)</option>
+              <option>Moderate Ties</option>
+              <option>Weak Ties or History of Absconding</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Nature of Evidence</label>
+            <select id="evidence" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+              <option>Weak/Circumstantial Evidence</option>
+              <option>Moderate Evidence</option>
+              <option>Strong/Direct Evidence</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="calculateBail()" class="w-full bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition">
+          Calculate Bail Eligibility
+        </button>
+        
+        <div id="bailResult" class="mt-4 p-4 rounded-lg hidden"></div>
+      </div>
+    </div>
+
+    <!-- Case Type Identifier -->
+    <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-yellow-400">
+      <h3 class="text-2xl font-bold text-red-900 mb-4">⚖️ Case Type Identifier</h3>
+      <p class="text-gray-600 mb-6">Describe your situation and we'll help identify the type of case</p>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">What happened?</label>
+          <select id="situation" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            <option>I was arrested by police</option>
+            <option>Someone filed a false complaint against me</option>
+            <option>I'm being investigated for financial irregularities</option>
+            <option>I was involved in a physical altercation</option>
+            <option>I'm accused of cybercrime or online fraud</option>
+            <option>Property or theft related issue</option>
+            <option>Domestic violence allegation</option>
+            <option>Drug possession or trafficking charge</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Have charges been filed?</label>
+          <select id="chargesFiled" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            <option>Yes, FIR has been filed</option>
+            <option>No, still under investigation</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Are you currently detained?</label>
+          <select id="detained" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            <option>Yes, in custody</option>
+            <option>No, but expecting arrest</option>
+            <option>No, free currently</option>
+          </select>
+        </div>
+
+        <button onclick="identifyCase()" class="w-full bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition">
+          Identify My Case Type
+        </button>
+        
+        <div id="caseTypeResult" class="mt-4 p-4 rounded-lg hidden"></div>
+      </div>
+    </div>
+
+    <!-- Your Rights Information -->
+    <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-green-600">
+      <h3 class="text-2xl font-bold text-red-900 mb-4">📋 Know Your Rights</h3>
+      <p class="text-gray-600 mb-6">Click on each situation to learn your legal rights</p>
+      
+      <div class="space-y-3">
+        <button onclick="showRights('arrest')" class="w-full text-left bg-red-50 p-4 rounded-lg hover:bg-red-100 transition border-l-4 border-red-600">
+          <span class="font-semibold text-red-900">→ Rights During Arrest</span>
+        </button>
+        <button onclick="showRights('interrogation')" class="w-full text-left bg-red-50 p-4 rounded-lg hover:bg-red-100 transition border-l-4 border-red-600">
+          <span class="font-semibold text-red-900">→ Rights During Police Interrogation</span>
+        </button>
+        <button onclick="showRights('custody')" class="w-full text-left bg-red-50 p-4 rounded-lg hover:bg-red-100 transition border-l-4 border-red-600">
+          <span class="font-semibold text-red-900">→ Rights While in Custody</span>
+        </button>
+        <button onclick="showRights('bail')" class="w-full text-left bg-red-50 p-4 rounded-lg hover:bg-red-100 transition border-l-4 border-red-600">
+          <span class="font-semibold text-red-900">→ Your Right to Bail</span>
+        </button>
+      </div>
+      
+      <div id="rightsInfo" class="mt-6 p-4 bg-gray-50 rounded-lg hidden"></div>
+    </div>
+
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="bg-white rounded-xl shadow-lg p-8 my-12">
+    <h3 class="text-2xl font-bold mb-6 text-center">Legal Services</h3>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Case Timeline -->
+      <a href="case-timeline.html" class="block bg-blue-50 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <h4 class="text-xl font-semibold mb-2">Case Timeline</h4>
+        <p class="text-gray-600">Track step-by-step updates for any legal case.</p>
+      </a>
+
+      <!-- Consultation Slot Booking -->
+      <a href="consultation-booking.html" class="block bg-blue-50 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <h4 class="text-xl font-semibold mb-2">Consultation Slot Booking</h4>
+        <p class="text-gray-600">Book an appointment with a verified lawyer.</p>
+      </a>
+
+      <!-- Case Strength Analysis -->
+      <a href="case-strength.html" class="block bg-blue-50 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <h4 class="text-xl font-semibold mb-2">Case Strength</h4>
+        <p class="text-gray-600">Get an evaluation of your case strength.</p>
+      </a>
+
+      <!-- Court Location -->
+      <a href="court-location.html" class="block bg-blue-50 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <h4 class="text-xl font-semibold mb-2">Court Location</h4>
+        <p class="text-gray-600">Find the nearest court for your legal matter.</p>
+      </a>
+
+      <!-- Legal Notice Generator -->
+      <a href="legal-notice-generator.html" class="block bg-blue-50 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <h4 class="text-xl font-semibold mb-2">Legal Notice Generator</h4>
+        <p class="text-gray-600">Generate a legally valid notice instantly.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <a href="https://wa.me/91XXXXXXXXXX" target="_blank" 
+   class="whatsapp-float">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+       class="w-12 h-12" alt="WhatsApp">
+</a>
+
+  <style>
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+</style>
+
+
+  <!-- Footer -->
+  <footer class="bg-red-900 text-white text-center py-4 mt-6">
+    <p>&copy; 2025 Legal Assist. All rights reserved.</p>
+  </footer>
+
+  <!-- JS: all scripts in one block -->
+  <script>
+    // Animated Statistics Counter
+    function countUp(id, target, duration) {
+      let start = 0;
+      const stepTime = Math.max(20, Math.abs(Math.floor(duration / target)));
+      const obj = document.getElementById(id);
+      if (!obj) return;
+      const timer = setInterval(() => {
+        start += 1;
+        obj.textContent = start;
+        if (start >= target) clearInterval(timer);
+      }, stepTime);
+    }
+
+    window.addEventListener('load', () => {
+      countUp('casesWon', 285, 2000);
+      countUp('bailGranted', 342, 2000);
+      countUp('clientsSaved', 450, 2000);
+      countUp('yearsExp', 28, 2000);
+    });
+
+    // Bail Eligibility Calculator
+    function calculateBail() {
+      const offense = document.getElementById('offenseType').value;
+      const record = document.getElementById('criminalRecord').value;
+      const flight = document.getElementById('flightRisk').value;
+      const evidence = document.getElementById('evidence').value;
+      
+      let score = 0;
+      let message = '';
+      let color = '';
+      
+      // Scoring system
+      if (offense.includes('Bailable')) score += 3;
+      else if (offense.includes('Economic')) score += 2;
+      else score += 1;
+      
+      if (record.includes('No Previous')) score += 2;
+      else if (record.includes('Minor')) score += 1;
+      
+      if (flight.includes('Strong')) score += 2;
+      else if (flight.includes('Moderate')) score += 1;
+      
+      if (evidence.includes('Weak')) score += 2;
+      else if (evidence.includes('Moderate')) score += 1;
+      
+      // Results
+      if (score >= 7) {
+        message = '✅ <strong>High Chance of Bail</strong><br>Based on your inputs, you have a strong case for bail. The offense type and your profile support a bail application.';
+        color = 'bg-green-100 border-l-4 border-green-600 text-green-900';
+      } else if (score >= 4) {
+        message = '⚠️ <strong>Moderate Chance of Bail</strong><br>Bail is possible but may require strong legal arguments and possibly sureties. Consult with our lawyers immediately.';
+        color = 'bg-yellow-100 border-l-4 border-yellow-600 text-yellow-900';
+      } else {
+        message = '❌ <strong>Challenging Bail Situation</strong><br>Bail may be difficult given the offense type and circumstances. However, we can explore options like anticipatory bail or regular bail with strong legal grounds.';
+        color = 'bg-red-100 border-l-4 border-red-600 text-red-900';
+      }
+      
+      const result = document.getElementById('bailResult');
+      result.innerHTML = message + '<br><br><strong>⚖️ Disclaimer:</strong> This is a preliminary assessment only. Actual bail decisions depend on many factors including court discretion, prosecution arguments, and specific case details. Contact us for a detailed legal consultation.';
+      result.className = `mt-4 p-4 rounded-lg ${color}`;
+      result.classList.remove('hidden');
+    }
+
+    // Case Type Identifier
+    function identifyCase() {
+      const situation = (document.getElementById('situation').value || '').toLowerCase();
+      const charges = document.getElementById('chargesFiled').value || '';
+      const detained = document.getElementById('detained').value || '';
+
+      let caseType = '';
+      let actions = '';
+      let urgency = '';
+
+      if (situation.includes('arrested')) {
+        caseType = '🚨 <strong>Arrest & Bail Matter</strong>';
+        actions = 'Immediate actions needed: Apply for bail, review arrest memo, check grounds of arrest.';
+        urgency = detained.toLowerCase().includes('yes') ? 'bg-red-100 border-red-600' : 'bg-yellow-100 border-yellow-600';
+
+      } else if (situation.includes('false complaint')) {
+        caseType = '⚖️ <strong>Defamation / False Complaint Case</strong>';
+        actions = 'File anticipatory bail, gather evidence proving falsity, consider counter-complaint.';
+        urgency = 'bg-yellow-100 border-yellow-600';
+
+      } else if (situation.includes('financial')) {
+        caseType = '💼 <strong>White-Collar / Economic Offense</strong>';
+        actions = 'Review documents, prepare financial audits, coordinate with forensic accountants.';
+        urgency = 'bg-blue-100 border-blue-600';
+
+      } else if (situation.includes('physical altercation')) {
+        caseType = '🥊 <strong>Assault / Physical Violence Case</strong>';
+        actions = 'Collect medical evidence, witness statements, prepare self-defense arguments.';
+        urgency = 'bg-yellow-100 border-yellow-600';
+
+      } else if (situation.includes('cybercrime')) {
+        caseType = '💻 <strong>Cybercrime / IT Act Case</strong>';
+        actions = 'Preserve digital evidence, consult IT experts, coordinate with cybercrime cell.';
+        urgency = 'bg-purple-100 border-purple-600';
+
+      } else if (situation.includes('property')) {
+        caseType = '🏠 <strong>Property / Theft Related Case</strong>';
+        actions = 'Review property documents, gather ownership proofs, witness statements.';
+        urgency = 'bg-blue-100 border-blue-600';
+
+      } else if (situation.includes('domestic')) {
+        caseType = '🏡 <strong>Domestic Violence Case</strong>';
+        actions = 'Apply for protection orders, collect evidence, consider counseling options.';
+        urgency = 'bg-red-100 border-red-600';
+
+      } else if (situation.includes('drug')) {
+        caseType = '💊 <strong>NDPS (Drug) Case</strong>';
+        actions = 'Review seizure memo, ensure proper procedures, file bail application.';
+        urgency = 'bg-red-100 border-red-600';
+
+      } else {
+        caseType = '📄 <strong>General Legal Matter</strong>';
+        actions = 'Provide more details to help identify the case properly.';
+        urgency = 'bg-gray-100 border-gray-400';
+      }
+
+      const result = document.getElementById('caseTypeResult');
+      if (!result) return;
+      result.className = `p-4 rounded-lg border ${urgency} mt-4`;
+      result.innerHTML = `
+        ${caseType}
+        <hr class="my-3">
+        <p class="text-sm"><strong>Recommended Actions:</strong><br>${actions}</p>
+        <p class="text-sm mt-2"><strong>Case Status:</strong> ${charges}</p>
+        <p class="text-sm mt-2"><strong>Detention Status:</strong> ${detained}</p>
+      `;
+      result.classList.remove('hidden');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Know Your Rights
+    function showRights(type) {
+      const rightsData = {
+        arrest: `
+          <h4 class="font-bold text-lg text-red-900 mb-3">Your Rights During Arrest</h4>
+          <ul class="text-left space-y-2 text-gray-700">
+            <li>✓ Right to know the grounds of arrest</li>
+            <li>✓ Right to be informed of the charges against you</li>
+            <li>✓ Right to remain silent (except for basic identity info)</li>
+            <li>✓ Right to consult a lawyer immediately</li>
+            <li>✓ Right to inform a friend or relative about your arrest</li>
+            <li>✓ Right to be produced before magistrate within 24 hours</li>
+            <li>✓ Right to be medically examined if injured</li>
+            <li>✓ Right against torture or custodial violence</li>
+            <li>✓ Right to free legal aid if you cannot afford a lawyer</li>
+          </ul>
+          <div class="mt-4 p-3 bg-red-50 border-l-4 border-red-600">
+            <strong>Remember:</strong> Call us immediately at +91-98765-43210 after arrest. Do not sign any documents without legal advice.
+          </div>
+        `,
+        interrogation: `
+          <h4 class="font-bold text-lg text-red-900 mb-3">Your Rights During Police Interrogation</h4>
+          <ul class="text-left space-y-2 text-gray-700">
+            <li>✓ Right to have your lawyer present during interrogation</li>
+            <li>✓ Right to refuse to answer questions (except name and address)</li>
+            <li>✓ Right against self-incrimination - cannot be forced to confess</li>
+            <li>✓ Right to breaks for food, water, and rest</li>
+            <li>✓ Right against torture, threats, or inducements</li>
+            <li>✓ Right to have interrogation recorded (in some cases)</li>
+            <li>✓ Women cannot be interrogated after sunset or before sunrise</li>
+            <li>✓ Right to not sign statements without reading and understanding</li>
+          </ul>
+          <div class="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-600">
+            <strong>Important:</strong> Statements to police are generally not admissible in court. Be cautious and consult your lawyer before answering questions.
+          </div>
+        `,
+        custody: `
+          <h4 class="font-bold text-lg text-red-900 mb-3">Your Rights While in Custody</h4>
+          <ul class="text-left space-y-2 text-gray-700">
+            <li>✓ Right to dignity and humane treatment</li>
+            <li>✓ Right to meet your lawyer in private</li>
+            <li>✓ Right to adequate food, water, and sanitation</li>
+            <li>✓ Right to medical treatment when needed</li>
+            <li>✓ Right to inform family about detention location</li>
+            <li>✓ Right to apply for bail (for bailable offenses)</li>
+            <li>✓ Right against torture, assault, or inhuman treatment</li>
+            <li>✓ Right to be produced in court within custody period</li>
+            <li>✓ Right to file habeas corpus if illegally detained</li>
+          </ul>
+          <div class="mt-4 p-3 bg-blue-50 border-l-4 border-blue-600">
+            <strong>Know This:</strong> Any violation of your rights in custody can be grounds for legal action. Document everything and inform your lawyer.
+          </div>
+        `,
+        bail: `
+          <h4 class="font-bold text-lg text-red-900 mb-3">Your Right to Bail</h4>
+          <ul class="text-left space-y-2 text-gray-700">
+            <li>✓ Bailable offenses - bail as a matter of right</li>
+            <li>✓ Non-bailable offenses - bail at court's discretion</li>
+            <li>✓ Anticipatory bail can be applied before arrest</li>
+            <li>✓ Bail cannot be denied merely to punish the accused</li>
+            <li>✓ Personal bonds or sureties may be required</li>
+            <li>✓ Bail conditions must be reasonable</li>
+            <li>✓ Regular bail, interim bail, and default bail options exist</li>
+            <li>✓ Right to appeal if bail is rejected</li>
+          </ul>
+          <div class="mt-4 p-3 bg-green-50 border-l-4 border-green-600">
+            <strong>Our Service:</strong> We handle all types of bail applications with high success rates. Contact us for immediate bail assistance.
+          </div>
+        `
+      };
+      
+      const result = document.getElementById('rightsInfo');
+      if (!result) return;
+      result.innerHTML = rightsData[type] || '<p class="text-gray-700">No information available.</p>';
+      result.classList.remove('hidden');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  </script>
+  <!-- Nearest Police Station Section -->
+<section class="bg-white p-6 rounded-xl shadow-lg my-8">
+  <h3 class="text-xl font-bold mb-4">Nearest Police Station</h3>
+
+  <button onclick="findPoliceStation()" 
+          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+    Find Nearest Police Station
+  </button>
+
+  <div id="policeResult" class="mt-4 hidden p-4 rounded-lg bg-blue-50 border-l-4 border-blue-600"></div>
+</section>
+<script>
+// Find Nearest Police Station
+function findPoliceStation() {
+  const result = document.getElementById("policeResult");
+  result.innerHTML = "Fetching your location...";
+  result.classList.remove("hidden");
+
+  if (!navigator.geolocation) {
+    result.innerHTML = "❌ Geolocation is not supported on your device.";
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+
+    const apiUrl =
+      `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=3000&type=police&key=YOUR_GOOGLE_MAPS_API_KEY`;
+
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+
+      if (!data.results || data.results.length === 0) {
+        result.innerHTML = "❌ No police stations found nearby.";
+        return;
+      }
+
+      const station = data.results[0];
+
+      const name = station.name;
+      const address = station.vicinity || "Address unavailable";
+      const location = station.geometry.location;
+      const directionsUrl =
+        `https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}`;
+
+      result.innerHTML = `
+        <strong>🚓 Nearest Police Station:</strong><br>
+        <p class="mt-2"><strong>Name:</strong> ${name}</p>
+        <p><strong>Address:</strong> ${address}</p>
+        <a href="${directionsUrl}" target="_blank"
+           class="mt-3 inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+          Get Directions
+        </a>
+      `;
+    } catch (err) {
+      result.innerHTML = "❌ Error fetching police station details.";
+    }
+  });
+}
+</script>
+
+
+</body>
+</html>

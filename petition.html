@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Petition Portal – Legal Assit</title>
+  <link rel="stylesheet" href="petition.css" />
+</head>
+<body>
+  <header class="petition-header">
+    <h1>Petition Submission & Dashboard</h1>
+    <nav>
+      <button class="btn">Add Petition</button>
+      <button class="btn">Track My Petition</button>
+      <button class="btn">Popular Petitions</button>
+    </nav>
+  </header>
+
+  <section class="petition-form">
+    <h2>Submit a Petition</h2>
+
+<form action="petition-success.html" method="get">
+  <label>Petition Title</label>
+  <input type="text" name="title" placeholder="e.g., Request for Better Road Safety in Hyderabad" required />
+
+  <label>Category</label>
+  <select name="category" required>
+    <option>Civic Issue</option>
+    <option>Legal Reform</option>
+    <option>Public Safety</option>
+    <option>Environmental</option>
+  </select>
+
+  <label>Petition Description</label>
+  <textarea name="description" rows="5" placeholder="Explain the issue in detail..." required></textarea>
+
+  <label>Upload Evidence (optional)</label>
+  <input type="file" name="evidence" multiple />
+
+  <label>Target Authority</label>
+  <input type="text" name="authority" placeholder="e.g., Local Municipality" required />
+
+  <label>Your Details</label>
+  <input type="text" name="name" placeholder="Name" required />
+  <input type="email" name="email" placeholder="Email" required />
+  <input type="tel" name="phone" placeholder="Phone" required />
+  <small class="disclaimer">*Your details are protected and only used for petition tracking.</small>
+
+  <label><input type="checkbox" name="public" /> Make this petition public</label>
+  <label><input type="checkbox" name="allowSupport" /> Allow others to support/sign</label>
+
+  <label>Deadline to Close Petition</label>
+  <input type="date" name="deadline" />
+
+  <button type="submit" class="btn-submit">Submit Petition</button>
+</form>
+
+   
+  </section>
+
+  <section class="petition-dashboard">
+    <h2>Explore Petitions</h2>
+    <div class="filters">
+      <input type="search" placeholder="Search by title or category" />
+      <select>
+        <option>Sort by: Latest</option>
+        <option>Most Supported</option>
+        <option>Trending</option>
+      </select>
+    </div>
+
+    <div class="petition-list">
+      <div class="petition-card">
+        <h3>Request for Better Road Safety</h3>
+        <p>Many accidents occur due to poor lighting and lack of signs...</p>
+        <p><strong>Signatures:</strong> 213</p>
+        <span class="status open">Status: Open</span>
+        <button class="support-btn">Support</button>
+      </div>
+
+      <div class="petition-card">
+        <h3>Ban Plastic in Local Markets</h3>
+        <p>Environmental damage is increasing, time to act...</p>
+        <p><strong>Signatures:</strong> 450</p>
+        <span class="status review">Status: Under Review</span>
+        <button class="support-btn">Support</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="legal-guidelines">
+    <h3>Legal Notice & Guidelines</h3>
+    <ul>
+      <li>Submit only genuine, respectful petitions.</li>
+      <li>Petitions containing hate speech, threats, or spam will be removed.</li>
+      <li>We act as a platform, not responsible for content submitted.</li>
+    </ul>
+  </footer>
+</body>
+</html>

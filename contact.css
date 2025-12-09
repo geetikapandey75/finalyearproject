@@ -1,0 +1,108 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f7fa;
+  margin: 0;
+  padding: 0;
+}
+
+.contact-header {
+  background-color: #1a237e;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.contact-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.contact-header p {
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.contact-container {
+  max-width: 800px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact-container h2 {
+  color: #1a237e;
+  margin-bottom: 20px;
+}
+
+.contact-info {
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.contact-info p {
+  margin: 8px 0;
+  color: #333;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #1a237e;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+button {
+  background-color: #3949ab;
+  color: white;
+  padding: 12px 20px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #303f9f;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: #555;
+  font-size: 14px;
+}
+
+
+.top-features-bar {
+  background-color: #1a237e; /* same as header */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.top-features-bar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.top-features-bar a:hover {
+  color: #ffca28; /* a soft yellow on hover */
+  text-decoration: underline;
+}

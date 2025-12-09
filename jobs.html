@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jobs | Legal Assist — Interactive Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* small extra styles for transitions */
+    .card-enter { transform: translateY(6px); opacity: 0; }
+    .card-enter-active { transform: translateY(0); opacity: 1; transition: all .28s cubic-bezier(.2,.8,.2,1); }
+    .card-hover:hover { transform: translateY(-6px); transition: transform .18s ease; }
+    /* prevent body scroll when modal open */
+    body.modal-open { overflow: hidden; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 antialiased">
+
+  <!-- Topbar -->
+  <header class="bg-white shadow-sm sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-4">
+          <h1 class="text-xl font-bold text-red-800">Legal Assist Jobs</h1>
+          <span class="text-sm text-gray-500">— Interactive job search & preview</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <input id="searchInput" type="search" placeholder="Search jobs, skills, companies..."
+                 class="px-3 py-2 rounded-lg border border-gray-200 w-72 focus:outline-none focus:ring-2 focus:ring-red-300"/>
+          <select id="filterType" class="px-3 py-2 rounded-lg border border-gray-200 focus:outline-none">
+            <option value="all">All Types</option>
+            <option value="fulltime">Full-time</option>
+            <option value="parttime">Part-time</option>
+            <option value="remote">Remote</option>
+            <option value="internship">Internship</option>
+          </select>
+          <select id="sortBy" class="px-3 py-2 rounded-lg border border-gray-200 focus:outline-none">
+            <option value="recent">Newest</option>
+            <option value="experience">Experience (low → high)</option>
+            <option value="company">Company (A → Z)</option>
+          </select>
+          <button id="clearFilters" class="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Clear</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Left: job list -->
+    <section id="listPane" class="lg:col-span-2 space-y-4">
+      <div class="bg-white p-4 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold">Job Listings</h2>
+          <p id="jobsCount" class="text-sm text-gray-500">0 jobs</p>
+        </div>
+      </div>
+
+      <div id="jobsContainer" class="space-y-4">
+        <!-- JS will populate cards here -->
+      </div>
+    </section>
+
+    <!-- Right: detail preview -->
+    <aside id="detailPane" class="bg-white rounded-lg shadow-sm p-6 sticky top-24 h-[60vh] overflow-auto">
+      <div id="emptyState" class="text-center text-gray-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-16 w-16 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 0 0 2 2h6m4-12l4 4m0 0l-4 4m4-4H13" />
+        </svg>
+        <h3 class="mt-3 font-semibold">Select a job to preview details</h3>
+        <p class="mt-2 text-sm">Click any job card on the left to see full description, apply, or save.</p>
+      </div>
+
+      <div id="jobDetail" class="hidden">
+        <!-- dynamic detail -->
+      </div>
+    </aside>
+  </main>
+
+  <!-- Apply Modal -->
+  <div id="applyModal" class="fixed inset-0 z-50 hidden items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/40" onclick="closeApplyModal()"></div>
+    <div role="dialog" aria-modal="true" aria-labelledby="applyTitle" class="relative max-w-xl w-full bg-white rounded-lg shadow-lg p-6 z-10">
+      <h3 id="applyTitle" class="text-xl font-semibold text-red-800">Apply for Job</h3>
+      <p id="applyJobTitle" class="text-sm text-gray-600 mt-1">Position</p>
+
+      <form id="applyForm" class="mt-4 space-y-3" onsubmit="submitApplication(event)">
+        <input required name="name" placeholder="Your name" class="w-full p-3 border rounded-lg" />
+        <input required name="email" type="email" placeholder="Email" class="w-full p-3 border rounded-lg" />
+        <input name="phone" placeholder="Phone (optional)" class="w-full p-3 border rounded-lg" />
+        <textarea name="message" placeholder="Short message / cover note" class="w-full p-3 border rounded-lg" rows="4"></textarea>
+
+        <div class="flex items-center justify-between">
+          <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Send Application</button>
+          <button type="button" onclick="closeApplyModal()" class="text-gray-600">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+/*
+  Glassdoor-style interactive jobs page
+  - Data-driven
+  - Click a card to show preview on right
+  - Save (bookmark) stored in localStorage
+  - Apply opens modal
+  - Search, filter, sort
+*/
+
+const jobsData = [
+  {
+    id: 'j1',
+    title: 'Senior Backend Developer',
+    location: 'Hyderabad',
+    type: 'fulltime',
+    expMin: 4,
+    expMax: 8,
+    salary: '₹12L - ₹18L',
+    tags: ['Node.js','API','MySQL'],
+    posted: '2025-11-20',
+    desc: `Drive backend architecture, build APIs, own performance & scaling. Coordinate with frontend and infra teams. `,
+  },
+  {
+    id: 'j2',
+    title: 'UI/UX Designer',
+    location: 'Remote',
+    type: 'remote',
+    expMin: 2,
+    expMax: 5,
+    salary: '₹6L - ₹12L',
+    tags: ['Figma','Prototyping','Research'],
+    posted: '2025-11-18',
+    desc: `Design delightful user experiences, prototypes and end-to-end design systems. Work closely with PMs and devs.`,
+  },
+  {
+    id: 'j3',
+    title: 'Legal Associate',
+    location: 'Delhi',
+    type: 'fulltime',
+    expMin: 1,
+    expMax: 4,
+    salary: '₹4L - ₹8L',
+    tags: ['Drafting','Research','Court Filing'],
+    posted: '2025-11-21',
+    desc: `Prepare pleadings, legal research, client coordination and court filings across civil and criminal matters.`,
+  },
+  {
+    id: 'j4',
+    title: 'Frontend Developer',
+    location: 'Bangalore',
+    type: 'fulltime',
+    expMin: 1,
+    expMax: 3,
+    salary: '₹5L - ₹10L',
+    tags: ['React','Tailwind','JS'],
+    posted: '2025-11-03',
+    desc: `Implement responsive UIs, optimize performance, collaborate on component libraries.`,
+  },
+  {
+    id: 'j5',
+    title: 'HR Recruiter',
+    location: 'Hyderabad',
+    type: 'fulltime',
+    expMin: 0,
+    expMax: 2,
+    salary: '₹2.5L - ₹4L',
+    tags: ['Sourcing','Screening'],
+    posted: '2025-11-22',
+    desc: `End-to-end hiring: sourcing, screening, coordinating interviews, employer branding.`,
+  },
+  {
+    id: 'j6',
+    title: 'Content Writer',
+    location: 'Remote',
+    type: 'parttime',
+    expMin: 0,
+    expMax: 2,
+    salary: '₹15k - ₹35k / month',
+    tags: ['SEO','Blogs','Editing'],
+    posted: '2025-11-10',
+    desc: `Create SEO-optimized content, blogs, and copy for technology and legal niches.`,
+  },
+  {
+    id: 'j7',
+    title: 'Digital Marketing Executive',
+    location: 'Pune',
+    type: 'fulltime',
+    expMin: 1,
+    expMax: 3,
+    salary: '₹3L - ₹6L',
+    tags: ['SEO','Ads','Analytics'],
+    posted: '2025-11-19',
+    desc: `Manage campaigns, ads, and performance analysis across channels.`,
+  },
+  {
+    id: 'j8',
+    title: 'Legal Research Intern',
+    location: 'Hyderabad',
+    type: 'internship',
+    expMin: 0,
+    expMax: 0,
+    salary: 'Stipend Available',
+    tags: ['Research','Drafting','Intern'],
+    posted: '2025-11-02',
+    desc: `Work on case summaries, legal drafting, and client reports under supervision.`,
+  },
+  {
+    id: 'j9',
+    title: 'Graphic Designer',
+    location: 'Mumbai',
+    type: 'fulltime',
+    expMin: 1,
+    expMax: 3,
+    salary: '₹3L - ₹5L',
+    tags: ['Photoshop','Illustrator'],
+    posted: '2025-11-12',
+    desc: `Design brand assets, social creatives and promotional materials.`,
+  },
+  {
+    id: 'j10',
+    title: 'DevOps Engineer',
+    location: 'Bengaluru',
+    type: 'fulltime',
+    expMin: 3,
+    expMax: 6,
+    salary: '₹10L - ₹16L',
+    tags: ['AWS','CI/CD','Kubernetes'],
+    posted: '2025-11-08',
+    desc: `Build CI/CD pipelines, maintain infra and ensure uptime and scalability.`,
+  }
+];
+
+// small helpers
+const $ = (sel) => document.querySelector(sel);
+const jobsContainer = $('#jobsContainer');
+const jobDetail = $('#jobDetail');
+const emptyState = $('#emptyState');
+const jobsCount = $('#jobsCount');
+
+let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+
+function renderJobs(list = jobsData) {
+  jobsContainer.innerHTML = '';
+  jobsCount.textContent = `${list.length} jobs`;
+  list.forEach((job, idx) => {
+    const card = document.createElement('article');
+    card.className = 'bg-white shadow-sm rounded-lg p-4 card-hover card-enter-active';
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-pressed', 'false');
+
+    card.innerHTML = `
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex-1 min-w-0">
+          <h3 class="text-lg font-semibold text-red-800">${escapeHTML(job.title)}</h3>
+          <p class="text-sm text-gray-600">${escapeHTML(job.company)} • ${escapeHTML(job.location)}</p>
+          <div class="mt-2 flex flex-wrap gap-2">
+            ${job.tags.map(t => `<span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">${escapeHTML(t)}</span>`).join('')}
+          </div>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <div class="text-sm text-gray-500">${job.type === 'fulltime' ? 'Full-time' : capitalize(job.type)}</div>
+          <div class="text-sm text-gray-500">${job.expMin}${job.expMax ? '–' + job.expMax + ' yrs' : ''}</div>
+          <div class="flex gap-2 mt-2">
+            <button class="saveBtn inline-flex items-center gap-2 text-sm px-3 py-1 rounded-full border hover:bg-gray-50" data-id="${job.id}">
+              <svg class="w-4 h-4" fill="${savedJobs.includes(job.id)?'currentColor':'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${savedJobs.includes(job.id)?'M5 3v16l7-5 7 5V3H5z':'M5 3v16l7-5 7 5V3H5z'}"/></svg>
+              <span>${savedJobs.includes(job.id)?'Saved':'Save'}</span>
+            </button>
+            <button class="applyBtn bg-red-600 text-white px-3 py-1 rounded-lg text-sm" data-id="${job.id}">Apply</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // click handlers - open detail
+    card.addEventListener('click', (e) => {
+      // avoid clicking through Save / Apply buttons
+      if (e.target.closest('.saveBtn') || e.target.closest('.applyBtn')) return;
+      showDetail(job.id);
+    });
+
+    // keyboard support
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        showDetail(job.id);
+      }
+    });
+
+    // Save button handler
+    card.querySelector('.saveBtn').addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      toggleSave(job.id, ev.currentTarget);
+    });
+
+    // Apply button handler
+    card.querySelector('.applyBtn').addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      openApplyModal(job.id);
+    });
+
+    jobsContainer.appendChild(card);
+  });
+}
+
+// show detail in right pane
+function showDetail(id) {
+  const job = jobsData.find(j => j.id === id);
+  if (!job) return;
+  emptyState.classList.add('hidden');
+  jobDetail.classList.remove('hidden');
+  jobDetail.innerHTML = `
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h3 class="text-2xl font-bold text-red-800">${escapeHTML(job.title)}</h3>
+        <p class="mt-1 text-gray-600">${escapeHTML(job.company)} • ${escapeHTML(job.location)}</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          ${job.tags.map(t => `<span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">${escapeHTML(t)}</span>`).join('')}
+        </div>
+        <div class="mt-4 text-sm text-gray-700">${escapeHTML(job.desc)}</div>
+      </div>
+
+      <div class="text-right">
+        <div class="text-sm text-gray-600">${job.salary}</div>
+        <div class="mt-4 flex flex-col gap-2">
+          <button class="bg-red-600 text-white px-4 py-2 rounded-lg applyModalBtn" data-id="${job.id}">Apply Now</button>
+          <button class="border px-4 py-2 rounded-lg saveDetailBtn" data-id="${job.id}">${savedJobs.includes(job.id)?'Saved':'Save Job'}</button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="text-sm text-gray-700 space-y-2">
+      <p><strong>Experience:</strong> ${job.expMin}${job.expMax ? ' – '+job.expMax+' years' : ''}</p>
+      <p><strong>Job Type:</strong> ${capitalize(job.type)}</p>
+      <p><strong>Posted:</strong> ${job.posted}</p>
+    </div>
+  `;
+
+  // bind the buttons inside detail
+  jobDetail.querySelectorAll('.applyModalBtn').forEach(btn => {
+    btn.addEventListener('click', () => openApplyModal(btn.dataset.id));
+  });
+  jobDetail.querySelectorAll('.saveDetailBtn').forEach(btn => {
+    btn.addEventListener('click', (e) => toggleSave(btn.dataset.id, btn));
+  });
+
+  // smooth scroll into view for small screens
+  if (window.innerWidth < 1024) {
+    document.getElementById('detailPane').scrollIntoView({behavior: 'smooth'});
+  }
+}
+
+// save / unsave job
+function toggleSave(id, btnEl) {
+  const idx = savedJobs.indexOf(id);
+  if (idx === -1) {
+    savedJobs.push(id);
+  } else {
+    savedJobs.splice(idx, 1);
+  }
+  localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+  renderJobsFiltered(); // re-render to update states
+}
+
+// apply modal
+const applyModal = document.getElementById('applyModal');
+function openApplyModal(id) {
+  const job = jobsData.find(j => j.id === id);
+  $('#applyJobTitle').textContent = `${job.title} — ${job.company}`;
+  applyModal.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  // focus
+  applyModal.querySelector('input[name="name"]').focus();
+}
+
+function closeApplyModal() {
+  applyModal.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+}
+
+function submitApplication(e) {
+  e.preventDefault();
+  // mock submit: read form and show success
+  const form = e.target;
+  const name = form.name.value;
+  const jobTitle = $('#applyJobTitle').textContent;
+  alert(`Thanks ${name} — your application for "${jobTitle}" was sent (mock).`);
+  form.reset();
+  closeApplyModal();
+}
+
+/* Search & filters */
+const searchInput = $('#searchInput');
+const filterType = $('#filterType');
+const sortBy = $('#sortBy');
+const clearFilters = $('#clearFilters');
+
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function escapeHTML(s) {
+  return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+}
+
+function renderJobsFiltered() {
+  let list = [...jobsData];
+
+  // search
+  const q = (searchInput.value || '').trim().toLowerCase();
+  if (q) {
+    list = list.filter(j => {
+      const text = (j.title+' '+j.company+' '+j.location+' '+j.tags.join(' ')+ ' '+ j.desc).toLowerCase();
+      return text.includes(q);
+    });
+  }
+
+  // filter type
+  const type = filterType.value;
+  if (type !== 'all') list = list.filter(j => j.type === type);
+
+  // sort
+  const s = sortBy.value;
+  if (s === 'experience') list.sort((a,b) => (a.expMin||0) - (b.expMin||0));
+  else if (s === 'company') list.sort((a,b) => a.company.localeCompare(b.company));
+  else if (s === 'recent') list.sort((a,b) => new Date(b.posted) - new Date(a.posted));
+
+  // re-render
+  renderJobs(list);
+
+  // if current detail job removed from list: show empty state
+  const currentDetailId = jobDetail.querySelector('.saveDetailBtn')?.dataset.id;
+  if (currentDetailId && !list.some(j=>j.id===currentDetailId)) {
+    jobDetail.classList.add('hidden');
+    emptyState.classList.remove('hidden');
+  }
+}
+
+searchInput.addEventListener('input', () => renderJobsFiltered());
+filterType.addEventListener('change', () => renderJobsFiltered());
+sortBy.addEventListener('change', () => renderJobsFiltered());
+clearFilters.addEventListener('click', () => {
+  searchInput.value = '';
+  filterType.value = 'all';
+  sortBy.value = 'recent';
+  renderJobsFiltered();
+});
+
+// initial render
+renderJobsFiltered();
+
+// enable delegation for dynamic Save icons if needed
+document.addEventListener('click', (e) => {
+  // If clicked outside modal and modal open - close on Escape
+  if (e.key === 'Escape') closeApplyModal();
+});
+
+// keyboard accessibility for modal
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !applyModal.classList.contains('hidden')) {
+    closeApplyModal();
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book an Appointment & Payment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- Header -->
+  <header class="bg-blue-700 text-white py-4 shadow-md">
+    <h1 class="text-center text-3xl font-bold">Book Your Appointment</h1>
+  </header>
+
+  <!-- Form Section -->
+  <section class="max-w-xl mx-auto my-10 bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Fill in Your Details</h2>
+
+    <form action="appointment-form.php" method="POST" class="space-y-5">
+
+      <!-- Full Name -->
+      <div>
+        <label for="name" class="block font-medium text-gray-700 mb-1">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name"
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block font-medium text-gray-700 mb-1">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com"
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label for="phone" class="block font-medium text-gray-700 mb-1">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number"
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+      </div>
+
+      <!-- Date -->
+      <div>
+        <label for="date" class="block font-medium text-gray-700 mb-1">Preferred Date</label>
+        <input type="date" id="date" name="date"
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+      </div>
+
+      <!-- Time -->
+      <div>
+        <label for="time" class="block font-medium text-gray-700 mb-1">Preferred Time</label>
+        <input type="time" id="time" name="time"
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+      </div>
+
+      <!-- Service -->
+      <div>
+        <label for="service" class="block font-medium text-gray-700 mb-1">Service Needed</label>
+        <select id="service" name="service"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+          <option value="">Select a service</option>
+          <option value="civil">Civil Case Consultation</option>
+          <option value="property">Property Dispute</option>
+          <option value="contract">Contract Review</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <!-- Additional Info -->
+      <div>
+        <label for="message" class="block font-medium text-gray-700 mb-1">Additional Information</label>
+        <textarea id="message" name="message" placeholder="Enter any additional details..."
+                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none h-28"></textarea>
+      </div>
+
+      <!-- Payment Section -->
+      <div>
+        <label class="block font-medium text-gray-700 mb-2">Payment Method</label>
+        <div class="space-y-2">
+          <label class="flex items-center space-x-3">
+            <input type="radio" name="payment" value="upi" class="form-radio" required>
+            <span>UPI</span>
+          </label>
+          <label class="flex items-center space-x-3">
+            <input type="radio" name="payment" value="card" class="form-radio" required>
+            <span>Credit/Debit Card</span>
+          </label>
+          <label class="flex items-center space-x-3">
+            <input type="radio" name="payment" value="netbanking" class="form-radio" required>
+            <span>Net Banking</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Amount -->
+      <div>
+        <label for="amount" class="block font-medium text-gray-700 mb-1">Amount to Pay (INR)</label>
+        <input type="number" id="amount" name="amount" placeholder="Enter amount"
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button type="submit"
+                class="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-6 py-3 rounded-full transition duration-300 shadow-md">
+          Book & Pay
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+</body>
+</html>

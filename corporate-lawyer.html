@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Legal Assist | Corporate Lawyer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <!-- Navigation -->
+  <nav class="flex justify-center gap-4 py-4 bg-white shadow">
+    <button class="bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold">Tools</button>
+    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full">Pricing</button>
+    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full">Process</button>
+    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full">Contact</button>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="max-w-6xl mx-auto p-6 mt-6 bg-white rounded-xl shadow-lg flex flex-col md:flex-row justify-between items-start gap-6">
+    <div class="flex-1">
+      <h1 class="text-3xl md:text-4xl font-bold text-blue-900 mb-4">Expert Corporate Legal Solutions for Your Business</h1>
+      <p class="text-gray-700 mb-6">From company formation and compliance to M&A and litigation — get clear guidance and hands-on support.</p>
+      <div class="flex gap-4">
+        <button class="bg-blue-700 text-white px-5 py-2 rounded hover:bg-blue-800 transition">Use Tools</button>
+        <button class="bg-yellow-400 text-black px-5 py-2 rounded hover:bg-yellow-300 transition">See Pricing</button>
+      </div>
+    </div>
+    <div class="bg-blue-50 p-6 rounded-lg shadow w-full md:w-1/3">
+      <h2 class="font-semibold text-lg text-blue-900 mb-2">Quick Contact</h2>
+      <p class="text-gray-700 mb-2">Call or message to schedule a corporate consultation.</p>
+      <p class="text-gray-900"><strong>Phone:</strong> +91-98765-43210</p>
+      <p class="text-gray-900"><strong>Email:</strong> corporate@legalassist.in</p>
+    </div>
+  </section>
+
+  <!-- Impact Section -->
+  <section class="max-w-6xl mx-auto p-6 mt-6">
+    <h2 class="text-2xl font-semibold text-blue-900 mb-4">Impact (Live)</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-blue-50 p-6 rounded-lg shadow text-center">
+        <p class="text-2xl font-bold text-gray-900" id="companies">0</p>
+        <p class="text-gray-700 mt-1">Businesses Registered</p>
+      </div>
+      <div class="bg-blue-50 p-6 rounded-lg shadow text-center">
+        <p class="text-2xl font-bold text-gray-900" id="agreements">0</p>
+        <p class="text-gray-700 mt-1">Agreements Drafted</p>
+      </div>
+      <div class="bg-blue-50 p-6 rounded-lg shadow text-center">
+        <p class="text-2xl font-bold text-gray-900" id="cases">0</p>
+        <p class="text-gray-700 mt-1">Cases Resolved</p>
+      </div>
+      <div class="bg-blue-50 p-6 rounded-lg shadow text-center">
+        <p class="text-2xl font-bold text-gray-900" id="years">0</p>
+        <p class="text-gray-700 mt-1">Avg Years Experience</p>
+      </div>
+    </div>
+  </section>
+<div class="space-y-6">
+  <!-- Tools Section -->
+  <section class="max-w-6xl mx-auto p-6 mt-6 space-y-6">
+    <!-- Service Finder -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Service Finder — which corporate service do you need?</h2>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">1. Are you starting a new business?</label>
+          <select id="q1" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">2. Do you need funding or investor documents?</label>
+          <select id="q2" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">3. Are you facing disputes or litigation?</label>
+          <select id="q3" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <button onclick="findService()" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">Find Service</button>
+        
+        <p id="serviceResult" class="text-gray-800 font-medium mt-4"></p>
+      </div>
+    </div>
+
+    <!-- Legal Fee Estimator -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Legal Fee Estimator</h2>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Type of Matter</label>
+          <select id="matterType" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Incorporation</option>
+            <option>Contract Drafting</option>
+            <option>M&A</option>
+            <option>Compliance</option>
+            <option>Litigation</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Complexity</label>
+          <select id="complexity" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Estimated Deal / Claim Value (₹)</label>
+          <input type="number" id="dealValue" value="0" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <button onclick="estimateFee()" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">Estimate</button>
+        
+        <p id="feeResult" class="text-gray-800 font-bold text-lg mt-4"></p>
+      </div>
+    </div>
+
+    <!-- Document Checklist -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Document Checklist</h2>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Select Service</label>
+          <select id="serviceType" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Company Registration</option>
+            <option>M&A</option>
+            <option>Contract Drafting</option>
+            <option>Compliance</option>
+          </select>
+        </div>
+
+        <button onclick="showChecklist()" class="bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition">Show Checklist</button>
+        
+        <div id="checklistResult" class="mt-4"></div>
+      </div>
+    </div>
+
+    <!-- Case Strength Quick Check -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Case Strength Quick Check</h2>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Do you have written evidence?</label>
+          <select id="evidence" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Are witnesses available?</label>
+          <select id="witnesses" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Is there a breach of contract or legal violation?</label>
+          <select id="breach" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <button onclick="assessCase()" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">Assess</button>
+        
+        <p id="caseResult" class="text-lg font-bold mt-4"></p>
+      </div>
+    </div>
+  </section>
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/8897752518?text=Hello%20Legal%20Assist,%20I%20need%20help%20with%20your%20services" target="_blank" class="fixed bottom-6 right-6 z-50">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="Chat with us on WhatsApp" class="w-14 h-14 rounded-full shadow-lg">
+  </a>
+
+  <script>
+    function countUp(id, target, duration) {
+      let start = 0;
+      const stepTime = Math.abs(Math.floor(duration / target));
+      const obj = document.getElementById(id);
+      const timer = setInterval(() => {
+        start += 1;
+        obj.textContent = start;
+        if (start >= target) clearInterval(timer);
+      }, stepTime);
+    }
+
+    window.onload = () => {
+      countUp('companies', 500, 2000);
+      countUp('agreements', 900, 2000);
+      countUp('cases', 120, 2000);
+      countUp('years', 12, 2000);
+    };
+  </script>
+
+</body>
+</html>

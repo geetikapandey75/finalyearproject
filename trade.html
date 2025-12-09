@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trade Licence | Legal Assist</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Top Navigation Bar -->
+  <nav class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
+    <div class="text-xl font-bold">Legal Assist</div>
+    <div class="space-x-6">
+      <a href="index.html" class="hover:underline">Home</a>
+      <a href="driving-licence.html" class="hover:underline">Driving Licence</a>
+      <a href="business.html" class="hover:underline">Business Licence</a>
+      <a href="other.html" class="hover:underline font-semibold">Other</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-gray-800 to-gray-700 text-white py-20 text-center">
+    <h1 class="text-4xl font-bold mb-4">Trade Licence Services</h1>
+    <p class="text-lg mb-6">
+      Apply, check status, upload documents, find agents & learn the rules — all in one place.
+    </p>
+    <a href="#apply"
+       class="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-2 px-6 rounded-lg">
+      Apply Now
+    </a>
+  </section>
+
+  <div class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+    <!-- Guidelines -->
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Guidelines</h2>
+      <ul class="list-disc list-inside space-y-2">
+        <li>Mandatory for all commercial establishments before starting operations.</li>
+        <li>Issued by the Municipal Corporation or local authority.</li>
+        <li>Licence type depends on the business category.</li>
+        <li>Valid for one year; renewal required before expiry.</li>
+        <li>Operations must not cause pollution, hazards, or nuisance.</li>
+        <li>Location must comply with zoning laws.</li>
+        <li>Authorities may inspect premises.</li>
+        <li>Operating without a valid licence can result in fines.</li>
+      </ul>
+    </section>
+
+    <!-- Apply Form -->
+    <section id="apply">
+      <h2 class="text-2xl font-bold mb-4">Apply for Trade Licence</h2>
+
+      <!-- FIXED FORM -->
+      <form action="trade-form.php" method="POST" class="bg-white shadow-md rounded-lg p-6 space-y-4">
+
+        <div>
+          <label class="block font-medium mb-1">Full Name</label>
+          <input type="text" name="full_name" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Business Name</label>
+          <input type="text" name="business_name" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Business Address</label>
+          <textarea name="business_address" class="w-full border border-gray-300 rounded-lg px-3 py-2" rows="3" required></textarea>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Business Category</label>
+          <select name="business_category" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+            <option value="">Select Category</option>
+            <option value="retail">Retail</option>
+            <option value="food">Food & Beverage</option>
+            <option value="manufacturing">Manufacturing</option>
+            <option value="service">Service</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Contact Number</label>
+          <input type="tel" name="phone_number" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+        </div>
+
+        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-500">
+          Submit Application
+        </button>
+
+      </form>
+    </section>
+
+    <!-- Application Status -->
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Check Application Status</h2>
+      <form class="bg-white shadow-md rounded-lg p-6 space-y-4">
+        <div>
+          <label class="block font-medium mb-1">Application Number</label>
+          <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+        </div>
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-500">
+          Check Status
+        </button>
+      </form>
+    </section>
+
+    <!-- Upload Documents -->
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Upload Required Documents</h2>
+      <form class="bg-white shadow-md rounded-lg p-6 space-y-4">
+        <div>
+          <label class="block font-medium mb-1">Document Type</label>
+          <select class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+            <option value="">Select Document</option>
+            <option value="id-proof">ID Proof</option>
+            <option value="address-proof">Address Proof</option>
+            <option value="business-proof">Business Proof</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Upload File</label>
+          <input type="file" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+        </div>
+        <button type="submit" class="bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-500">
+          Upload
+        </button>
+      </form>
+    </section>
+
+    <!-- Find an Agent -->
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Find an Agent</h2>
+      <a href="https://www.justdial.com/Hyderabad/Trade-License-Agents/nct-10595115"
+         target="_blank" class="text-blue-600 hover:underline">
+        Click here to find a verified Trade Licence agent near you
+      </a>
+    </section>
+
+    <!-- Acts & Rules -->
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Acts & Rules</h2>
+      <p>
+        The Trade Licence is governed by local municipal corporation acts.
+        <a href="https://www.ghmc.gov.in/TradeLicenses.aspx" target="_blank" class="text-blue-600 hover:underline">
+          Click here for detailed Acts & Rules
+        </a>.
+      </p>
+    </section>
+
+  </div>
+</body>
+</html>

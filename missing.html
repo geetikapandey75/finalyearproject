@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Missing Person Portal</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body class="m-0 font-sans">
+
+  <!-- HERO HEADER -->
+  <header class="bg-[#10367d] h-[320px] flex items-center justify-center text-center text-white">
+    <div class="w-full h-full p-5 flex flex-col justify-center items-center">
+      <h1 class="text-4xl font-bold mb-2">Missing Person Portal</h1>
+      <p class="text-lg mb-5">Help us reunite families and loved ones.</p>
+
+      <div class="flex gap-4">
+        <a href="#missing-form" 
+           class="bg-[#ffcc00] text-[#1a237e] font-bold px-6 py-2 rounded-full hover:bg-[#ffb300] transition">
+           Report Missing Person
+        </a>
+
+        <a href="#emergency" 
+           class="bg-red-600 text-white font-bold px-6 py-2 rounded-full hover:bg-red-700 transition">
+           ⚠ Emergency Help
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- FORM SECTION -->
+  <section id="missing-form" class="p-8 max-w-3xl mx-auto">
+    <h2 class="text-3xl font-bold mb-6 text-[#10367d]">Report a Missing Person</h2>
+
+    <form class="space-y-4 bg-gray-100 p-6 rounded-lg shadow">
+
+      <div>
+        <label class="font-semibold">Full Name</label>
+        <input type="text" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="font-semibold">Age</label>
+        <input type="number" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="font-semibold">Gender</label>
+        <select class="w-full p-2 border rounded">
+          <option>Select</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="font-semibold">Date Last Seen</label>
+        <input type="date" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="font-semibold">Last Seen Location</label>
+        <input type="text" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="font-semibold">Description / Identifying Marks</label>
+        <textarea rows="4" class="w-full p-2 border rounded"></textarea>
+      </div>
+
+      <div>
+        <label class="font-semibold">Upload Recent Photo</label>
+        <input type="file" class="w-full">
+      </div>
+
+      <div>
+        <label class="font-semibold">Your Contact Number</label>
+        <input type="tel" class="w-full p-2 border rounded">
+      </div>
+
+      <button class="bg-[#10367d] text-white w-full py-2 rounded font-bold hover:bg-blue-900 transition">
+        Submit Report
+      </button>
+
+    </form>
+  </section>
+
+
+  <!-- UPLOAD POSTER -->
+  <section class="p-8 max-w-3xl mx-auto">
+    <h2 class="text-3xl font-bold text-[#10367d] mb-4">Upload Missing Poster</h2>
+
+    <form class="bg-gray-100 p-6 rounded-lg shadow space-y-4">
+      <div>
+        <label class="font-semibold">Upload Poster (PDF/JPG/PNG)</label>
+        <input type="file" class="w-full">
+      </div>
+
+      <button class="bg-[#10367d] text-white w-full py-2 rounded font-bold hover:bg-blue-900 transition">
+        Upload Poster
+      </button>
+    </form>
+  </section>
+
+
+  <!-- LIVE STATUS TRACKING -->
+  <section class="p-8 bg-blue-50">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-900 mb-4">Live Case Tracking</h2>
+
+      <form class="space-y-4 bg-gray-100 p-6 rounded-lg shadow">
+        <label class="font-semibold">Enter Case ID</label>
+        <input type="text" class="w-full p-2 border rounded" placeholder="MP-2025-1234">
+
+        <button class="bg-[#10367d] text-white w-full py-2 rounded font-bold hover:bg-blue-900 transition">
+          Track Status
+        </button>
+      </form>
+
+      <div class="bg-white p-5 rounded-lg shadow mt-4 border">
+        <h3 class="font-bold text-lg mb-2 text-[#10367d]">Status Updates</h3>
+        <p>No case selected.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- MAP-BASED SIGHTINGS -->
+  <section class="p-8 max-w-5xl mx-auto">
+    <h2 class="text-3xl font-bold text-[#10367d] mb-3">Map-Based Sightings</h2>
+    <p class="mb-3 text-gray-700">View real-time sightings reported by the public.</p>
+
+    <div class="w-full h-80 bg-gray-300 flex items-center justify-center rounded shadow">
+      Map Loading...
+    </div>
+  </section>
+
+
+  <!-- HEATMAP -->
+  <section class="p-8 max-w-5xl mx-auto">
+    <h2 class="text-3xl font-bold text-[#10367d] mb-3">Heatmap of Missing Cases</h2>
+    <p class="mb-3 text-gray-700">Hotspots of missing persons and safe/unsafe zones.</p>
+
+    <div class="w-full h-80 bg-gray-300 flex items-center justify-center rounded shadow">
+      Heatmap Loading...
+    </div>
+  </section>
+
+  <!-- VOLUNTEER NETWORK -->
+<section class="p-8 max-w-4xl mx-auto">
+  <h2 class="text-3xl font-bold text-[#10367d] mb-4">Volunteer Search Network</h2>
+  <p class="text-gray-700 mb-4">
+    Join the community and get notified when a missing person is reported near your area.
+  </p>
+
+  <form class="bg-gray-100 p-6 rounded-lg shadow space-y-4">
+    <div>
+      <label class="font-semibold">Full Name</label>
+      <input type="text" class="w-full p-2 border rounded">
+    </div>
+
+    <div>
+      <label class="font-semibold">Your Location</label>
+      <input type="text" placeholder="City / Pincode" class="w-full p-2 border rounded">
+    </div>
+
+    <div>
+      <label class="font-semibold">Phone Number</label>
+      <input type="tel" class="w-full p-2 border rounded">
+    </div>
+
+    <div>
+      <label class="font-semibold">Receive Alerts Within</label>
+      <select class="w-full p-2 border rounded">
+        <option>1 km</option>
+        <option>5 km</option>
+        <option>10 km</option>
+        <option>20 km</option>
+      </select>
+    </div>
+
+    <button class="bg-[#10367d] text-white w-full py-2 rounded font-bold hover:bg-blue-900 transition">
+      Join Volunteer Network
+    </button>
+  </form>
+</section>
+
+<!-- COMMUNITY FORUMS -->
+<section class="p-8 max-w-5xl mx-auto">
+  <h2 class="text-3xl font-bold text-[#10367d] mb-4">Community Forums</h2>
+  <p class="text-gray-700 mb-4">Connect with families, volunteers, and support groups.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <div class="bg-white p-5 rounded-lg shadow border">
+      <h3 class="font-bold text-xl mb-2">Families of Missing Individuals</h3>
+      <p class="mb-3">Share updates, photos, tips, and receive support from the community.</p>
+      <a class="text-blue-700 font-semibold hover:underline" href="#">Enter Forum →</a>
+    </div>
+
+    <div class="bg-white p-5 rounded-lg shadow border">
+      <h3 class="font-bold text-xl mb-2">Volunteer Discussions</h3>
+      <p class="mb-3">Coordinate searches, share sightings, and organize group efforts.</p>
+      <a class="text-blue-700 font-semibold hover:underline" href="#">Enter Forum →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- SOCIAL MEDIA SHARE -->
+<section class="p-8 max-w-4xl mx-auto">
+  <h2 class="text-3xl font-bold text-[#10367d] mb-4">Share Missing Person Poster</h2>
+  <p class="text-gray-700 mb-4">Help spread awareness by sharing with one click.</p>
+
+  <div class="flex flex-wrap gap-4">
+
+    <a href="https://wa.me/?text=Please%20help%20find%20this%20missing%20person%20-%20[LINK]" 
+       class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600">
+       WhatsApp
+    </a>
+
+    <a href="#" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
+      Facebook
+    </a>
+
+    <a href="#" class="bg-[#E4405F] text-white px-4 py-2 rounded-full hover:bg-pink-600">
+      Instagram
+    </a>
+
+    <a href="#" class="bg-sky-500 text-white px-4 py-2 rounded-full hover:bg-sky-600">
+      Twitter
+    </a>
+  </div>
+</section>
+<!-- WHAT TO DO FIRST -->
+<section class="p-8 bg-gray-100">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl font-bold text-[#10367d] mb-4">What To Do First</h2>
+    <p class="text-gray-700 mb-4">If someone you know goes missing, follow these essential steps:</p>
+
+    <ol class="list-decimal pl-6 space-y-3 text-gray-800">
+      <li>Call 112 immediately and report the missing person.</li>
+      <li>Gather a recent photo, description, and last known location.</li>
+      <li>Notify close friends, neighbors, and relatives.</li>
+      <li>Submit a missing report on this portal.</li>
+      <li>Share the poster on WhatsApp and social media.</li>
+      <li>Check CCTV in nearby areas if possible.</li>
+      <li>Join search teams and track live updates from volunteers.</li>
+    </ol>
+  </div>
+</section>
+
+
+
+
+
+  <!-- SAFETY TIPS -->
+  <section class="p-8 bg-gray-100">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-[#10367d] mb-4">Safety Alerts & Tips</h2>
+
+      <ul class="list-disc pl-6 space-y-2 text-gray-800">
+        <li>Share your live location with trusted contacts.</li>
+        <li>Avoid isolated areas at night.</li>
+        <li>Use emergency SOS on your phone.</li>
+        <li>Teach children how to identify safe adults.</li>
+        <li>Report suspicious activity immediately.</li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- SUCCESS STORIES -->
+  <section class="p-8 max-w-5xl mx-auto">
+    <h2 class="text-3xl font-bold text-[#10367d] mb-4">Success Stories</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <div class="p-5 bg-white rounded-lg shadow border">
+        <h3 class="font-bold text-xl mb-2">Reunited After 3 Weeks</h3>
+        <p>A 14-year-old girl from Hyderabad was safely found with the help of public reports.</p>
+      </div>
+
+      <div class="p-5 bg-white rounded-lg shadow border">
+        <h3 class="font-bold text-xl mb-2">Community Search Saved a Life</h3>
+        <p>A missing senior citizen was located quickly due to quick public response.</p>
+      </div>
+
+    </div>
+  </section>
+  <!-- MEDIA PARTNERSHIP MODULE -->
+<section class="bg-white p-6 rounded shadow-lg mt-10">
+    <h2 class="text-3xl font-bold text-blue-800 mb-4">Media Partnership Module</h2>
+    <p class="text-gray-700 mb-6">Generate alerts for media outlets and boost visibility instantly.</p>
+
+    <!-- Tabs -->
+    <div class="flex gap-3 mb-6">
+        <button onclick="showTab('newsTab')"
+            class="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800">Local News Channels</button>
+        <button onclick="showTab('radioTab')"
+            class="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800">Community Radio</button>
+        <button onclick="showTab('paperTab')"
+            class="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800">Newspaper Classified</button>
+        <button onclick="showTab('tvTab')"
+            class="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800">TV Ticker</button>
+    </div>
+
+    <!-- NEWS CHANNEL AUTO-SEND -->
+    <div id="newsTab" class="tab-content">
+        <h3 class="text-xl font-semibold mb-2">Auto-Send to Local News Channels</h3>
+        <p class="text-gray-600 mb-4">Enter missing person details and generate auto email alerts.</p>
+
+        <textarea id="newsMessage"
+            class="w-full p-3 border rounded h-40"
+            placeholder="Enter the missing person details..."></textarea>
+
+        <button onclick="generateNewsEmail()"
+            class="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            Generate Email Message
+        </button>
+
+        <textarea id="newsOutput"
+            class="w-full p-3 border rounded h-40 mt-4"
+            readonly></textarea>
+    </div>
+
+    <!-- COMMUNITY RADIO -->
+    <div id="radioTab" class="tab-content hidden">
+        <h3 class="text-xl font-semibold mb-2">Community Radio Announcement</h3>
+        <textarea id="radioInput"
+            class="w-full p-3 border rounded h-40"
+            placeholder="Basic missing details..."></textarea>
+
+        <button onclick="generateRadio()"
+            class="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            Generate Radio Script
+        </button>
+
+        <textarea id="radioOutput"
+            class="w-full p-3 border rounded h-40 mt-4"
+            readonly></textarea>
+    </div>
+
+    <!-- NEWSPAPER CLASSIFIED -->
+    <div id="paperTab" class="tab-content hidden">
+        <h3 class="text-xl font-semibold mb-2">Newspaper Classified Generator</h3>
+
+        <textarea id="paperInput"
+            class="w-full p-3 border rounded h-40"
+            placeholder="Enter missing person details..."></textarea>
+
+        <button onclick="generateClassified()"
+            class="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            Generate Classified Ad
+        </button>
+
+        <textarea id="paperOutput"
+            class="w-full p-3 border rounded h-40 mt-4"
+            readonly></textarea>
+    </div>
+
+    <!-- TV TICKER -->
+    <div id="tvTab" class="tab-content hidden">
+        <h3 class="text-xl font-semibold mb-2">TV Ticker / Breaking News Text</h3>
+
+        <textarea id="tvInput"
+            class="w-full p-3 border rounded h-40"
+            placeholder="Enter short missing alert..."></textarea>
+
+        <button onclick="generateTicker()"
+            class="mt-3 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+            Generate Ticker Text
+        </button>
+
+        <textarea id="tvOutput"
+            class="w-full p-3 border rounded h-40 mt-4"
+            readonly></textarea>
+    </div>
+</section>
+
+<!-- JS -->
+<script>
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+    document.getElementById(tabId).classList.remove('hidden');
+}
+
+/* Local News Email Generator */
+function generateNewsEmail() {
+    const text = document.getElementById('newsMessage').value;
+
+    const message =
+`SUBJECT: MISSING PERSON URGENT ALERT
+
+Dear Media Team,
+
+We request your urgent support in broadcasting the following missing person report:
+
+${text}
+
+Please help us circulate this information on your channel.
+
+Regards,
+Legal Assist Team`;
+
+    document.getElementById('newsOutput').value = message;
+}
+
+/* Radio Script Generator */
+function generateRadio() {
+    const text = document.getElementById('radioInput').value;
+
+    const script =
+`📻 COMMUNITY RADIO ALERT
+---------------------------------
+Attention listeners,
+We have an important missing person update:
+
+${text}
+
+If you have any information, please contact your nearest police station immediately.
+Stay alert, stay safe.`;
+
+    document.getElementById('radioOutput').value = script;
+}
+
+/* Classified Ad Generator */
+function generateClassified() {
+    const text = document.getElementById('paperInput').value;
+
+    const ad =
+`📰 NEWSPAPER MISSING PERSON AD
+---------------------------------
+MISSING: ${text}
+
+Anyone with information is requested to inform the nearest police station.
+
+This is a public interest request from Legal Assist.`;
+
+    document.getElementById('paperOutput').value = ad;
+}
+
+/* TV Ticker Generator */
+function generateTicker() {
+    const text = document.getElementById('tvInput').value;
+
+    const ticker =
+`BREAKING: Missing person alert — ${text} — Please contact the nearest police station if seen.`;
+
+    document.getElementById('tvOutput').value = ticker;
+}
+</script>
+
+
+<!-- Floating WhatsApp Icon -->
+<a href="https://wa.me/8897752519" target="_blank"
+   class="fixed bottom-5 right-5 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center transition-all duration-300">
+   <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7" viewBox="0 0 16 16">
+     <path d="M13.601 2.326A7.854 7.854 0 0 0 8.002 0C3.584 0 .01 3.584.01 8.002c0 1.41.367 2.79 1.064 4.01L0 16l4.114-1.058a7.953 7.953 0 0 0 3.888 1h.004c4.417 0 8.002-3.584 8.002-8.002a7.95 7.95 0 0 0-2.407-5.614zM8.006 14.53h-.003a6.52 6.52 0 0 1-3.324-.91l-.238-.14-2.44.628.65-2.377-.156-.245a6.53 6.53 0 1 1 5.51 3.045zm3.625-4.93c-.198-.099-1.174-.578-1.355-.644-.182-.066-.315-.099-.446.099-.132.198-.513.644-.63.776-.116.132-.232.149-.43.05-.198-.1-.837-.308-1.594-.983-.589-.525-.985-1.175-1.102-1.373-.116-.198-.013-.304.087-.403.089-.089.198-.232.297-.347.099-.116.132-.198.198-.33.066-.132.033-.248-.017-.347-.05-.099-.446-1.075-.611-1.47-.161-.386-.325-.33-.446-.335l-.38-.007c-.132 0-.347.05-.528.248-.182.198-.695.679-.695 1.654 0 .975.712 1.915.811 2.049.099.132 1.402 2.137 3.396 2.997.475.205.845.326 1.133.417.476.151.91.13 1.253.079.383-.057 1.174-.48 1.34-.944.165-.464.165-.863.116-.944-.05-.082-.182-.132-.38-.231z"/>
+   </svg>
+</a>
+  <!-- EMERGENCY -->
+  <section id="emergency" class="p-8 text-center bg-red-50">
+    <h2 class="text-3xl font-bold text-red-700 mb-4">Emergency Assistance</h2>
+    <p class="mb-4">If someone is in immediate danger, click below:</p>
+
+    <a href="tel:112" 
+       class="bg-red-600 text-white font-bold px-8 py-3 rounded-full hover:bg-red-700 transition">
+      Call 112 (Emergency)
+    </a>
+  </section>
+
+</body>
+</html>

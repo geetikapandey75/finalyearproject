@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crime Reporting Portal - FIR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+<header class="bg-red-900 text-white p-6 text-center">
+  <h1 class="text-3xl font-bold">Crime Reporting Portal (FIR)</h1>
+  <p>Report crime incidents safely and securely</p>
+</header>
+
+<main class="p-6 max-w-5xl mx-auto space-y-6">
+
+  <!-- Progress Tracker -->
+  <div id="progressBar" class="w-full bg-gray-200 rounded-full h-4 mb-4">
+    <div class="bg-green-500 h-4 rounded-full w-0"></div>
+  </div>
+  <p id="progressText" class="text-sm text-gray-700 mb-4">You're 0% done, last saved: never</p>
+
+  <!-- FIR Form -->
+  <section class="bg-white p-6 rounded shadow space-y-6">
+    <h2 class="text-2xl font-bold">Report Crime</h2>
+
+    <form id="crimeForm" class="space-y-6">
+
+      <!-- FIR Details -->
+      <div>
+        <label class="block font-semibold">FIR Title / Crime Type</label>
+        <input type="text" id="crimeTitle" class="w-full p-2 border rounded" placeholder="e.g. Hit & Run"/>
+      </div>
+
+      <div>
+        <label class="block font-semibold">Victim Name</label>
+        <input type="text" id="victimName" class="w-full p-2 border rounded"/>
+      </div>
+
+      <div>
+        <label class="block font-semibold">Contact Number</label>
+        <input type="tel" id="contactNumber" class="w-full p-2 border rounded"/>
+      </div>
+
+      <div>
+        <label class="block font-semibold">Incident Date & Time</label>
+        <input type="datetime-local" id="incidentDate" class="w-full p-2 border rounded"/>
+      </div>
+
+      <div>
+        <label class="block font-semibold">Incident Location</label>
+        <input type="text" id="incidentLocation" class="w-full p-2 border rounded" placeholder="Address or landmark"/>
+      </div>
+
+      <!-- Map -->
+      <div>
+        <h3 class="font-bold mb-2">Pin Incident Location on Map</h3>
+        <div id="map" class="w-full h-64 rounded border mb-2"></div>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="text" id="pinLat" class="p-2 border rounded" placeholder="Latitude" readonly/>
+          <input type="text" id="pinLng" class="p-2 border rounded" placeholder="Longitude" readonly/>
+        </div>
+      </div>
+
+      <!-- Evidence Upload -->
+      <div>
+        <h3 class="font-bold mb-2">Evidence Upload (Photos/Videos/Audio/Documents)</h3>
+        <input type="file" id="evidenceFiles" multiple class="mb-2"/>
+        <div id="evidencePreview" class="grid grid-cols-3 gap-2"></div>
+      </div>
+
+      <!-- Witness Module -->
+      <div>
+        <h3 class="font-bold mb-2">Witnesses</h3>
+        <button type="button" id="addWitnessBtn" class="bg-red-700 text-white px-3 py-1 rounded mb-2">+ Add Witness</button>
+        <div id="witnessList" class="space-y-2"></div>
+      </div>
+
+      <!-- Vehicle Details -->
+      <div>
+        <h3 class="font-bold mb-2">Vehicle Details (if applicable)</h3>
+        <input type="text" id="vehicleReg" placeholder="Registration Number" class="w-full p-2 border rounded mb-1"/>
+        <input type="text" id="vehicleMake" placeholder="Make/Model/Color" class="w-full p-2 border rounded mb-1"/>
+        <input type="text" id="vehicleUnique" placeholder="Unique Identifiers" class="w-full p-2 border rounded mb-1"/>
+        <input type="text" id="vehicleDirection" placeholder="Direction of movement" class="w-full p-2 border rounded"/>
+      </div>
+
+      <!-- Cyber Crime Toolkit -->
+      <div>
+        <h3 class="font-bold mb-2">Cyber Crime Details</h3>
+        <input type="text" id="cyberScreenshot" placeholder="Screenshot URL / File" class="w-full p-2 border rounded mb-1"/>
+        <input type="text" id="cyberURL" placeholder="Social media / website URL" class="w-full p-2 border rounded mb-1"/>
+        <input type="text" id="cyberTransaction" placeholder="Transaction ID / UPI details" class="w-full p-2 border rounded mb-1"/>
+        <input type="text" id="cyberIP" placeholder="IP address (if known)" class="w-full p-2 border rounded"/>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="bg-red-900 text-white w-full py-2 rounded font-bold">Submit FIR</button>
+      <a href="https://wa.me/918897752519?text=I%20want%20to%20report%20a%20crime" target="_blank" class="block mt-2 text-center text-blue-700 underline">Contact via WhatsApp</a>
+
+    </form>
+  </section>
+</main>
+<div class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-semibold mb-2">Police Action Log</h2>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Investigation started: 07 Dec 2025</li>
+      <li>Witness statements recorded: 08 Dec 2025</li>
+      <li>Evidence collected: 09 Dec 2025</li>
+      <li><button class="text-blue-600 underline" onclick="alert('Update requested')">Request update</button></li>
+    </ul>
+  </div>
+
+  
+  <!-- Social Media Alert Generator -->
+  <div class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-semibold mb-2">Social Media Alert</h2>
+    <textarea id="alert-text" rows="3" class="border p-2 rounded w-full" placeholder="Write alert message..."></textarea>
+    <div class="mt-2 space-x-2">
+      <button class="px-3 py-1 bg-blue-600 text-white rounded" onclick="shareFB()">Share on Facebook</button>
+      <button class="px-3 py-1 bg-blue-400 text-white rounded" onclick="shareTwitter()">Share on Twitter</button>
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+  // ======= Auto-save + Progress Tracker =======
+  const AUTO_SAVE_KEY = 'crime_autosave';
+  const formFields = [
+    'crimeTitle','victimName','contactNumber','incidentDate','incidentLocation',
+    'vehicleReg','vehicleMake','vehicleUnique','vehicleDirection',
+    'cyberScreenshot','cyberURL','cyberTransaction','cyberIP'
+  ];
+  const witnessListEl = document.getElementById('witnessList');
+  const evidencePreviewEl = document.getElementById('evidencePreview');
+  const progressBarEl = document.getElementById('progressBar').firstElementChild;
+  const progressTextEl = document.getElementById('progressText');
+
+  function saveDraft() {
+    const witnesses = [];
+    document.querySelectorAll('.witness-entry').forEach(w => {
+      witnesses.push({
+        name: w.querySelector('.witness-name').value,
+        contact: w.querySelector('.witness-contact').value,
+        relation: w.querySelector('.witness-relation').value,
+        anonymous: w.querySelector('.witness-anonymous').checked,
+        availability: w.querySelector('.witness-availability').value
+      });
+    });
+    const evidenceFiles = [];
+    document.querySelectorAll('#evidenceFiles')[0]?.files && [...document.querySelector('#evidenceFiles').files].forEach(f=>{
+      evidenceFiles.push(f.name);
+    });
+    const state = {};
+    formFields.forEach(id => state[id] = document.getElementById(id).value);
+    state.witnesses = witnesses;
+    state.evidenceFiles = evidenceFiles;
+    state.pinLat = document.getElementById('pinLat').value;
+    state.pinLng = document.getElementById('pinLng').value;
+    state.lastSaved = new Date().toLocaleTimeString();
+    localStorage.setItem(AUTO_SAVE_KEY, JSON.stringify(state));
+    updateProgress(state);
+  }
+
+  function loadDraft() {
+    const state = JSON.parse(localStorage.getItem(AUTO_SAVE_KEY) || '{}');
+    formFields.forEach(id => { if(state[id]) document.getElementById(id).value = state[id]; });
+    if(state.witnesses) state.witnesses.forEach(addWitness);
+    if(state.pinLat && state.pinLng) setMapPin(state.pinLat, state.pinLng);
+    updateProgress(state);
+  }
+
+  function updateProgress(state){
+    let filled = 0;
+    formFields.forEach(f => { if(state[f] && state[f]!=='') filled++; });
+    filled += (state.witnesses?.length || 0) * 2; // weight witnesses more
+    const total = formFields.length + 10;
+    const pct = Math.min(100, Math.round(filled/total*100));
+    progressBarEl.style.width = pct + '%';
+    progressTextEl.textContent = `You're ${pct}% done, last saved: ${state.lastSaved||'never'}`;
+  }
+
+  // ======= Witness Module =======
+  document.getElementById('addWitnessBtn').addEventListener('click', () => addWitness());
+  function addWitness(data={}){
+    const div = document.createElement('div');
+    div.className = 'witness-entry p-2 border rounded relative';
+    div.innerHTML = `
+      <button type="button" class="absolute top-1 right-1 text-red-600 remove-witness">✕</button>
+      <input class="w-full p-1 border rounded mb-1 witness-name" placeholder="Name" value="${data.name||''}"/>
+      <input class="w-full p-1 border rounded mb-1 witness-contact" placeholder="Contact" value="${data.contact||''}"/>
+      <input class="w-full p-1 border rounded mb-1 witness-relation" placeholder="Relation to victim" value="${data.relation||''}"/>
+      <input class="w-full p-1 border rounded mb-1 witness-availability" placeholder="Availability for testimony" value="${data.availability||''}"/>
+      <label><input type="checkbox" class="witness-anonymous" ${data.anonymous?'checked':''}/> Anonymous</label>
+    `;
+    div.querySelector('.remove-witness').addEventListener('click', ()=>{div.remove(); saveDraft();});
+    witnessListEl.appendChild(div);
+    saveDraft();
+  }
+
+  // ======= Evidence Preview =======
+  document.getElementById('evidenceFiles').addEventListener('change', function(){
+    evidencePreviewEl.innerHTML = '';
+    Array.from(this.files).forEach(file=>{
+      const div = document.createElement('div');
+      div.className = 'border p-1 rounded text-sm';
+      div.textContent = file.name;
+      evidencePreviewEl.appendChild(div);
+    });
+    saveDraft();
+  });
+
+  // ======= Map (Leaflet) =======
+  const map = L.map('map').setView([17.3850,78.4867], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+  let pinMarker = null;
+  map.on('click', function(e){
+    const {lat,lng} = e.latlng;
+    setMapPin(lat,lng);
+    saveDraft();
+  });
+  function setMapPin(lat,lng){
+    if(pinMarker) pinMarker.setLatLng([lat,lng]);
+    else pinMarker = L.marker([lat,lng]).addTo(map);
+    document.getElementById('pinLat').value = lat.toFixed(6);
+    document.getElementById('pinLng').value = lng.toFixed(6);
+  }
+
+  // ======= Form Submit =======
+  document.getElementById('crimeForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    saveDraft();
+    const state = JSON.parse(localStorage.getItem(AUTO_SAVE_KEY));
+    const w = window.open();
+    w.document.write('<h2>FIR Submitted (Preview)</h2><pre>'+JSON.stringify(state,null,2)+'</pre>');
+    alert('FIR saved locally. Preview opened in new tab.');
+  });
+
+  // ======= Auto-save every 15s =======
+  setInterval(saveDraft,15000);
+  loadDraft();
+  
+  // Social Media Sharing
+  function shareFB() {
+    const text = encodeURIComponent(document.getElementById('alert-text').value);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=&quote=${text}`, '_blank');
+  }
+
+  function shareTwitter() {
+    const text = encodeURIComponent(document.getElementById('alert-text').value);
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+  }
+
+</script>
+
+<!-- Floating WhatsApp Icon -->
+<a href="https://wa.me/918897752519" target="_blank" 
+   class="fixed bottom-5 right-5 bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg flex items-center justify-center z-50" 
+   title="Chat with us on WhatsApp">
+  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M20.52 3.48A11.94 11.94 0 0012 0C5.373 0 0 5.373 0 12c0 2.116.552 4.094 1.516 5.83L0 24l6.27-1.576A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12 0-3.18-1.235-6.18-3.48-8.52zm-8.51 19.46a10.036 10.036 0 01-5.345-1.536l-.383-.23-3.728.937.997-3.63-.252-.395A9.97 9.97 0 012 12C2 6.486 6.486 2 12 2c2.667 0 5.15 1.04 7.04 2.927A9.939 9.939 0 0122 12c0 5.514-4.486 10-10 10zm5.302-7.905c-.234-.117-1.382-.682-1.595-.76-.213-.078-.368-.117-.523.117-.154.234-.594.76-.73.915-.134.156-.268.174-.502.058-.234-.117-1.0-.371-1.9-1.17-.703-.626-1.178-1.398-1.316-1.632-.134-.234-.014-.36.104-.476.107-.106.234-.273.351-.41.117-.136.156-.234.234-.39.078-.156.039-.293-.02-.41-.059-.117-.523-1.256-.717-1.717-.189-.45-.38-.39-.523-.397l-.446-.008c-.156 0-.41.058-.625.273s-.82.8-.82 1.95c0 1.15.84 2.266.957 2.422.117.156 1.657 2.53 4.02 3.545.563.243 1.0.388 1.344.497.564.178 1.077.153 1.48.093.451-.066 1.382-.566 1.577-1.115.195-.548.195-1.017.136-1.115-.059-.097-.213-.156-.446-.273z"/>
+  </svg>
+</a>
+
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Other Licence Services</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+
+  <!-- Navigation Bar -->
+  <header class="bg-gray-900 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">Legal Assist</h1>
+      <nav class="space-x-4">
+        <a href="license.html" class="hover:underline">Home</a>
+        <a href="business.html" class="hover:underline">Business Licence</a>
+        <a href="trade.html" class="hover:underline">Trade Licence</a>
+        <a href="food.html" class="hover:underline">Food Licence</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="text-center py-16 bg-gradient-to-r from-gray-800 to-gray-600 text-white">
+    <h2 class="text-4xl font-bold mb-4">Other Licence Services</h2>
+    <p class="mb-6 text-lg">Explore a wide range of licences and registrations we assist with — beyond business, trade, driving, and food.</p>
+  </section>
+
+  <!-- Content -->
+  <main class="container mx-auto px-6 py-12 space-y-12">
+
+    <!-- List of Other Licences -->
+    <section id="others" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-6 text-center">Additional Licence Services We Offer</h3>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="p-6 border rounded-xl hover:shadow-md transition">
+          <h4 class="text-xl font-semibold mb-2">Shop & Establishment Licence</h4>
+          <p class="text-gray-700">For small businesses, retail shops, and offices to operate legally within city limits.</p>
+        </div>
+
+        <div class="p-6 border rounded-xl hover:shadow-md transition">
+          <h4 class="text-xl font-semibold mb-2">Import Export Code (IEC)</h4>
+          <p class="text-gray-700">Mandatory for businesses involved in import or export activities across India.</p>
+        </div>
+
+        <div class="p-6 border rounded-xl hover:shadow-md transition">
+          <h4 class="text-xl font-semibold mb-2">Labour Licence</h4>
+          <p class="text-gray-700">Required for establishments employing contract labour to ensure legal compliance.</p>
+        </div>
+
+        <div class="p-6 border rounded-xl hover:shadow-md transition">
+          <h4 class="text-xl font-semibold mb-2">Fire Safety Licence</h4>
+          <p class="text-gray-700">Ensures your premises meet fire safety standards and are approved by local authorities.</p>
+        </div>
+
+        <div class="p-6 border rounded-xl hover:shadow-md transition">
+          <h4 class="text-xl font-semibold mb-2">GST Registration</h4>
+          <p class="text-gray-700">Essential for all businesses providing goods or services to collect and remit GST legally.</p>
+        </div>
+
+        <div class="p-6 border rounded-xl hover:shadow-md transition">
+          <h4 class="text-xl font-semibold mb-2">Health Trade Licence</h4>
+          <p class="text-gray-700">Required for businesses dealing in goods that may affect public health, like salons or eateries.</p>
+        </div>
+
+        <div class="p-6 border rounded-xl hover:shadow-md transition">
+          <h4 class="text-xl font-semibold mb-2">FSSAI Renewal</h4>
+          <p class="text-gray-700">Renew your existing food licence easily through our assistance services.</p>
+        </div>
+
+        <div class="p-6 border rounded-xl hover:shadow-md transition">
+          <h4 class="text-xl font-semibold mb-2">Pollution Control Licence</h4>
+          <p class="text-gray-700">For industries that emit waste or pollutants, ensuring compliance with environmental laws.</p>
+        </div>
+
+        <div class="p-6 border rounded-xl hover:shadow-md transition">
+          <h4 class="text-xl font-semibold mb-2">Trade Mark Registration</h4>
+          <p class="text-gray-700">Protect your business name, logo, or slogan with official trade mark registration.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enquiry Form -->
+    <section id="enquiry" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-6 text-center">Request Assistance</h3>
+
+      <!-- ⭐ FIXED: Added action, method, and correct name attributes -->
+      <form action="other-form.php" method="POST" class="space-y-6 max-w-2xl mx-auto">
+        
+        <div>
+          <label class="block font-semibold mb-2">Full Name</label>
+          <input type="text" name="full_name" class="w-full p-4 border rounded-lg" placeholder="Enter your name" required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Email</label>
+          <input type="email" name="email" class="w-full p-4 border rounded-lg" placeholder="Enter your email" required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Phone Number</label>
+          <input type="tel" name="phone" class="w-full p-4 border rounded-lg" placeholder="Enter your phone number" required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Type of Licence</label>
+          <select name="licence_type" class="w-full p-4 border rounded-lg" required>
+            <option value="">Select Licence Type</option>
+            <option>Shop & Establishment Licence</option>
+            <option>Import Export Code</option>
+            <option>Labour Licence</option>
+            <option>Fire Safety Licence</option>
+            <option>Health Trade Licence</option>
+            <option>Pollution Control Licence</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <button type="submit" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full">
+          Submit Request
+        </button>
+
+      </form>
+    </section>
+
+  </main>
+
+</body>
+</html>

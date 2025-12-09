@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Licence Services</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+
+  <!-- Navigation Bar -->
+  <header class="bg-gray-900 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">Legal Assist</h1>
+      <nav class="space-x-4">
+        <a href="license.html" class="hover:underline">Home</a>
+        <a href="business.html" class="hover:underline">Business Licence</a>
+        <a href="trade.html" class="hover:underline">Trade Licence</a>
+        <a href="other.html" class="hover:underline">Other</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="text-center py-16 bg-gradient-to-r from-gray-800 to-gray-600 text-white">
+    <h2 class="text-4xl font-bold mb-4">Food Licence Services</h2>
+    <p class="mb-6 text-lg">Apply, renew, check status, upload documents, and find consultants — all in one place.</p>
+    <a href="#apply" class="bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300">Apply Now</a>
+  </section>
+
+  <!-- Content -->
+  <main class="container mx-auto px-6 py-12 space-y-12">
+
+    <!-- Guidelines -->
+    <section id="guidelines" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-4">Eligibility & Requirements</h3>
+      <ul class="list-disc list-inside space-y-2 text-gray-700">
+        <li>All food business operators must register under FSSAI.</li>
+        <li>Businesses with turnover above ₹12 lakh require a state licence.</li>
+        <li>Large-scale operators or importers require a central licence.</li>
+        <li>Compliance with food safety standards and hygiene is mandatory.</li>
+        <li>Valid ID proof and address proof of the owner are required.</li>
+        <li>Proof of business premises such as rent agreement or utility bill.</li>
+        <li>Passport-size photographs and NOC from local authorities.</li>
+      </ul>
+    </section>
+
+    <!-- Apply Form -->
+    <section id="apply" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-6">Apply for Food Licence</h3>
+
+      <!-- FULLY FIXED FORM -->
+      <form action="food-form.php" method="POST" class="space-y-6 max-w-2xl mx-auto">
+
+        <div>
+          <label class="block font-semibold mb-2">Full Name</label>
+          <input type="text" 
+                 name="full_name"
+                 class="w-full p-4 border rounded-lg" 
+                 placeholder="Enter your name" 
+                 required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Business Name</label>
+          <input type="text" 
+                 name="business_name"
+                 class="w-full p-4 border rounded-lg" 
+                 placeholder="Enter your business name" 
+                 required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Email</label>
+          <input type="email" 
+                 name="email"
+                 class="w-full p-4 border rounded-lg" 
+                 placeholder="Enter your email" 
+                 required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Phone Number</label>
+          <input type="tel" 
+                 name="phone_number"
+                 class="w-full p-4 border rounded-lg" 
+                 placeholder="Enter your phone number"
+                 pattern="[0-9]{10}"
+                 maxlength="10"
+                 required>
+        </div>
+
+        <button type="submit" 
+                class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full">
+          Submit Application
+        </button>
+
+      </form>
+    </section>
+
+    <!-- Application Status -->
+    <section id="status" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-4">Check Application Status</h3>
+      <form class="space-y-4 max-w-md mx-auto">
+        <input type="text" class="w-full p-4 border rounded-lg" placeholder="Enter Application ID" required>
+        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full">
+          Check Status
+        </button>
+      </form>
+    </section>
+
+    <!-- Upload Documents -->
+    <section id="upload" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-4">Upload Required Documents</h3>
+      <form class="space-y-4 max-w-md mx-auto">
+        <input type="file" class="w-full p-4 border rounded-lg" required>
+        <button type="submit" class="bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-400 w-full">
+          Upload
+        </button>
+      </form>
+    </section>
+
+    <!-- Find a Consultant -->
+    <section id="agents" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-4">Find a Food Licence Consultant</h3>
+      <p class="text-gray-700 mb-4">Need help with the process? Find verified consultants near you.</p>
+      <a href="https://www.google.com/search?q=food+licence+consultant+near+me" target="_blank" 
+         class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-500">
+         Search Consultants
+      </a>
+    </section>
+
+    <!-- Acts and Rules -->
+    <section id="acts" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-4">Acts & Rules</h3>
+      <ul class="list-disc list-inside space-y-2 text-gray-700">
+        <li><a href="https://fssai.gov.in" class="text-blue-600 hover:underline" target="_blank">FSSAI - Food Safety and Standards Act, 2006</a></li>
+        <li><a href="https://fssai.gov.in/cms/food-safety-and-standards-regulations.php" class="text-blue-600 hover:underline" target="_blank">Food Safety Regulations</a></li>
+      </ul>
+    </section>
+
+  </main>
+
+</body>
+</html>

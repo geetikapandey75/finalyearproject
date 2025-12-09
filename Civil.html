@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Legal Assist | Civil Lawyer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+
+  <!-- Header -->
+  <header class="bg-blue-900 text-white text-center p-6">
+    <h1 class="text-2xl font-bold">Legal Assist - Civil Lawyer Services</h1>
+    <p class="text-sm mt-2">Expert Legal Help for Property, Contract, and Civil Disputes</p>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bg-gradient-to-r from-blue-800 to-blue-600 text-white p-4 flex justify-center gap-6 font-semibold shadow-md">
+  <a href="appointment-form.html" class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-4 py-2 rounded-full shadow hover:from-yellow-300 hover:to-yellow-400 transition">Book an Appointment</a>
+  <a href="find-lawyer.html" class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-4 py-2 rounded-full shadow hover:from-yellow-300 hover:to-yellow-400 transition">Find a Lawyer</a>
+</nav>
+
+  <!-- Hero Section -->
+  <section class="bg-white text-black py-20">
+  <div class="p-10 max-w-3xl mx-auto rounded-lg text-center bg-white shadow-lg">
+    <h1 class="text-4xl font-bold mb-4">Expert Legal Help at Your Fingertips</h1>
+    <p class="mb-6">Connect with top civil lawyers and get your legal issues resolved quickly and efficiently.</p>
+    <a href="appointment-form.html" class="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-300 transition">
+      Book Appointment Now
+    </a>
+  </div>
+</section>
+
+
+  <!-- About Section -->
+  <section id="about" class="max-w-5xl mx-auto p-6">
+    <h2 class="text-2xl font-semibold text-blue-900 mb-4">About Our Civil Lawyer</h2>
+    <p class="leading-relaxed">Our experienced Civil Lawyers at Legal Assist handles all types of non-criminal legal matters, including property issues, breach of contract, and family disputes. We focus on providing fair, efficient, and practical legal solutions tailored to each client's needs.</p>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="bg-white py-10">
+    <div class="max-w-5xl mx-auto px-6">
+      <h2 class="text-2xl font-semibold text-blue-900 mb-6">Services Offered</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-blue-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+          <h3 class="font-bold text-lg mb-2">Property Dispute Resolution</h3>
+          <p>We help resolve ownership, tenancy, and property boundary disputes efficiently.</p>
+        </div>
+        <div class="bg-blue-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+          <h3 class="font-bold text-lg mb-2">Contract Disputes & Notices</h3>
+          <p>Drafting, reviewing, and resolving contract disagreements with legal expertise.</p>
+        </div>
+        <div class="bg-blue-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+          <h3 class="font-bold text-lg mb-2">Tenant-Landlord Issues</h3>
+          <p>Legal solutions for rent disputes, evictions, and rental agreements.</p>
+        </div>
+        <div class="bg-blue-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+          <h3 class="font-bold text-lg mb-2">Consumer Complaints</h3>
+          <p>File and pursue consumer forum cases for defective goods or poor services.</p>
+        </div>
+        <div class="bg-blue-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+          <h3 class="font-bold text-lg mb-2">Family Civil Matters</h3>
+          <p>Inheritance disputes, partition suits, and family settlement agreements.</p>
+        </div>
+        <div class="bg-blue-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+          <h3 class="font-bold text-lg mb-2">Legal Consultations</h3>
+          <p>One-on-one sessions to guide you through your legal issues.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+<!--fee calculator-->
+<section id="fee-calculator" class="max-w-5xl mx-auto p-6 bg-white rounded shadow my-10">
+  <h2 class="text-2xl font-semibold text-blue-900 mb-4">Legal Fee Estimator</h2>
+  <form id="feeForm" class="space-y-4">
+    <select id="caseType" class="border p-2 w-full rounded">
+      <option value="">Select Case Type</option>
+      <option value="property">Property Dispute</option>
+      <option value="contract">Contract Dispute</option>
+      <option value="family">Family Matters</option>
+      <option value="consumer">Consumer Complaint</option>
+    </select>
+    <select id="complexity" class="border p-2 w-full rounded">
+      <option value="">Select Complexity</option>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+    <button type="button" onclick="calculateFee()" class="bg-yellow-400 px-4 py-2 rounded font-semibold hover:bg-yellow-300">Calculate Fee</button>
+  </form>
+  <p id="feeResult" class="mt-4 font-bold text-lg"></p>
+</section>
+
+<script>
+function calculateFee() {
+  const type = document.getElementById('caseType').value;
+  const complexity = document.getElementById('complexity').value;
+  let base = 0;
+  if(type==='property') base=5000;
+  else if(type==='contract') base=4000;
+  else if(type==='family') base=6000;
+  else if(type==='consumer') base=3000;
+  else { document.getElementById('feeResult').innerText="Select a case type"; return; }
+
+  if(complexity==='medium') base *=1.5;
+  else if(complexity==='high') base *=2;
+  
+  document.getElementById('feeResult').innerText = `Estimated Fee: ₹${base}`;
+}
+</script>
+
+<!--timeline-->
+<section id="case-timeline" class="max-w-5xl mx-auto p-6 bg-white rounded shadow my-10">
+  <h2 class="text-2xl font-semibold text-blue-900 mb-4">Case Timeline Generator</h2>
+  <select id="timelineCaseType" class="border p-2 w-full rounded mb-4">
+    <option value="">Select Case Type</option>
+    <option value="property">Property Dispute</option>
+    <option value="contract">Contract Dispute</option>
+    <option value="family">Family Matters</option>
+    <option value="consumer">Consumer Complaint</option>
+  </select>
+  <button onclick="generateTimeline()" class="bg-yellow-400 px-4 py-2 rounded font-semibold hover:bg-yellow-300">Generate Timeline</button>
+
+  <div id="timelineResult" class="mt-6"></div>
+</section>
+
+<script>
+const timelines = {
+  property: [
+    "File complaint: Week 1",
+    "First hearing: Week 4",
+    "Evidence submission: Week 6-8",
+    "Final hearing: Week 12-16",
+    "Judgment: Week 20"
+  ],
+  contract: [
+    "Notice to party: Week 1",
+    "Response from opposite party: Week 2",
+    "Negotiation / Mediation: Week 3-5",
+    "Court filing: Week 6",
+    "Judgment: Week 10"
+  ],
+  family: [
+    "File petition: Week 1",
+    "Notice served: Week 2",
+    "Hearing sessions: Week 3-10",
+    "Mediation/Settlement: Week 6-12",
+    "Final Order: Week 14"
+  ],
+  consumer: [
+    "File complaint: Week 1",
+    "Response from company: Week 2-3",
+    "Hearing: Week 4-6",
+    "Order: Week 7-8"
+  ]
+};
+
+function generateTimeline() {
+  const type = document.getElementById('timelineCaseType').value;
+  const container = document.getElementById('timelineResult');
+  container.innerHTML = '';
+  if (!type) { container.innerText = "Please select a case type."; return; }
+  timelines[type].forEach(step => {
+    const div = document.createElement('div');
+    div.className = "bg-blue-50 p-3 rounded mb-2 shadow";
+    div.innerText = step;
+    container.appendChild(div);
+  });
+}
+</script>
+
+<!--docs-->
+<section id="doc-checklist" class="max-w-5xl mx-auto p-6 bg-white rounded shadow my-10">
+  <h2 class="text-2xl font-semibold text-blue-900 mb-4">Document Checklist</h2>
+  <select id="docCaseType" class="border p-2 w-full rounded mb-4">
+    <option value="">Select Case Type</option>
+    <option value="property">Property Dispute</option>
+    <option value="contract">Contract Dispute</option>
+    <option value="family">Family Matters</option>
+    <option value="consumer">Consumer Complaint</option>
+  </select>
+  <div id="docList" class="space-y-2"></div>
+</section>
+
+<script>
+const documents = {
+  property: ["Title Deed", "Sale Agreement", "Property Tax Receipts", "Encumbrance Certificate"],
+  contract: ["Signed Contract", "Email/Chat Evidence", "Notice Letters", "Invoices/Receipts"],
+  family: ["Birth Certificates", "Will/Inheritance Docs", "Marriage Certificate", "Property Papers"],
+  consumer: ["Bill/Invoice", "Product Images", "Warranty Card", "Complaint Copies"]
+};
+
+document.getElementById('docCaseType').addEventListener('change', function() {
+  const type = this.value;
+  const container = document.getElementById('docList');
+  container.innerHTML = '';
+  if (!type) return;
+  documents[type].forEach(doc => {
+    const div = document.createElement('div');
+    div.className = "flex items-center gap-2";
+    div.innerHTML = `<input type="checkbox" id="${doc}" class="w-4 h-4"><label for="${doc}" class="text-gray-800">${doc}</label>`;
+    container.appendChild(div);
+  });
+});
+</script>
+<!--Consultation Slot Booking-->
+<section id="consultation" class="max-w-5xl mx-auto p-6 bg-white rounded shadow my-10">
+  <h2 class="text-2xl font-semibold text-blue-900 mb-4">Book Consultation Slot</h2>
+  <form id="consultForm" class="space-y-4">
+    <input type="text" placeholder="Your Name" id="userName" class="border p-2 w-full rounded" required>
+    <input type="email" placeholder="Email" id="userEmail" class="border p-2 w-full rounded" required>
+    <input type="date" id="consultDate" class="border p-2 w-full rounded" required>
+    <input type="time" id="consultTime" class="border p-2 w-full rounded" required>
+    <button type="button" onclick="bookConsultation()" class="bg-yellow-400 px-4 py-2 rounded font-semibold hover:bg-yellow-300">Book Slot</button>
+  </form>
+  <p id="consultMsg" class="mt-4 font-bold text-green-700"></p>
+</section>
+
+<script>
+function bookConsultation() {
+  const name = document.getElementById('userName').value;
+  const email = document.getElementById('userEmail').value;
+  const date = document.getElementById('consultDate').value;
+  const time = document.getElementById('consultTime').value;
+  
+  if(!name || !email || !date || !time) { alert("Fill all fields."); return; }
+  
+  document.getElementById('consultMsg').innerText = `Hi ${name}, your consultation is booked on ${date} at ${time}. We will contact you at ${email}.`;
+  
+  // Here you can integrate backend API to save booking or send email
+}
+</script>
+
+<!--Case Strength Checker-->
+<section id="case-strength" class="max-w-5xl mx-auto p-6 bg-white rounded shadow my-10">
+  <h2 class="text-2xl font-semibold text-blue-900 mb-4">Case Strength Checker</h2>
+  <form id="strengthForm" class="space-y-3">
+    <p>Do you have proper evidence for your case?</p>
+    <select class="border p-2 w-full rounded" id="q1"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+
+    <p>Are there witnesses available?</p>
+    <select class="border p-2 w-full rounded" id="q2"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+
+    <p>Has prior notice been sent?</p>
+    <select class="border p-2 w-full rounded" id="q3"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+
+    <p>Is the case straightforward?</p>
+    <select class="border p-2 w-full rounded" id="q4"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+
+    <button type="button" onclick="checkStrength()" class="bg-yellow-400 px-4 py-2 rounded font-semibold hover:bg-yellow-300">Check Strength</button>
+  </form>
+  <p id="strengthResult" class="mt-4 font-bold text-lg"></p>
+</section>
+
+<script>
+function checkStrength() {
+  const answers = [
+    document.getElementById('q1').value,
+    document.getElementById('q2').value,
+    document.getElementById('q3').value,
+    document.getElementById('q4').value
+  ];
+  if(answers.includes("")) { alert("Answer all questions."); return; }
+  let score = 0;
+  answers.forEach(a => { if(a==="yes") score++; });
+  
+  let strength = "";
+  if(score >= 3) strength="Strong Case";
+  else if(score==2) strength="Moderate Case";
+  else strength="Weak Case";
+  
+  document.getElementById('strengthResult').innerText = `Your case is: ${strength}`;
+}
+</script>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="max-w-5xl mx-auto p-6">
+    <h2 class="text-2xl font-semibold text-blue-900 mb-4">Client Feedback</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-blue-100 border-l-4 border-blue-800 p-4 rounded shadow">
+        <p class="italic">“Legal Assist helped me resolve a long-standing property issue with clear advice and constant support.”</p>
+        <strong class="block mt-2">- Anjali R., Hyderabad</strong>
+      </div>
+      <div class="bg-blue-100 border-l-4 border-blue-800 p-4 rounded shadow">
+        <p class="italic">“Professional and prompt service. Highly recommend for civil and consumer-related legal matters.”</p>
+        <strong class="block mt-2">- Vikram D., Secunderabad</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="bg-gray-50 py-10">
+    <div class="max-w-5xl mx-auto p-6">
+      <h2 class="text-2xl font-semibold text-blue-900 mb-4">Contact Details</h2>
+      <div class="space-y-2 text-lg">
+        <p><strong>Phone:</strong> +91-98765-43210</p>
+        <p><strong>Email:</strong> support@legalassist.in</p>
+        <p><strong>Office:</strong> 2nd Floor, Legal Towers, Banjara Hills, Hyderabad</p>
+      </div>
+    </div>
+  </section>
+  <!--faq-->
+  <section id="faq" class="max-w-5xl mx-auto p-6">
+  <h2 class="text-2xl font-semibold text-blue-900 mb-4">FAQ</h2>
+  <div>
+    <button class="faq-question font-bold w-full text-left p-2 bg-blue-50 rounded mb-2">How long does a property dispute take?</button>
+    <p class="faq-answer hidden p-2 bg-blue-100 rounded">It usually takes 6–12 months depending on complexity...</p>
+  </div>
+</section>
+
+<script>
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const ans = q.nextElementSibling;
+    ans.classList.toggle('hidden');
+  });
+});
+</script>
+
+
+  <!-- Footer -->
+  <footer class="bg-blue-900 text-white text-center py-4">
+    <p>&copy; 2025 Legal Assist. All rights reserved.</p>
+  </footer>
+
+  <!-- WhatsApp Chat Button -->
+<style>
+  #whatsapp-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+  }
+
+  #whatsapp-button img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+  }
+</style>
+
+<a href="https://wa.me/8897752519?text=Hello%20Legal%20Assist,%20I%20need%20help%20with%20your%20services" target="_blank" id="whatsapp-button">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="Chat with us on WhatsApp">
+</a>
+
+
+</body>
+</html>

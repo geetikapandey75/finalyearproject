@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MeeSeva Queue & Certificate Services</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+</head>
+<body class="bg-blue-50 font-sans text-gray-900">
+
+  <!-- Navigation -->
+  <header class="bg-blue-900 text-white p-4">
+    <div class="container mx-auto">
+      <h1 class="text-2xl font-bold">MeeSeva Services - Queue & Certificate Portal</h1>
+    </div>
+  </header>
+
+  <!-- ====================== REAL-TIME QUEUE MANAGEMENT ====================== -->
+  <section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-5xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">🎫 Real-Time Queue Management</h2>
+      <p class="text-center text-gray-600 mb-8">Check live queue status or book your token online to skip the wait!</p>
+
+      <!-- Select Center -->
+      <div class="mb-6">
+        <label class="block font-semibold mb-2">Select MeeSeva Center</label>
+        <select id="queueCenter" class="w-full p-4 border rounded-lg">
+          <option value="">Choose a center</option>
+          <option value="madhapur">Madhapur MeeSeva</option>
+          <option value="kukatpally">Kukatpally MeeSeva</option>
+          <option value="secunderabad">Secunderabad MeeSeva</option>
+          <option value="ameerpet">Ameerpet MeeSeva</option>
+        </select>
+      </div>
+
+      <!-- Live Queue Status -->
+      <div id="queueStatus" class="hidden">
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+          <!-- Current Token -->
+          <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-6 rounded-xl text-center shadow-lg">
+            <div class="text-5xl font-bold mb-2" id="currentToken">A-045</div>
+            <div class="text-sm">Current Token Being Served</div>
+            <div class="mt-2 text-xs opacity-80">Updated just now</div>
+          </div>
+
+          <!-- Waiting People -->
+          <div class="bg-gradient-to-br from-orange-500 to-orange-700 text-white p-6 rounded-xl text-center shadow-lg">
+            <div class="text-5xl font-bold mb-2" id="waitingCount">23</div>
+            <div class="text-sm">People in Queue</div>
+            <div class="mt-2 text-xs opacity-80">Est. wait: <span id="estWait">46 mins</span></div>
+          </div>
+
+          <!-- Your Token -->
+          <div class="bg-gradient-to-br from-green-500 to-green-700 text-white p-6 rounded-xl text-center shadow-lg">
+            <div class="text-5xl font-bold mb-2" id="yourToken">--</div>
+            <div class="text-sm">Your Token Number</div>
+            <div class="mt-2 text-xs opacity-80">Book online now!</div>
+          </div>
+        </div>
+
+        <!-- Counter Status -->
+        <div class="bg-blue-50 p-6 rounded-lg mb-6">
+          <h3 class="text-xl font-semibold text-blue-800 mb-4">📊 Live Counter Status</h3>
+          <div class="grid md:grid-cols-4 gap-4" id="counterStatus">
+            <!-- Counter cards will be generated here -->
+          </div>
+        </div>
+
+        <!-- Book Token Online -->
+        <div class="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border-2 border-green-300">
+          <h3 class="text-xl font-semibold text-green-800 mb-4">⚡ Skip the Queue - Book Token Online</h3>
+          
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block font-semibold mb-2">Service Type</label>
+              <select id="tokenService" class="w-full p-3 border rounded-lg">
+                <option value="">Select service</option>
+                <option value="certificate">Certificate Services</option>
+                <option value="aadhaar">Aadhaar Services</option>
+                <option value="pension">Pension Services</option>
+                <option value="property">Property Registration</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold mb-2">Your Mobile Number</label>
+              <input type="tel" id="tokenMobile" class="w-full p-3 border rounded-lg" placeholder="Enter 10-digit mobile">
+            </div>
+          </div>
+
+          <button id="bookTokenBtn" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 w-full transition">
+            🎟️ Book My Token Now
+          </button>
+
+          <p class="text-sm text-gray-600 mt-3 text-center">
+            ✓ Get SMS when your turn approaches (10 tokens before)<br>
+            ✓ Arrive just in time - No waiting!
+          </p>
+        </div>
+
+        <!-- Token Confirmation -->
+        <div id="tokenConfirmation" class="hidden mt-6 p-6 bg-green-100 border-2 border-green-500 rounded-lg">
+          <h4 class="text-xl font-bold text-green-800 mb-3 text-center">✅ Token Booked Successfully!</h4>
+          <div class="bg-white p-6 rounded-lg text-center">
+            <div class="text-6xl font-bold text-green-600 mb-2" id="bookedToken">A-068</div>
+            <p class="text-gray-700 mb-4">Your Token Number</p>
+            <div class="space-y-2 text-left">
+              <p><strong>Center:</strong> <span id="confirmedCenter"></span></p>
+              <p><strong>Service:</strong> <span id="confirmedService"></span></p>
+              <p><strong>Estimated Wait:</strong> <span id="confirmedWait"></span></p>
+              <p><strong>SMS Alert:</strong> Will be sent to <span id="confirmedMobile"></span></p>
+            </div>
+            <div class="mt-4 p-3 bg-yellow-50 border border-yellow-300 rounded">
+              <p class="text-sm text-yellow-800">💡 You'll receive SMS when token <strong id="alertToken"></strong> is being served (10 tokens before yours)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== ENHANCED CERTIFICATE DOWNLOAD PORTAL ====================== -->
+  <section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">📥 Certificate Download Portal</h2>
+      <p class="text-center text-gray-600 mb-8">Download your verified certificate with digital signature and QR code</p>
+
+      <!-- Application Number Input -->
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Application Number</label>
+        <input type="text" id="certAppNumber" class="w-full p-4 border rounded-lg text-lg" placeholder="e.g., MS20250012345">
+      </div>
+
+      <!-- Mobile Number -->
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Registered Mobile Number</label>
+        <input type="tel" id="certMobile" class="w-full p-4 border rounded-lg" placeholder="Enter mobile for OTP verification">
+      </div>
+
+      <!-- Send OTP Button -->
+      <button id="sendOtpBtn" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 w-full mb-4">
+        📱 Send OTP
+      </button>
+
+      <!-- OTP Input (Hidden initially) -->
+      <div id="otpSection" class="hidden mb-4">
+        <label class="block font-semibold mb-2">Enter OTP</label>
+        <div class="flex gap-2 mb-4">
+          <input type="text" maxlength="1" class="otp-input w-14 h-14 text-center text-2xl border rounded-lg" data-index="0">
+          <input type="text" maxlength="1" class="otp-input w-14 h-14 text-center text-2xl border rounded-lg" data-index="1">
+          <input type="text" maxlength="1" class="otp-input w-14 h-14 text-center text-2xl border rounded-lg" data-index="2">
+          <input type="text" maxlength="1" class="otp-input w-14 h-14 text-center text-2xl border rounded-lg" data-index="3">
+          <input type="text" maxlength="1" class="otp-input w-14 h-14 text-center text-2xl border rounded-lg" data-index="4">
+          <input type="text" maxlength="1" class="otp-input w-14 h-14 text-center text-2xl border rounded-lg" data-index="5">
+        </div>
+        <button id="verifyOtpBtn" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 w-full">
+          ✓ Verify & Download Certificate
+        </button>
+      </div>
+
+      <!-- Certificate Preview -->
+      <div id="certPreview" class="hidden mt-8">
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-lg border-2 border-blue-300">
+          <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Your Certificate</h3>
+          
+          <!-- Certificate Canvas -->
+          <div class="bg-white p-8 rounded-lg shadow-xl mb-6 relative" style="background-image: url('data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ctext x=\'10\' y=\'50\' font-size=\'8\' fill=\'%23e0e0e0\' opacity=\'0.3\' transform=\'rotate(-45 50 50)\'%3EOFFICIAL%3C/text%3E%3C/svg%3E'); background-repeat: repeat;">
+            
+            <!-- Header -->
+            <div class="text-center mb-6 border-b-2 border-blue-600 pb-4">
+              <div class="text-3xl font-bold text-blue-900 mb-2">🏛️ GOVERNMENT OF TELANGANA</div>
+              <div class="text-xl text-gray-700">MeeSeva Services</div>
+              <div class="text-sm text-gray-600 mt-2">Official Certificate</div>
+            </div>
+
+            <!-- Certificate Content -->
+            <div class="mb-6">
+              <div class="text-center mb-4">
+                <div class="text-2xl font-bold text-blue-800 mb-2" id="certType">INCOME CERTIFICATE</div>
+                <div class="text-sm text-gray-600">Certificate No: <span id="certNumber" class="font-semibold">IC/2025/012345</span></div>
+              </div>
+
+              <div class="space-y-3 text-gray-800">
+                <p class="leading-relaxed">This is to certify that <strong class="text-blue-900" id="holderName">RAJESH KUMAR</strong>, 
+                son/daughter of <strong id="fatherName">KUMAR RAO</strong>, 
+                residing at <strong id="address">H.No 12-3-456, Street Name, Hyderabad - 500001</strong>, 
+                has an annual family income of <strong class="text-green-700" id="income">₹2,50,000</strong>.</p>
+                
+                <p>This certificate is issued for the purpose of <strong id="purpose">Educational scholarship application</strong>.</p>
+                
+                <p class="text-sm text-gray-600">Date of Issue: <strong id="issueDate">08-Dec-2025</strong></p>
+                <p class="text-sm text-gray-600">Valid Until: <strong id="validDate">07-Dec-2026</strong></p>
+              </div>
+            </div>
+
+            <!-- QR Code and Digital Signature -->
+            <div class="flex justify-between items-end border-t-2 border-gray-300 pt-4">
+              <div class="text-center">
+                <div id="qrCode" class="inline-block p-2 bg-white border-2 border-gray-300 rounded"></div>
+                <p class="text-xs text-gray-600 mt-2">Scan to Verify</p>
+              </div>
+              
+              <div class="text-right">
+                <div class="mb-2">
+                  <img src="data:image/svg+xml,%3Csvg width='120' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='10' y='25' font-family='Brush Script MT' font-size='20' fill='%230000ff'%3EK. Sharma%3C/text%3E%3C/svg%3E" alt="signature" class="inline-block">
+                </div>
+                <p class="font-semibold text-gray-800">Authorized Officer</p>
+                <p class="text-sm text-gray-600">Revenue Department</p>
+                <p class="text-xs text-green-700 mt-1">✓ Digitally Signed</p>
+              </div>
+            </div>
+
+            <!-- Watermark -->
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5 text-9xl font-bold text-blue-900 rotate-45 pointer-events-none">
+              VERIFIED
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="grid md:grid-cols-4 gap-4">
+            <button id="downloadPdfBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+              📄 Download PDF
+            </button>
+            <button id="printCertBtn" class="bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
+              🖨️ Print
+            </button>
+            <button id="shareEmailBtn" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+              📧 Email
+            </button>
+            <button id="shareWhatsappBtn" class="bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition">
+              💬 WhatsApp
+            </button>
+          </div>
+
+          <!-- Verification Info -->
+          <div class="mt-6 p-4 bg-green-50 border border-green-300 rounded-lg">
+            <h4 class="font-semibold text-green-800 mb-2">🔐 Certificate Verification</h4>
+            <ul class="text-sm text-gray-700 space-y-1">
+              <li>✓ Digital signature verified and authentic</li>
+              <li>✓ QR code contains encrypted verification data</li>
+              <li>✓ Certificate issued by authorized officer</li>
+              <li>✓ Watermark present for security</li>
+            </ul>
+            <p class="text-xs text-gray-600 mt-3">
+              To verify authenticity, scan QR code or visit: 
+              <a href="#" class="text-blue-600 underline">meeseva.telangana.gov.in/verify</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // ====================== QUEUE MANAGEMENT LOGIC ======================
+    
+    const queueCenter = document.getElementById('queueCenter');
+    const queueStatus = document.getElementById('queueStatus');
+    const bookTokenBtn = document.getElementById('bookTokenBtn');
+    const tokenConfirmation = document.getElementById('tokenConfirmation');
+
+    // Mock data for different centers
+    const centerData = {
+      madhapur: { current: 'A-045', waiting: 23, avgTime: 2 },
+      kukatpally: { current: 'B-032', waiting: 18, avgTime: 2.5 },
+      secunderabad: { current: 'C-056', waiting: 31, avgTime: 1.8 },
+      ameerpet: { current: 'D-041', waiting: 15, avgTime: 2.2 }
+    };
+
+    // Show queue status when center is selected
+    queueCenter.addEventListener('change', function() {
+      if (this.value) {
+        const data = centerData[this.value];
+        document.getElementById('currentToken').textContent = data.current;
+        document.getElementById('waitingCount').textContent = data.waiting;
+        document.getElementById('estWait').textContent = Math.round(data.waiting * data.avgTime) + ' mins';
+        
+        // Generate counter status
+        generateCounterStatus();
+        queueStatus.classList.remove('hidden');
+      } else {
+        queueStatus.classList.add('hidden');
+      }
+    });
+
+    // Generate counter status cards
+    function generateCounterStatus() {
+      const counterDiv = document.getElementById('counterStatus');
+      const counters = [
+        { num: 1, status: 'Active', serving: 'A-045', type: 'Certificates', time: '2 mins' },
+        { num: 2, status: 'Active', serving: 'A-043', type: 'Aadhaar', time: '5 mins' },
+        { num: 3, status: 'Break', serving: '--', type: 'All Services', time: '10 mins' },
+        { num: 4, status: 'Active', serving: 'A-042', type: 'Pension', time: '3 mins' }
+      ];
+
+      counterDiv.innerHTML = counters.map(c => `
+        <div class="bg-white p-4 rounded-lg border ${c.status === 'Active' ? 'border-green-300' : 'border-gray-300'}">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-lg">Counter ${c.num}</span>
+            <span class="text-xs px-2 py-1 rounded ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}">
+              ${c.status}
+            </span>
+          </div>
+          <div class="text-2xl font-bold text-blue-600 mb-1">${c.serving}</div>
+          <div class="text-xs text-gray-600">${c.type}</div>
+          <div class="text-xs text-gray-500 mt-1">Avg: ${c.time}</div>
+        </div>
+      `).join('');
+    }
+
+    // Book token online
+    bookTokenBtn.addEventListener('click', function() {
+      const service = document.getElementById('tokenService').value;
+      const mobile = document.getElementById('tokenMobile').value;
+      const center = queueCenter.options[queueCenter.selectedIndex].text;
+
+      if (!service || !mobile || mobile.length !== 10) {
+        alert('Please fill all details correctly');
+        return;
+      }
+
+      // Generate token number
+      const prefix = ['A', 'B', 'C', 'D'][Math.floor(Math.random() * 4)];
+      const tokenNum = prefix + '-' + String(Math.floor(Math.random() * 900) + 100).padStart(3, '0');
+      const currentNum = parseInt(document.getElementById('currentToken').textContent.split('-')[1]);
+      const yourNum = parseInt(tokenNum.split('-')[1]);
+      const peopleAhead = yourNum - currentNum;
+      const waitTime = peopleAhead * 2;
+
+      document.getElementById('bookedToken').textContent = tokenNum;
+      document.getElementById('confirmedCenter').textContent = center;
+      document.getElementById('confirmedService').textContent = service;
+      document.getElementById('confirmedWait').textContent = waitTime + ' mins (approx)';
+      document.getElementById('confirmedMobile').textContent = mobile;
+      document.getElementById('alertToken').textContent = prefix + '-' + String(yourNum - 10).padStart(3, '0');
+      document.getElementById('yourToken').textContent = tokenNum;
+
+      tokenConfirmation.classList.remove('hidden');
+      tokenConfirmation.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Update current token every 30 seconds (simulation)
+    setInterval(() => {
+      if (!queueStatus.classList.contains('hidden')) {
+        const currentEl = document.getElementById('currentToken');
+        const parts = currentEl.textContent.split('-');
+        const newNum = String(parseInt(parts[1]) + 1).padStart(3, '0');
+        currentEl.textContent = parts[0] + '-' + newNum;
+      }
+    }, 30000);
+
+    // ====================== CERTIFICATE DOWNLOAD LOGIC ======================
+    
+    const sendOtpBtn = document.getElementById('sendOtpBtn');
+    const otpSection = document.getElementById('otpSection');
+    const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+    const certPreview = document.getElementById('certPreview');
+    const otpInputs = document.querySelectorAll('.otp-input');
+
+    // Send OTP
+    sendOtpBtn.addEventListener('click', function() {
+      const appNum = document.getElementById('certAppNumber').value;
+      const mobile = document.getElementById('certMobile').value;
+
+      if (!appNum || !mobile) {
+        alert('Please enter application number and mobile number');
+        return;
+      }
+
+      // Simulate OTP sent
+      alert('OTP sent to ' + mobile + ' (Use: 123456 for demo)');
+      otpSection.classList.remove('hidden');
+    });
+
+    // OTP input auto-focus
+    otpInputs.forEach((input, index) => {
+      input.addEventListener('input', function() {
+        if (this.value.length === 1 && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+      });
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !this.value && index > 0) {
+          otpInputs[index - 1].focus();
+        }
+      });
+    });
+
+    // Verify OTP and show certificate
+    verifyOtpBtn.addEventListener('click', function() {
+      const otp = Array.from(otpInputs).map(input => input.value).join('');
+      
+      if (otp.length !== 6) {
+        alert('Please enter complete OTP');
+        return;
+      }
+
+      // For demo, accept 123456
+      if (otp !== '123456') {
+        alert('Invalid OTP. Use 123456 for demo');
+        return;
+      }
+
+      // Show certificate
+      certPreview.classList.remove('hidden');
+      certPreview.scrollIntoView({ behavior: 'smooth' });
+
+      // Generate QR code
+      generateQRCode();
+    });
+
+    // Generate QR Code
+    function generateQRCode() {
+      const qr = qrcode(0, 'M');
+      const appNum = document.getElementById('certAppNumber').value;
+      qr.addData('https://meeseva.telangana.gov.in/verify/' + appNum);
+      qr.make();
+      document.getElementById('qrCode').innerHTML = qr.createImgTag(4);
+    }
+
+    // Download PDF
+    document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+      alert('Certificate downloaded as PDF!\n(In production, this would generate a real PDF file)');
+    });
+
+    // Print Certificate
+    document.getElementById('printCertBtn').addEventListener('click', function() {
+      window.print();
+    });
+
+    // Share via Email
+    document.getElementById('shareEmailBtn').addEventListener('click', function() {
+      const subject = 'My MeeSeva Certificate';
+      const body = 'Please find my certificate attached. Application No: ' + document.getElementById('certAppNumber').value;
+      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+
+    // Share via WhatsApp
+    document.getElementById('shareWhatsappBtn').addEventListener('click', function() {
+      const text = 'My MeeSeva Certificate - Application No: ' + document.getElementById('certAppNumber').value;
+      window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+    });
+  </script>
+
+</body>
+</html>
