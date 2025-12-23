@@ -1,53 +1,81 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// ================= DB CONNECTION =================
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db   = "legal_assist";
 
-$servername = "localhost";
-$username   = "root";
-$password   = "";
-$dbname     = "projectdb";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
+$conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Database connection failed");
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// ===============================================
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $full_name     = $_POST['full_name'] ?? '';
-    $business_name = $_POST['business_name'] ?? '';
-    $email         = $_POST['email'] ?? '';
-    $phone_number         = $_POST['phone_number'] ?? '';
+    // ================= APPLY FOOD LICENCE =================
+    if ($_POST["action"] === "apply") {
 
-    // Prepared insert
-    $stmt = $conn->prepare("
-        INSERT INTO food
-        (full_name, business_name, email, phone_number)
-        VALUES (?, ?, ?, ?)
-    ");
+        $application_id = "FSSAI" . date("Y") . rand(10000,99999);
 
-    $stmt->bind_param("ssss",
-        $full_name,
-        $business_name,
-        $email,
-        $phone_number
-    );
+        $name     = $_POST["full_name"];
+        $business = $_POST["business_name"];
+        $email    = $_POST["email"];
+        $phone    = $_POST["phone_number"];
 
-    if ($stmt->execute()) {
+        $stmt = $conn->prepare("
+            INSERT INTO food_licence_applications
+            (application_id, full_name, business_name, email, phone, status, applied_on)
+            VALUES (?, ?, ?, ?, ?, 'Under Review', NOW())
+        ");
 
-        // Redirect to success page
-        header("Location: business-success.html");
-        exit();
+        $stmt->bind_param(
+            "sssss",
+            $application_id,
+            $name,
+            $business,
+            $email,
+            $phone
+        );
 
-    } else {
-        echo "Error: " . $stmt->error;
+        $stmt->execute();
+
+        echo "
+        <h2>✅ Application Submitted Successfully</h2>
+        <p><strong>Your Application ID:</strong> $application_id</p>
+        <p>Please save this ID to track your application.</p>
+        ";
+        exit;
     }
 
-    $stmt->close();
-}
+    // ================= TRACK STATUS =================
+    if ($_POST["action"] === "status") {
 
-$conn->close();
+        $appId = $_POST["application_id"];
+        $phone = $_POST["phone"];
+
+        $stmt = $conn->prepare("
+            SELECT application_id, status, applied_on
+            FROM food_licence_applications
+            WHERE application_id = ? AND phone = ?
+        ");
+
+        $stmt->bind_param("ss", $appId, $phone);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+
+            echo "
+            <h2>📄 Application Status</h2>
+            <p><strong>Application ID:</strong> {$row['application_id']}</p>
+            <p><strong>Status:</strong> {$row['status']}</p>
+            <p><strong>Applied On:</strong> {$row['applied_on']}</p>
+            ";
+        } else {
+            echo "<p style='color:red;'>❌ Application not found. Please check details.</p>";
+        }
+        exit;
+    }
+}
 ?>

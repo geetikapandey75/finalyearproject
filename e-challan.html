@@ -16,7 +16,6 @@
         <a href="police-complaint.html" class="hover:underline">Home</a>
         <a href="vehicle.html" class="hover:underline">Unclaimed Vehicles</a>
         <a href="passport.html" class="hover:underline">Passport Services</a>
-        <a href="Police Clearance.html" class="hover:underline">Police Clearance</a>
         <a href="e-challan.html" class="hover:underline font-semibold text-yellow-300">E-Challan</a>
       </nav>
     </div>
@@ -43,23 +42,75 @@
       </p>
     </section>
 
-    <!-- Check Challan -->
     <section id="check" class="bg-white rounded-xl shadow-lg p-8">
-      <h3 class="text-2xl font-bold mb-6 text-center">Check Your Challan</h3>
-      <form class="space-y-6 max-w-xl mx-auto">
-        <div>
-          <label class="block font-semibold mb-2">Vehicle Number</label>
-          <input type="text" class="w-full p-4 border rounded-lg" placeholder="e.g., TS09AB1234" required>
-        </div>
-        <div>
-          <label class="block font-semibold mb-2">Challan Number (if available)</label>
-          <input type="text" class="w-full p-4 border rounded-lg" placeholder="Enter Challan Number (optional)">
-        </div>
-        <button type="submit" class="bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 w-full">
-          Check Status
-        </button>
-      </form>
-    </section>
+  <h3 class="text-2xl font-bold mb-6 text-center">Check Your Challan</h3>
+  
+<form method="POST" action="echallan.php" class="space-y-6 max-w-xl mx-auto">
+    <div>
+      <label class="block font-semibold mb-2">Vehicle Number</label>
+      <input
+        type="text"
+        id="vehicleNo"
+        name="vehicle_no"
+        class="w-full p-4 border rounded-lg"
+        placeholder="e.g., TS09AB1234"
+        required
+      >
+    </div>
+
+    <div>
+      <label class="block font-semibold mb-2">Challan Number (if available)</label>
+      <input
+        type="text"
+        id="challanNo"
+        name="challan_no"
+        class="w-full p-4 border rounded-lg"
+        placeholder="Enter Challan Number (optional)"
+      >
+    </div>
+
+    <button
+      type="submit"
+      class="bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 w-full"
+    >
+      Check Status
+    </button>
+  </form>
+</section>
+
+<script>
+// JS to handle form submission without reloading page
+
+
+  const vehicle = document.getElementById("vehicleNo").value.trim();
+  const challan = document.getElementById("challanNo").value.trim();
+
+  if (!vehicle && !challan) {
+    alert("Enter Vehicle Number or Challan Number");
+    return;
+  }
+
+  fetch(`api/api.php?action=check_challan&vehicle=${vehicle}&challan=${challan}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "not_found") {
+        alert("No challan found for this vehicle/challan number.");
+        return;
+      }
+
+      // Populate the result UI
+      document.getElementById("resVehicle").textContent = data.vehicle_no;
+      document.getElementById("resViolation").textContent = data.violation;
+      document.getElementById("resDate").textContent = data.challan_date;
+      document.getElementById("resAmount").textContent = data.amount;
+
+      selectedChallanId = data.id; // save for payment
+      document.getElementById("resultBox").classList.remove("hidden");
+    })
+    .catch(err => console.error(err));
+;
+</script>
+
 
     <!-- Payment Section -->
     <section class="bg-white rounded-xl shadow-lg p-8">
@@ -73,94 +124,31 @@
       </ol>
     </section>
 
-    <!-- Raise a Query -->
-    <section class="bg-white rounded-xl shadow-lg p-8">
-      <h3 class="text-2xl font-bold mb-4">Raise a Query / Dispute</h3>
-      <p class="text-gray-700 mb-6">If you believe a challan has been wrongly issued, submit your details below for review.</p>
-      <form class="space-y-6 max-w-xl mx-auto">
-        <div>
-          <label class="block font-semibold mb-2">Full Name</label>
-          <input type="text" class="w-full p-4 border rounded-lg" placeholder="Enter your name" required>
-        </div>
-        <div>
-          <label class="block font-semibold mb-2">Vehicle Number</label>
-          <input type="text" class="w-full p-4 border rounded-lg" placeholder="Enter vehicle number" required>
-        </div>
-        <div>
-          <label class="block font-semibold mb-2">Challan Number</label>
-          <input type="text" class="w-full p-4 border rounded-lg" placeholder="Enter challan number" required>
-        </div>
-        <div>
-          <label class="block font-semibold mb-2">Comments</label>
-          <textarea class="w-full p-4 border rounded-lg" placeholder="Describe your issue briefly" rows="4" required></textarea>
-        </div>
-        <button type="submit" class="bg-yellow-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-yellow-400 w-full">
-          Submit Query
-        </button>
-      </form>
-    </section>
-<!-- ======================= SEARCH + PAYMENT MODULE ======================= -->
-<section class="bg-white rounded-xl shadow-lg p-8 container mx-auto my-12">
-  <h3 class="text-2xl font-bold mb-6 text-center">Search & Pay Challan</h3>
+   
+<script>
+// JS to handle query form submission
+document.getElementById("queryForm").addEventListener("submit", function(e) {
+  e.preventDefault(); // prevent page reload
 
-  <!-- Search Box -->
-  <div class="max-w-xl mx-auto space-y-4">
-    <input id="searchVehicle" type="text" class="w-full p-4 border rounded-lg" placeholder="Enter Vehicle Number (TS09AB1234)">
-    <button id="searchBtn" class="bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 w-full">
-      Search Challan
-    </button>
-  </div>
+  const formData = new FormData(this);
 
-  <!-- Result Box -->
-  <div id="resultBox" class="mt-8 hidden bg-gray-50 p-6 rounded-lg shadow-md">
-    <h4 class="text-xl font-bold mb-4">Challan Details</h4>
-    <p><strong>Vehicle:</strong> <span id="resVehicle"></span></p>
-    <p><strong>Violation:</strong> <span id="resViolation"></span></p>
-    <p><strong>Date:</strong> <span id="resDate"></span></p>
-    <p><strong>Fine Amount:</strong> ₹<span id="resAmount"></span></p>
+  fetch("api/api.php?action=raise_query", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "submitted") {
+      alert("Your query has been submitted successfully!");
+      document.getElementById("queryForm").reset();
+    } else if (data.error) {
+      alert("Error: " + data.error);
+    }
+  })
+  .catch(err => console.error(err));
+});
+</script>
 
-    <button id="payBtn" class="mt-6 bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500">
-      Pay Now
-    </button>
-  </div>
-</section>
-
-<!-- ======================= PAYMENT MODAL ======================= -->
-<div id="paymentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-  <div class="bg-white p-8 rounded-xl w-96 shadow-xl">
-    <h3 class="text-xl font-bold mb-4">Complete Payment</h3>
-
-    <p class="mb-2"><strong>Challan Amount:</strong> ₹<span id="payAmount"></span></p>
-
-    <!-- Payment Methods -->
-    <label class="block mt-4 font-semibold">Choose Payment Method</label>
-    <select id="paymentMethod" class="w-full p-3 border rounded-lg">
-      <option value="">Select</option>
-      <option value="UPI">UPI</option>
-      <option value="Card">Debit/Credit Card</option>
-      <option value="NetBanking">Net Banking</option>
-    </select>
-
-    <button id="confirmPayment" class="mt-6 bg-blue-700 text-white px-8 py-3 rounded-lg w-full font-semibold hover:bg-blue-600">
-      Pay ₹<span id="payAmountBtn"></span>
-    </button>
-
-    <button id="cancelPayment" class="mt-4 text-gray-600 w-full hover:underline">Cancel</button>
-  </div>
-</div>
-
-<!-- ======================= RECEIPT ======================= -->
-<div id="receiptBox" class="hidden container mx-auto bg-white p-8 mt-12 max-w-xl rounded-xl shadow-lg">
-  <h3 class="text-2xl font-bold mb-4 text-green-700">Payment Successful</h3>
-  <p><strong>Vehicle:</strong> <span id="recVehicle"></span></p>
-  <p><strong>Amount Paid:</strong> ₹<span id="recAmount"></span></p>
-  <p><strong>Payment Mode:</strong> <span id="recMode"></span></p>
-  <p><strong>Date:</strong> <span id="recDate"></span></p>
-
-  <button onclick="window.print()" class="mt-6 bg-yellow-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-yellow-400">
-    Download Receipt
-  </button>
-</div>
 
 <script>
   // Demo data (you can replace this with API later)
@@ -307,13 +295,72 @@
       </div>
     </div>
 
-    <button onclick="searchChallans()" class="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold w-full hover:bg-blue-600">
+    <button id="searchBtn" class="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold w-full hover:bg-blue-600">
       Search Challans
     </button>
   </div>
 
   <div id="output" class="mt-6 max-w-xl mx-auto"></div>
 </section>
+
+<script>
+const searchBtn = document.getElementById("searchBtn");
+
+searchBtn.addEventListener("click", () => {
+    const vehicle = document.getElementById("vehicle").value.trim().toUpperCase();
+    const challan = document.getElementById("challan").value.trim().toUpperCase();
+    const license = document.getElementById("license").value.trim().toUpperCase();
+    const status = document.getElementById("status").value;
+    const violation = document.getElementById("violation").value;
+    const from = document.getElementById("from").value;
+    const to = document.getElementById("to").value;
+
+    if (!vehicle && !challan && !license) {
+        alert("Enter at least one filter (Vehicle, Challan, or License)");
+        return;
+    }
+
+    // Fetch from backend
+    const params = new URLSearchParams({
+        action: "search_challans",
+        vehicle, challan, license, status, violation, from, to
+    });
+
+    fetch("api/api.php?" + params.toString())
+    .then(res => res.json())
+    .then(data => {
+        displayResults(data);
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error fetching challans");
+    });
+});
+
+function displayResults(challans) {
+    const out = document.getElementById("output");
+    out.innerHTML = "";
+
+    if(!challans || challans.length === 0){
+        out.innerHTML = `<div class="bg-gray-100 p-4 rounded-lg text-center">No challans found.</div>`;
+        return;
+    }
+
+    challans.forEach(ch => {
+        out.innerHTML += `
+        <div class="bg-blue-50 p-4 rounded-lg mb-4 shadow-sm">
+            <p><strong>Challan No:</strong> ${ch.challanNo}</p>
+            <p><strong>Vehicle:</strong> ${ch.vehicle}</p>
+            <p><strong>License:</strong> ${ch.license}</p>
+            <p><strong>Violation:</strong> ${ch.violation}</p>
+            <p><strong>Date:</strong> ${ch.date}</p>
+            <p><strong>Amount:</strong> ₹${ch.amount}</p>
+            <p><strong>Status:</strong> <span class="${ch.status==='Paid'?'text-green-600':'text-red-600'}">${ch.status}</span></p>
+        </div>`;
+    });
+}
+</script>
+
 <script>
 // Dummy challan data (replace with real API if available)
 const challans = [

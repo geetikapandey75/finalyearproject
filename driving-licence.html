@@ -449,13 +449,32 @@
     <!-- Sections below only shown when not in test mode -->
     <div id="otherSections">
       <!-- Application Status -->
-      <section id="status" class="bg-white rounded-xl shadow-lg p-8">
-        <h3 class="text-2xl font-bold mb-4">Check Application Status</h3>
-        <div class="space-y-4 max-w-md mx-auto">
-          <input type="text" class="w-full p-4 border rounded-lg" placeholder="Enter Application ID" required>
-          <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full">Check Status</button>
-        </div>
-      </section>
+<section id="status" class="bg-white rounded-xl shadow-lg p-8">
+  <h3 class="text-2xl font-bold mb-4">Check Application Status</h3>
+
+  <form action="driving-form.php" method="POST" class="space-y-4 max-w-md mx-auto">
+    
+    <!-- tells backend what to do -->
+    <input type="hidden" name="action" value="check_status">
+
+    <input 
+      type="text" 
+      name="application_id"
+      class="w-full p-4 border rounded-lg"
+      placeholder="Enter Application ID"
+      required
+    >
+
+    <button 
+      type="submit"
+      class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full"
+    >
+      Check Status
+    </button>
+
+  </form>
+</section>
+
 
       <!-- Upload Documents -->
       <section id="upload" class="bg-white rounded-xl shadow-lg p-8">
@@ -475,36 +494,59 @@
 
       <!-- Slot Booking -->
       <section id="slotBooking" class="bg-white rounded-xl shadow-lg p-8">
-        <h3 class="text-2xl font-bold mb-4">Book a Slot for Driving Test</h3>
-        <div class="space-y-4 max-w-md mx-auto">
-          <label class="block font-semibold">Select Date</label>
-          <input type="date" name="test_date" class="w-full p-4 border rounded-lg" required>
+  <h3 class="text-2xl font-bold mb-4">Book a Slot for Driving Test</h3>
 
-          <label class="block font-semibold">Select Time</label>
-          <select name="test_time" class="w-full p-4 border rounded-lg" required>
-            <option value="">Select slot</option>
-            <option value="9am">09:00 AM</option>
-            <option value="11am">11:00 AM</option>
-            <option value="1pm">01:00 PM</option>
-            <option value="3pm">03:00 PM</option>
-          </select>
+  <form action="driving-backend.php" method="POST" class="space-y-4 max-w-md mx-auto">
 
-          <label class="block font-semibold">Select Location</label>
-          <select name="test_location" class="w-full p-4 border rounded-lg" required>
-            <option value="">Select RTO / Test Center</option>
-            <option value="kphb">KPHB RTO</option>
-            <option value="amberpet">Amberpet RTO</option>
-            <option value="hitec">HITEC City RTO</option>
-            <option value="nallakunta">Nallakunta RTO</option>
-            <option value="gachibowli">Gachibowli Driving Test Center</option>
-            <option value="malkajgiri">Malkajgiri RTO</option>
-          </select>
+    <!-- tells backend this is slot booking -->
+    <input type="hidden" name="action" value="book_slot">
 
-          <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full">
-            Book Slot
-          </button>
-        </div>
-      </section>
+    <label class="block font-semibold">Select Date</label>
+    <input 
+      type="date" 
+      name="test_date" 
+      class="w-full p-4 border rounded-lg" 
+      required
+    >
+
+    <label class="block font-semibold">Select Time</label>
+    <select 
+      name="test_time" 
+      class="w-full p-4 border rounded-lg" 
+      required
+    >
+      <option value="">Select slot</option>
+      <option value="09:00">09:00 AM</option>
+      <option value="11:00">11:00 AM</option>
+      <option value="13:00">01:00 PM</option>
+      <option value="15:00">03:00 PM</option>
+    </select>
+
+    <label class="block font-semibold">Select Location</label>
+    <select 
+      name="test_location" 
+      class="w-full p-4 border rounded-lg" 
+      required
+    >
+      <option value="">Select RTO / Test Center</option>
+      <option value="KPHB RTO">KPHB RTO</option>
+      <option value="Amberpet RTO">Amberpet RTO</option>
+      <option value="HITEC City RTO">HITEC City RTO</option>
+      <option value="Nallakunta RTO">Nallakunta RTO</option>
+      <option value="Gachibowli Driving Test Center">Gachibowli Driving Test Center</option>
+      <option value="Malkajgiri RTO">Malkajgiri RTO</option>
+    </select>
+
+    <button 
+      type="submit" 
+      class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full"
+    >
+      Book Slot
+    </button>
+
+  </form>
+</section>
+
 
       <!-- Acts -->
       <section id="acts" class="bg-white rounded-xl shadow-lg p-8">

@@ -305,7 +305,9 @@
     <h3 class="text-2xl font-bold mb-6">🔍 Track Application Status</h3>
     
     <div class="max-w-2xl mx-auto">
-      <form id="statusForm" class="space-y-4">
+      <form action="business-backend.php" method="POST" class="space-y-4">
+  <input type="hidden" name="action" value="status">
+
         <div>
           <label class="block font-semibold mb-3">Application ID</label>
           <input type="text" id="appId" class="w-full p-4 border rounded-lg" placeholder="Enter your Application ID (e.g., BL2024-12345)" required>
@@ -374,7 +376,9 @@
   </section>
 
   <!-- Application Form -->
-  <section id="apply" class="bg-white shadow-xl rounded-lg p-8">
+<form action="business-form.php" method="POST" enctype="multipart/form-data" class="max-w-3xl mx-auto space-y-6">
+  <input type="hidden" name="action" value="apply">
+
     <h3 class="text-2xl font-bold mb-6">📝 Business License Application Form</h3>
     
     <form id="applicationForm" class="max-w-3xl mx-auto space-y-6">

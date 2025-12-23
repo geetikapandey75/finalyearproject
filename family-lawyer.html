@@ -1,112 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Legal Assist - Family Lawyer</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Legal Assist - Family Lawyer</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-gray-50 text-gray-800 font-sans relative">
 
-  <!-- Header Section -->
-  <header class="bg-gradient-to-b from-blue-900 to-blue-600 text-white py-8">
-    <div class="max-w-6xl mx-auto text-center px-4">
-      <h1 class="text-3xl font-bold">Legal Assist - Family Lawyer Services</h1>
-      <p class="mt-2 text-gray-200 text-lg">
-        Expert Legal Help for Divorce, Custody, Adoption, and Family Disputes
-      </p>
-      <div class="mt-6 flex justify-center space-x-4">
-        <a href="#contact" class="bg-yellow-400 text-gray-900 font-semibold px-6 py-2 rounded-full hover:bg-yellow-500 transition">
-          Book an Appointment
-        </a>
-        <a href="#services" class="bg-yellow-400 text-gray-900 font-semibold px-6 py-2 rounded-full hover:bg-yellow-500 transition">
-          Find a Lawyer
-        </a>
+<!-- 1. Emergency Banner -->
+<div class="bg-red-600 text-white text-center py-3 font-bold">
+  🚨 Urgent Help Available 24/7 - Call Now: <a href="tel:+919876543210" class="underline">+91 98765 43210</a>
+</div>
+
+<!-- Header -->
+<header class="bg-gradient-to-b from-blue-900 to-blue-600 text-white py-8 relative">
+  <div class="max-w-6xl mx-auto text-center px-4">
+    <h1 class="text-3xl font-bold">Legal Assist - Family Lawyer Services</h1>
+    <p class="mt-2 text-gray-200 text-lg">Expert Legal Help for Divorce, Custody, Adoption, and Family Disputes</p>
+    <div class="mt-6 flex justify-center space-x-4">
+      <a href="#appointment" class="bg-yellow-400 text-gray-900 font-semibold px-6 py-2 rounded-full hover:bg-yellow-500 transition">Book Appointment</a>
+      <a href="#services" class="bg-yellow-400 text-gray-900 font-semibold px-6 py-2 rounded-full hover:bg-yellow-500 transition">Find a Lawyer</a>
+      <a href="tel:+919876543210" class="bg-red-500 text-white font-semibold px-6 py-2 rounded-full hover:bg-red-600 transition">Emergency Contact</a>
+    </div>
+  </div>
+</header>
+
+<!-- 2. Hero Section -->
+<section class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto text-center shadow-lg rounded-2xl p-10">
+    <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Expert Family Legal Help at Your Fingertips</h2>
+    <p class="text-gray-600 mb-6">Connect with top family lawyers and get your legal issues resolved with compassion, speed, and professionalism.</p>
+    <a href="#appointment" class="bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-full hover:bg-yellow-500 transition">Book Appointment Now</a>
+  </div>
+</section>
+
+<!-- 3. Interactive Legal Help Cards -->
+<section id="services" class="py-16 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-6">
+    <h3 class="text-2xl font-bold text-blue-900 mb-8 text-center">Our Legal Services</h3>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-white p-6 shadow rounded-lg hover:shadow-lg transition relative group cursor-pointer" onclick="alert('Tip: Keep all documentation ready.')">
+        <h4 class="text-lg font-semibold text-blue-800 mb-2">Divorce & Separation</h4>
+        <p class="text-gray-600 text-sm">Guiding you through legal proceedings with empathy and clarity.</p>
+      </div>
+      <div class="bg-white p-6 shadow rounded-lg hover:shadow-lg transition relative group cursor-pointer" onclick="alert('Tip: Focus on child\'s best interest.')">
+        <h4 class="text-lg font-semibold text-blue-800 mb-2">Child Custody</h4>
+        <p class="text-gray-600 text-sm">Helping you secure fair custody and visitation rights.</p>
+      </div>
+      <div class="bg-white p-6 shadow rounded-lg hover:shadow-lg transition relative group cursor-pointer" onclick="alert('Tip: Collect evidence & report immediately.')">
+        <h4 class="text-lg font-semibold text-blue-800 mb-2">Domestic Violence</h4>
+        <p class="text-gray-600 text-sm">Immediate, confidential legal help for victims.</p>
+      </div>
+      <div class="bg-white p-6 shadow rounded-lg hover:shadow-lg transition relative group cursor-pointer" onclick="alert('Tip: Adoption requires legal verification.')">
+        <h4 class="text-lg font-semibold text-blue-800 mb-2">Adoption</h4>
+        <p class="text-gray-600 text-sm">Simplifying your adoption journey with legal support.</p>
+      </div>
+      <div class="bg-white p-6 shadow rounded-lg hover:shadow-lg transition relative group cursor-pointer" onclick="alert('Tip: Draft agreements carefully for future peace.')">
+        <h4 class="text-lg font-semibold text-blue-800 mb-2">Prenuptial Agreements</h4>
+        <p class="text-gray-600 text-sm">Drafting legally sound agreements for future peace of mind.</p>
+      </div>
+      <div class="bg-white p-6 shadow rounded-lg hover:shadow-lg transition relative group cursor-pointer" onclick="alert('Tip: Mediation avoids lengthy court processes.')">
+        <h4 class="text-lg font-semibold text-blue-800 mb-2">Mediation & Settlement</h4>
+        <p class="text-gray-600 text-sm">Resolving disputes peacefully without going to court.</p>
       </div>
     </div>
-  </header>
+  </div>
+</section>
 
-  <!-- Hero Section -->
-  <section class="py-16 bg-white">
-    <div class="max-w-4xl mx-auto text-center shadow-lg rounded-2xl p-10">
-      <h2 class="text-3xl font-extrabold text-gray-900 mb-4">
-        Expert Family Legal Help at Your Fingertips
-      </h2>
-      <p class="text-gray-600 mb-6">
-        Connect with top family lawyers and get your legal issues resolved with compassion, speed, and professionalism.
-      </p>
-      <a href="#contact" class="bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-full hover:bg-yellow-500 transition">
-        Book Appointment Now
-      </a>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section class="bg-gray-100 py-14">
-    <div class="max-w-6xl mx-auto px-6">
-      <h3 class="text-2xl font-bold text-blue-900 mb-4">About Our Family Lawyer</h3>
-      <p class="text-gray-700 leading-relaxed">
-        Our experienced Family Lawyers at Legal Assist handle all types of personal and family legal matters including divorce, 
-        child custody, domestic violence, adoption, and prenuptial agreements. 
-        We aim to provide practical, fair, and compassionate legal solutions that protect your rights and maintain family well-being.
-      </p>
-    </div>
-  </section>
-
-  <!-- Services Section -->
-  <section id="services" class="py-16 bg-white">
-    <div class="max-w-6xl mx-auto px-6">
-      <h3 class="text-2xl font-bold text-blue-900 mb-8 text-center">Our Legal Services</h3>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="bg-gray-50 p-6 shadow rounded-lg hover:shadow-lg transition">
-          <h4 class="text-lg font-semibold text-blue-800 mb-2">Divorce & Separation</h4>
-          <p class="text-gray-600 text-sm">Guiding you through legal proceedings with empathy and clarity.</p>
-        </div>
-        <div class="bg-gray-50 p-6 shadow rounded-lg hover:shadow-lg transition">
-          <h4 class="text-lg font-semibold text-blue-800 mb-2">Child Custody</h4>
-          <p class="text-gray-600 text-sm">Helping you secure fair custody and visitation rights for your child.</p>
-        </div>
-        <div class="bg-gray-50 p-6 shadow rounded-lg hover:shadow-lg transition">
-          <h4 class="text-lg font-semibold text-blue-800 mb-2">Domestic Violence</h4>
-          <p class="text-gray-600 text-sm">Immediate, confidential legal help for victims of domestic abuse.</p>
-        </div>
-        <div class="bg-gray-50 p-6 shadow rounded-lg hover:shadow-lg transition">
-          <h4 class="text-lg font-semibold text-blue-800 mb-2">Adoption</h4>
-          <p class="text-gray-600 text-sm">Simplifying your adoption journey with end-to-end legal support.</p>
-        </div>
-        <div class="bg-gray-50 p-6 shadow rounded-lg hover:shadow-lg transition">
-          <h4 class="text-lg font-semibold text-blue-800 mb-2">Prenuptial Agreements</h4>
-          <p class="text-gray-600 text-sm">Drafting legally sound agreements for future peace of mind.</p>
-        </div>
-        <div class="bg-gray-50 p-6 shadow rounded-lg hover:shadow-lg transition">
-          <h4 class="text-lg font-semibold text-blue-800 mb-2">Mediation & Settlement</h4>
-          <p class="text-gray-600 text-sm">Resolving disputes peacefully without going to court.</p>
-        </div>
+<!-- 9. Animated Statistics -->
+<section class="py-16 bg-white">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h3 class="text-2xl font-bold text-blue-900 mb-8">Our Achievements</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div>
+        <p class="text-4xl font-bold text-yellow-400" id="cases">0</p>
+        <p class="text-gray-600 mt-2">Cases Handled</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold text-yellow-400" id="clients">0</p>
+        <p class="text-gray-600 mt-2">Clients Helped</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold text-yellow-400" id="success">0</p>
+        <p class="text-gray-600 mt-2">Successful Resolutions</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold text-yellow-400" id="years">0</p>
+        <p class="text-gray-600 mt-2">Years Experience</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-16">
-    <div class="max-w-4xl mx-auto text-center px-6">
-      <h3 class="text-3xl font-bold mb-4">Get in Touch</h3>
-      <p class="mb-6 text-gray-200">
-        Schedule a consultation or ask your legal questions. We’ll respond within 24 hours.
-      </p>
-      <form class="max-w-lg mx-auto grid gap-4 text-gray-800">
-        <input type="text" placeholder="Your Name" class="p-3 rounded w-full border focus:ring-2 focus:ring-yellow-400" />
-        <input type="email" placeholder="Your Email" class="p-3 rounded w-full border focus:ring-2 focus:ring-yellow-400" />
-        <textarea rows="4" placeholder="Your Message" class="p-3 rounded w-full border focus:ring-2 focus:ring-yellow-400"></textarea>
-        <button type="submit" class="bg-yellow-400 text-gray-900 font-semibold py-3 rounded-full hover:bg-yellow-500 transition">
-          Send Message
-        </button>
-      </form>
+<!-- 11. Lawyer Profiles -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-6">
+    <h3 class="text-2xl font-bold text-blue-900 mb-8 text-center">Meet Our Lawyers</h3>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-white p-6 shadow rounded-lg text-center">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-32 h-32 mx-auto rounded-full mb-4" alt="Lawyer 1">
+        <h4 class="text-lg font-semibold text-blue-800">Adv. Priya Sharma</h4>
+        <p class="text-gray-600 text-sm">Family Law Specialist, 10+ Years Experience</p>
+      </div>
+      <div class="bg-white p-6 shadow rounded-lg text-center">
+        <img src="https://randomuser.me/api/portraits/men/46.jpg" class="w-32 h-32 mx-auto rounded-full mb-4" alt="Lawyer 2">
+        <h4 class="text-lg font-semibold text-blue-800">Adv. Rahul Mehta</h4>
+        <p class="text-gray-600 text-sm">Child Custody & Divorce Expert</p>
+      </div>
+      <div class="bg-white p-6 shadow rounded-lg text-center">
+        <img src="https://randomuser.me/api/portraits/women/55.jpg" class="w-32 h-32 mx-auto rounded-full mb-4" alt="Lawyer 3">
+        <h4 class="text-lg font-semibold text-blue-800">Adv. Neha Kapoor</h4>
+        <p class="text-gray-600 text-sm">Adoption & Mediation Specialist</p>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-300 text-center py-6">
-    <p>© 2025 Legal Assist - Family Lawyer | All Rights Reserved</p>
-  </footer>
-</body>
-</html>
+
+
+<!-- 4. FAQ Section -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-4xl mx-auto px-6">
+    <h3 class="text-2xl font-bold text-blue-900 mb-8 text-center">Frequently Asked Questions</h3>
+    <div class="space-y-4">
+      <details class="bg-white p-4 rounded shadow">
+        <summary class="cursor-pointer font-semibold">How long does a divorce process take?</summary>
+        <p class="mt-2 text-gray-600">Depending on mutual consent or contested cases, it may take 3–12 months.</p>
+      </details>
+      <details class="bg-white p-4 rounded shadow">
+        <summary class="cursor-pointer font-semibold">Who gets child custody?</summary>
+        <p class="mt-2 text-gray-600">Courts decide based on the child's best interest, considering both parents' capabilities.</p>
+      </details>
+      <details class="bg-white p-4 rounded shadow">
+        <summary class="cursor-pointer font-semibold">Can I get emergency legal help?</summary>
+        <p class="mt-2 text-gray-600">Yes, contact our 24/7 emergency helpline immediately.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- 5 & 14. Appointment Form & Live Chat -->
+<section id="appointment" class="py-16 bg-white">
+  <div class="max-w-3xl mx-auto px-6 bg-gray-50 shadow-lg rounded-2xl p-10 relative">
+    <h3 class="text-2xl font-bold text-blue-900 mb-6 text-center">Request a Consultation</h3>
+    <form id="appointmentForm" class="grid gap-4" onsubmit="submitForm(event)">
+      <input type="text" placeholder="Full Name" required class="p-3 rounded border focus:ring-2 focus:ring-yellow-400">
+      <input type="email" placeholder="Email" required class="p-3 rounded border focus:ring-2 focus:ring-yellow-400">
+      <input type="tel" placeholder="Phone Number" required class="p-3 rounded border focus:ring-2 focus:ring-yellow-400">
+      <select required class="p-3 rounded border focus:ring-2 focus:ring-yellow-400">
+        <option value="">Select Service</option>
+        <option>Divorce</option>
+        <option>Child Custody</option>
+        <option>Domestic Violence</option>
+        <option>Adoption</option>
+      </select>
+      <textarea placeholder="Brief Description" required class="p-3 rounded border focus:ring-2 focus:ring-yellow-400"></textarea>
+      <button type="submit" class="bg-yellow-400 text-gray-900 font-semibold py-3 rounded-full hover:bg-yellow-500 transition">Submit</button>
+      <p id="successMsg" class="text-green-600 font-bold mt-2 hidden">✅ Your request has been submitted!</p>
+    </form>
+    <button class="fixed bottom-24 right-6 bg-blue-600 text-white px-4 py-3 rounded-full shadow-lg hover:bg-blue-700 transition" onclick="alert('Chat support coming soon!')">Live Chat</button>
+  </div>
+</section>
+
+<!-- 10. Case Cost Estimator -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-3xl mx-auto px-6 bg-white shadow-lg rounded-2xl p-10">
+    <h3 class="text-2xl font-bold text-blue-900 mb-6 text-center">Case Cost Estimator</h3>
+    <form id="costForm" class="grid gap-4" onsubmit="calculateCost(event)">
+      <label class="font-semibold">Select Case Type:</label>
+      <select id="caseType" class="p-3 rounded border focus:ring-2 focus:ring-yellow-400">
+        <option value="">Choose Case</option>
+        <option value="divorce">Divorce</option>
+        <option value="custody">Child Custody</option>
+        <option value="adoption">Adoption</option>
+      </select>
+      <button type="submit" class="bg-yellow-400 text-gray-900 font-semibold py-3 rounded-full hover:bg-yellow-500 transition">Estimate Cost</button>
+      <p id="costResult" class="mt-2 text-gray-700 font-bold"></p>
+    </form>
+  </div>
+</section>
+
+<!-- 13. Newsletter -->
+<section class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <h3 class="text-2xl font-bold text-blue-900 mb-4">Subscribe for Legal Updates</h3>
+    <p class="mb-6 text-gray-600">Get tips, updates, and guides straight to your inbox.</p>
+    <form class="flex flex-col sm:flex-row gap-4 justify-center">
+      <input type="email" placeholder="Enter your email" class="p-3 rounded border focus:ring-2 focus:ring-yellow-400 w-full sm:w-auto">
+      <button class="bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-full hover:bg-yellow-500 transition">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- 15. Map -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h3 class="text-2xl font-bold text-blue-900 mb-6">Our Office Location</h3>
+    <iframe class="w-full h-80 rounded-lg shadow" src="https://maps.google.com/maps?q=Hyderabad&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+  </div>
+</section>
+
+<!-- 16. Countdown Timer -->
+<section class="py-16 bg-white text-center">
+  <h3 class="text-2xl font-bold text-blue-900 mb-4">Limited-Time Consultation Offer</h3>
+  <p class="text-gray-600 mb-4">Hurry! Offer ends in:</p>
+  <p id="countdown" class="text-3xl font-bold text-red-600"></p>
+</section>
+
+<!-- 17. Downloadable Resources -->
+<section class="py-16 bg-gray-50 text-center">
+  <h3 class="text-2xl font-bold text-blue-900 mb-4">Download Legal Guides</h3>
+  <a href="#" download class="bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-full hover:bg-yellow-500 transition">Download PDF Guide</a>
+</section>
+
+<!-- 18. Interactive Timeline -->
+<section class="py-16 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+    <h3 class="text-2xl font-bold text-blue-900 mb-8 text-center">Legal Process Timeline</h3>
+    <div class="relative border-l-2 border-blue-300 ml-4">
+      <div class="mb-8 ml-4">
+        <div class="absolute -left-3 w-6 h-6 bg-blue-600 rounded-full"></div>
+        <h4 class="font-semibold text-blue-800">Step 1: Consultation</h4>
+        <p class="text-gray-600">Discuss your case and plan legal strategy.</p>
+      </div>
+      <div class="mb-8 ml-4">
+        <div class="absolute -left-3 w-6 h-6 bg-blue-600 rounded-full"></div>
+        <h4 class="font-semibold text-blue-800">Step 2: Documentation</h4>
+        <p class="text-gray-600">Prepare all legal documents and evidence.</p>
+      </div>
+      <div class="mb-8 ml-4">
+        <div class="absolute -left-3 w-6 h-6 bg-blue-600 rounded-full"></div>
+        <h4 class="font-semibold text-blue-800">Step 3: Filing</h4>
+        <p class="text-gray-600">Submit your case to the court.</p>
+      </div>
+      <div class="mb-8 ml-4">
+        <div class="absolute -

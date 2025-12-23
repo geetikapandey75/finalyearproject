@@ -18,12 +18,8 @@
     <div class="container mx-auto flex justify-between items-center">
       <h1 class="text-xl font-bold">Legal Assist</h1>
       <nav class="space-x-4">
-        <a href="police-complaint.html" class="hover:underline">Home</a>
         <a href="vehicle.html" class="hover:underline font-semibold text-yellow-300">Unclaimed Vehicles</a>
-        <a href="petition.html" class="hover:underline">Lodge a Petition</a>
-        <a href="FIR.html" class="hover:underline">View/Print FIR</a>
         <a href="passport.html" class="hover:underline">Passport Services</a>
-        <a href="Police Clearance.html" class="hover:underline">Police Clearance</a>
         <a href="e-challan.html" class="hover:underline">E-Challan</a>
       </nav>
     </div>
@@ -35,42 +31,9 @@
     <p class="mb-6 text-lg max-w-2xl mx-auto">View details of vehicles found and reported as unclaimed by the police department. If you identify your vehicle, you can initiate the claim process online.</p>
   </section>
 
-  <!-- Search Section -->
-  <section class="container mx-auto px-6 py-10">
-    <div class="bg-white rounded-xl shadow-lg p-8">
-      <h3 class="text-2xl font-bold mb-6 text-blue-800 text-center">Search for Your Vehicle</h3>
-      <div class="flex flex-col md:flex-row gap-4 justify-center">
-        <input type="text" id="searchInput" placeholder="Enter vehicle number (e.g. TS09AB1234)" class="w-full md:w-1/2 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <button onclick="filterVehicles()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500">Search</button>
-      </div>
-    </div>
-  </section>
+ 
 
-  <!-- Advanced Filters -->
-  <section class="container mx-auto px-6 py-4">
-    <div class="bg-white rounded-xl shadow-lg p-6">
-      <h3 class="text-xl font-bold mb-4 text-blue-800 text-center">Advanced Filters</h3>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <select id="filter-type" class="border p-2 rounded">
-          <option value="">Vehicle Type</option>
-          <option>Car</option><option>Bike</option><option>Scooter</option><option>Truck</option><option>Auto</option>
-        </select>
-        <select id="filter-color" class="border p-2 rounded">
-          <option value="">Color</option>
-          <option>Red</option><option>Blue</option><option>Black</option><option>White</option><option>Silver</option>
-        </select>
-        <select id="filter-location" class="border p-2 rounded">
-          <option value="">Police Station</option>
-          <option>Kukatpally</option><option>Madhapur</option><option>Secunderabad</option><option>Banjara Hills</option>
-        </select>
-        <select id="filter-brand" class="border p-2 rounded">
-          <option value="">Brand/Make</option>
-          <option>Honda</option><option>Hero</option><option>Maruti</option><option>Hyundai</option><option>Suzuki</option>
-        </select>
-      </div>
-      <button class="mt-4 px-4 py-2 bg-red-500 text-white rounded" onclick="clearFilters()">Clear Filters</button>
-    </div>
-  </section>
+  
 
   <!-- Vehicle List with Gallery -->
   <section class="container mx-auto px-6 pb-12">
@@ -113,25 +76,26 @@
   <section class="container mx-auto px-6 pb-12">
     <div class="bg-white rounded-xl shadow-lg p-8">
       <h3 class="text-2xl font-bold mb-6 text-blue-800 text-center">Claim Your Vehicle</h3>
-      <form class="space-y-6 max-w-2xl mx-auto">
-        <div>
-          <label class="block font-semibold mb-2">Full Name</label>
-          <input type="text" class="w-full p-4 border rounded-lg" placeholder="Enter your name" required>
-        </div>
-        <div>
-          <label class="block font-semibold mb-2">Vehicle Number</label>
-          <input type="text" class="w-full p-4 border rounded-lg" placeholder="Enter vehicle number" required>
-        </div>
-        <div>
-          <label class="block font-semibold mb-2">Contact Number</label>
-          <input type="tel" class="w-full p-4 border rounded-lg" placeholder="Enter your contact number" required>
-        </div>
-        <div>
-          <label class="block font-semibold mb-2">Upload Proof of Ownership</label>
-          <input type="file" class="w-full p-4 border rounded-lg" required>
-        </div>
-        <button type="submit" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 w-full">Submit Claim</button>
-      </form>
+      <form class="space-y-6 max-w-2xl mx-auto" method="POST" action="vehicle.php" enctype="multipart/form-data">
+    <div>
+        <label class="block font-semibold mb-2">Full Name</label>
+        <input type="text" name="full_name" class="w-full p-4 border rounded-lg" placeholder="Enter your name" required>
+    </div>
+    <div>
+        <label class="block font-semibold mb-2">Vehicle Number</label>
+        <input type="text" name="vehicle_no" class="w-full p-4 border rounded-lg" placeholder="Enter vehicle number" required>
+    </div>
+    <div>
+        <label class="block font-semibold mb-2">Contact Number</label>
+        <input type="tel" name="contact_no" class="w-full p-4 border rounded-lg" placeholder="Enter your contact number" required>
+    </div>
+    <div>
+        <label class="block font-semibold mb-2">Upload Proof of Ownership</label>
+        <input type="file" name="proof" class="w-full p-4 border rounded-lg" required>
+    </div>
+    <button type="submit" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 w-full">Submit Claim</button>
+</form>
+
     </div>
   </section>
 
@@ -243,58 +207,7 @@
     }
     
   </script>
-  <!-- Claim Status Tracker Section -->
-<section class="container mx-auto px-6 py-12">
-  <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
-    <h3 class="text-2xl font-bold mb-6 text-blue-800 text-center">Claim Status Tracker</h3>
-
-    <!-- Timeline -->
-    <div class="relative border-l-2 border-blue-300 ml-4 mb-8">
-      <div class="mb-6 ml-6 relative">
-        <div class="absolute -left-5 top-0 w-3 h-3 rounded-full bg-blue-600"></div>
-        <p class="font-semibold">Submitted</p>
-        <p class="text-gray-500 text-sm">Date: 2025-12-01</p>
-      </div>
-      <div class="mb-6 ml-6 relative">
-        <div class="absolute -left-5 top-0 w-3 h-3 rounded-full bg-blue-600"></div>
-        <p class="font-semibold">Verified</p>
-        <p class="text-gray-500 text-sm">Date: 2025-12-03</p>
-      </div>
-      <div class="mb-6 ml-6 relative">
-        <div class="absolute -left-5 top-0 w-3 h-3 rounded-full bg-gray-300"></div>
-        <p class="font-semibold text-gray-400">Approved</p>
-        <p class="text-gray-500 text-sm">Estimated: 2025-12-10</p>
-      </div>
-      <div class="mb-6 ml-6 relative">
-        <div class="absolute -left-5 top-0 w-3 h-3 rounded-full bg-gray-300"></div>
-        <p class="font-semibold text-gray-400">Released</p>
-        <p class="text-gray-500 text-sm">Estimated: 2025-12-15</p>
-      </div>
-    </div>
-
-    <!-- Documents Pending -->
-    <div class="mb-6">
-      <h4 class="font-semibold mb-2">Documents Pending</h4>
-      <ul class="list-disc list-inside text-gray-700">
-        <li>Proof of Address</li>
-        <li>Vehicle Insurance Copy</li>
-      </ul>
-    </div>
-
-    <!-- Upload Additional Documents -->
-    <div class="mb-6">
-      <label class="block font-semibold mb-2">Upload Additional Documents</label>
-      <input type="file" multiple class="w-full p-3 border rounded-lg">
-    </div>
-
-    <!-- Appointment Scheduler -->
-    <div>
-      <label class="block font-semibold mb-2">Schedule Vehicle Inspection</label>
-      <input type="datetime-local" class="w-full p-3 border rounded-lg mb-4">
-      <button onclick="alert('Appointment Scheduled!')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full">Schedule</button>
-    </div>
-  </div>
-</section>
+  
 
 <!-- Auction & Vehicle Identification Section -->
 <section class="container mx-auto px-6 py-12">
@@ -374,14 +287,7 @@
       </table>
     </div>
 
-    <!-- Vehicle Identification Helper -->
-    <div class="mt-10">
-      <h4 class="font-semibold mb-2 text-blue-700">Vehicle Identification Helper</h4>
-      <input type="text" id="partialNumber" placeholder="Partial plate number or color/model" class="w-full p-3 border rounded-lg mb-2">
-      <button onclick="searchVehicle()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-500 w-full mb-4">Search Vehicle</button>
-
-      <div id="similarVehicles" class="text-gray-700"></div>
-    </div>
+    
 
     <!-- Trending Areas Alert -->
     <div class="mt-8 p-4 bg-yellow-100 rounded-lg">
@@ -393,13 +299,6 @@
       </ul>
     </div>
 
-    <!-- Vehicle History Report -->
-    <div class="mt-8">
-      <h4 class="font-semibold mb-2 text-blue-700">Vehicle History Report</h4>
-      <p class="text-gray-700">Check if vehicle was reported stolen, previous owner details, pending challans/fines, insurance status.</p>
-    </div>
-  </div>
-</section>
 
 <!-- Countdown Timer Script -->
 <script>
@@ -468,8 +367,13 @@
       <button type="button" onclick="generateInsuranceClaim()" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 w-full">Generate Insurance Claim</button>
     </form>
 
+    <!-- Green Success Box -->
+    <div id="successMessage" class="mt-6 p-4 bg-green-100 border border-green-400 text-green-800 rounded-lg hidden">
+      ✅ Insurance claim submitted successfully!
+    </div>
+
     <!-- Claim Status Tracker -->
-    <div id="claimStatus" class="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200 hidden">
+    <div id="claimStatus" class="mt-6 p-6 bg-gray-50 rounded-lg border border-gray-200 hidden">
       <h4 class="font-semibold mb-4 text-blue-700">Insurance Claim Status</h4>
       <ul class="list-disc list-inside text-gray-700">
         <li id="statusSubmitted">Submitted: ✅</li>
@@ -483,7 +387,7 @@
 
 <script>
 function generateInsuranceClaim() {
-  const vehicle = document.getElementById('vehicleNumber').value;
+  const vehicle = document.getElementById('vehicleNumber').value.trim();
   const damage = document.getElementById('damageStatus').value;
   const photos = document.getElementById('damagePhotos').files;
 
@@ -492,9 +396,13 @@ function generateInsuranceClaim() {
     return;
   }
 
+  // Show green success box
+  const successBox = document.getElementById('successMessage');
+  successBox.classList.remove('hidden');
+
   // Show claim status tracker
   const statusDiv = document.getElementById('claimStatus');
-  statusDiv.style.display = 'block';
+  statusDiv.classList.remove('hidden');
 
   // Reset status
   document.getElementById('statusSubmitted').textContent = 'Submitted: ✅';
@@ -502,7 +410,8 @@ function generateInsuranceClaim() {
   document.getElementById('statusApproved').textContent = 'Approved: ❌';
   document.getElementById('statusCompleted').textContent = 'Completed: ❌';
 
-  alert(`Insurance claim generated for vehicle ${vehicle}. ${damage === 'Yes' ? 'Damage documented with ' + photos.length + ' photo(s).' : 'No damage reported.'}`);
+  // Alert summary
+  alert(`Insurance claim generated for vehicle ${vehicle}.\nDamage reported: ${damage}${damage === 'Yes' ? `\nPhotos uploaded: ${photos.length}` : ''}`);
 
   // Simulate status updates
   setTimeout(() => {
@@ -514,8 +423,153 @@ function generateInsuranceClaim() {
   setTimeout(() => {
     document.getElementById('statusCompleted').textContent = 'Completed: ✅';
   }, 6000);
+
+  // Clear form fields after short delay (so success box is visible)
+  setTimeout(() => {
+    document.getElementById('insuranceForm').reset();
+  }, 500);
 }
 </script>
+<!-- Container for report -->
+<div id="reportContainer" class="mt-6 hidden text-center">
+  <canvas id="claimCanvas" width="800" height="1000" class="border"></canvas>
+  <br>
+  <button id="downloadReport" class="mt-4 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-500">Download Report</button>
+</div>
+
+<script>
+function generateInsuranceClaim() {
+  const vehicle = document.getElementById('vehicleNumber').value.trim();
+  const damage = document.getElementById('damageStatus').value;
+  const photos = document.getElementById('damagePhotos').files;
+
+  if (!vehicle || !damage) {
+    alert('Please fill in required fields.');
+    return;
+  }
+
+  // Show success message
+  document.getElementById('successMessage').classList.remove('hidden');
+
+  // Show claim status tracker
+  const statusDiv = document.getElementById('claimStatus');
+  statusDiv.classList.remove('hidden');
+
+  // Reset status
+  document.getElementById('statusSubmitted').textContent = 'Submitted: ✅';
+  document.getElementById('statusProcessing').textContent = 'Processing: ⏳';
+  document.getElementById('statusApproved').textContent = 'Approved: ❌';
+  document.getElementById('statusCompleted').textContent = 'Completed: ❌';
+
+  // Simulate status updates
+  setTimeout(() => { document.getElementById('statusProcessing').textContent = 'Processing: ✅'; }, 2000);
+  setTimeout(() => { document.getElementById('statusApproved').textContent = 'Approved: ✅'; }, 4000);
+  setTimeout(() => { 
+    document.getElementById('statusCompleted').textContent = 'Completed: ✅';
+
+    // Generate report canvas once claim is completed
+    generateReportCanvas(vehicle, damage, photos);
+  }, 6000);
+
+  // Clear form
+  setTimeout(() => { document.getElementById('insuranceForm').reset(); }, 500);
+}
+
+function generateReportCanvas(vehicle, damage, photos) {
+  const canvas = document.getElementById('claimCanvas');
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width;
+  let y = 50;
+
+  // Background
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0,0,width,canvas.height);
+
+  // Title
+  ctx.fillStyle = '#1e3a8a';
+  ctx.font = 'bold 28px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('INSURANCE CLAIM REPORT', width/2, y);
+  y += 40;
+
+  ctx.strokeStyle = '#999';
+  ctx.beginPath();
+  ctx.moveTo(50, y);
+  ctx.lineTo(width-50, y);
+  ctx.stroke();
+  y += 30;
+
+  // Claim Details
+  ctx.font = 'bold 20px Arial';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#1e3a8a';
+  ctx.fillText('Claim Details', 50, y);
+  y += 25;
+  ctx.strokeStyle = '#ccc';
+  ctx.strokeRect(50, y, width-100, 120);
+
+  ctx.font = '16px Arial';
+  ctx.fillStyle = '#000';
+  const claimDate = new Date().toLocaleDateString();
+  ctx.fillText(`Vehicle Number: ${vehicle}`, 60, y+30);
+  ctx.fillText(`Damage Status: ${damage === 'Yes' ? 'Yes, Vehicle Damaged' : 'No Damage'}`, 60, y+60);
+  ctx.fillText(`Photos Submitted: ${photos.length} Photo(s)`, 60, y+90);
+  ctx.fillText(`Claim Date: ${claimDate}`, 60, y+120);
+  y += 160;
+
+  // Damage Photos
+  if (photos.length > 0) {
+    ctx.fillStyle = '#1e3a8a';
+    ctx.font = 'bold 20px Arial';
+    ctx.fillText('Damage Photos', 50, y);
+    y += 30;
+
+    const photoWidth = 200;
+    const photoHeight = 120;
+    const gap = 20;
+    Array.from(photos).forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const x = 50 + index*(photoWidth+gap);
+          ctx.drawImage(img, x, y, photoWidth, photoHeight);
+        }
+        img.src = e.target.result;
+      }
+      reader.readAsDataURL(file);
+    });
+    y += photoHeight + 40;
+  }
+
+  // Claim Status
+  ctx.fillStyle = '#1e3a8a';
+  ctx.font = 'bold 20px Arial';
+  ctx.fillText('Claim Status', 50, y);
+  y += 30;
+  ctx.font = '16px Arial';
+  ctx.fillStyle = '#000';
+  ctx.fillText('✅ Submitted: Successfully Submitted', 60, y);
+  y += 25;
+  ctx.fillText('⏳ Processing: Claim Under Review', 60, y);
+  y += 25;
+  ctx.fillText('✅ Approved: Claim Approved', 60, y);
+  y += 25;
+  ctx.fillText('✅ Completed: Claim Completed', 60, y);
+
+  // Show canvas container
+  document.getElementById('reportContainer').classList.remove('hidden');
+
+  // Download button
+  document.getElementById('downloadReport').onclick = function() {
+    const link = document.createElement('a');
+    link.download = `Insurance_Claim_${vehicle}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+  };
+}
+</script>
+
 
 
 </body>

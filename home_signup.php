@@ -7,7 +7,7 @@ session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "projectdb";
+$dbname = "legal_assist";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
-
+    
     // Validation
     if (empty($full_name)) {
         $_SESSION['error'] = "Full name is required!";
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $check_result = $stmt->get_result();
-
+        
         if ($check_result->num_rows > 0) {
             $_SESSION['error'] = "Email already registered!";
             $stmt->close();
@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Hash password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
+        
         // Insert new user
         $sql = "INSERT INTO users (full_name, email, password, role) VALUES (?, ?, ?, 'user')";
         $stmt = $conn->prepare($sql);
@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         
         $stmt->bind_param("sss", $full_name, $email, $hashed_password);
-
+        
         if ($stmt->execute()) {
             $_SESSION['success'] = "Registration successful! You can now login.";
             $stmt->close();
@@ -117,9 +117,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
-
-
-<!-- 
-SAVE THIS FILE AS: home_signup.php
-Location: C:\xampp\htdocs\project\home_signup.php
--->

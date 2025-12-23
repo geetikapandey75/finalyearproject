@@ -5,7 +5,7 @@ session_start();
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Legal Assist – Legal Services</title>
+  <title>Legal Assist – Welcome</title>
   <link rel="stylesheet" href="style.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
@@ -105,10 +105,7 @@ session_start();
   <!-- Top Navigation Links -->
   <div class="top-features-bar">
     <span><a href="about-us.html">About Us</a></span>
-    <span><a href="#dashboard">Dashboard</a></span>
-    <span><a href="contact.html">Contact</a></span>
-    <span><a href="#help">Help</a></span>
-    <span><a href="settings.html">Settings</a></span>
+    <span><a href="jobs.html">Jobs</a></span>
   </div>
 
   <!-- Login/Signup -->
@@ -122,19 +119,9 @@ session_start();
     <div class="overlay">
       <h1>Legal Assist</h1>
       <p class="tagline">Your trusted guide for all legal and license needs</p>
+      <p style="margin-top: 20px; font-size: 18px;">Login or Sign Up to access our services</p>
     </div>
   </header>
-
-  
-  <!-- Help Section -->
-  <section class="help-section">
-    <h2>What do you need help with?</h2>
-    <div class="choice-container">
-      <a href="law.html" class="choice-card">Legal Help</a>
-      <a href="license.html" class="choice-card">Apply for a Licence</a>
-      <a href="police-complaint.html" class="choice-card">File a Police Complaint</a>
-    </div>
-  </section>
 
   <!-- Auth Section -->
   <section id="auth-section" class="auth-container">
@@ -160,8 +147,6 @@ session_start();
       </form>
     </div>
   </section>
-
-  
 
   <!-- Footer -->
   <footer class="footer">
@@ -234,10 +219,3 @@ session_start();
 
 </body>
 </html>
-
-<!-- 
-SAVE THIS FILE AS: home_page.php
-Location: C:\xampp\htdocs\project\home_page.php
-
-IMPORTANT: Rename home_page.html to home_page.php
--->

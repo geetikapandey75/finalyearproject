@@ -6,6 +6,16 @@
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+<!-- Leaflet Map CSS -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<!-- Leaflet Map JS -->
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 
 </head>
 <body class="m-0 font-sans">
@@ -33,100 +43,111 @@
 
   <!-- FORM SECTION -->
   <section id="missing-form" class="p-8 max-w-3xl mx-auto">
-    <h2 class="text-3xl font-bold mb-6 text-[#10367d]">Report a Missing Person</h2>
+  <h2 class="text-3xl font-bold mb-6 text-[#10367d]">Report a Missing Person</h2>
 
-    <form class="space-y-4 bg-gray-100 p-6 rounded-lg shadow">
+  <form action="missing.php" method="POST" enctype="multipart/form-data"
+        class="space-y-4 bg-gray-100 p-6 rounded-lg shadow">
 
-      <div>
-        <label class="font-semibold">Full Name</label>
-        <input type="text" class="w-full p-2 border rounded">
-      </div>
+    <div>
+      <label class="font-semibold">Full Name</label>
+      <input type="text" name="full_name" required class="w-full p-2 border rounded">
+    </div>
 
-      <div>
-        <label class="font-semibold">Age</label>
-        <input type="number" class="w-full p-2 border rounded">
-      </div>
+    <div>
+      <label class="font-semibold">Age</label>
+      <input type="number" name="age" required class="w-full p-2 border rounded">
+    </div>
 
-      <div>
-        <label class="font-semibold">Gender</label>
-        <select class="w-full p-2 border rounded">
-          <option>Select</option>
-          <option>Male</option>
-          <option>Female</option>
-          <option>Other</option>
-        </select>
-      </div>
+    <div>
+      <label class="font-semibold">Gender</label>
+      <select name="gender" required class="w-full p-2 border rounded">
+        <option value="">Select</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+    </div>
 
-      <div>
-        <label class="font-semibold">Date Last Seen</label>
-        <input type="date" class="w-full p-2 border rounded">
-      </div>
+    <div>
+      <label class="font-semibold">Date Last Seen</label>
+      <input type="date" name="last_seen_date" required class="w-full p-2 border rounded">
+    </div>
 
-      <div>
-        <label class="font-semibold">Last Seen Location</label>
-        <input type="text" class="w-full p-2 border rounded">
-      </div>
+    <div>
+      <label class="font-semibold">Last Seen Location</label>
+      <input type="text" name="last_seen_location" required class="w-full p-2 border rounded">
+    </div>
 
-      <div>
-        <label class="font-semibold">Description / Identifying Marks</label>
-        <textarea rows="4" class="w-full p-2 border rounded"></textarea>
-      </div>
+    <div>
+      <label class="font-semibold">Description / Identifying Marks</label>
+      <textarea name="description" rows="4" class="w-full p-2 border rounded"></textarea>
+    </div>
 
-      <div>
-        <label class="font-semibold">Upload Recent Photo</label>
-        <input type="file" class="w-full">
-      </div>
+    <div>
+      <label class="font-semibold">Upload Recent Photo</label>
+      <input type="file" name="photo" required class="w-full">
+    </div>
 
-      <div>
-        <label class="font-semibold">Your Contact Number</label>
-        <input type="tel" class="w-full p-2 border rounded">
-      </div>
+    <div>
+      <label class="font-semibold">Your Contact Number</label>
+      <input type="tel" name="contact" required class="w-full p-2 border rounded">
+    </div>
 
-      <button class="bg-[#10367d] text-white w-full py-2 rounded font-bold hover:bg-blue-900 transition">
-        Submit Report
-      </button>
+    <button type="submit"
+            class="bg-[#10367d] text-white w-full py-2 rounded font-bold hover:bg-blue-900 transition">
+      Submit Report
+    </button>
 
-    </form>
-  </section>
+  </form>
+</section>
+
 
 
   <!-- UPLOAD POSTER -->
-  <section class="p-8 max-w-3xl mx-auto">
-    <h2 class="text-3xl font-bold text-[#10367d] mb-4">Upload Missing Poster</h2>
+<section class="p-8 max-w-3xl mx-auto">
+  <h2 class="text-3xl font-bold text-[#10367d] mb-4">Upload Missing Poster</h2>
 
-    <form class="bg-gray-100 p-6 rounded-lg shadow space-y-4">
-      <div>
-        <label class="font-semibold">Upload Poster (PDF/JPG/PNG)</label>
-        <input type="file" class="w-full">
-      </div>
+  <form action="missing.php" method="POST" enctype="multipart/form-data"
+        class="bg-gray-100 p-6 rounded-lg shadow space-y-4">
 
-      <button class="bg-[#10367d] text-white w-full py-2 rounded font-bold hover:bg-blue-900 transition">
-        Upload Poster
-      </button>
-    </form>
-  </section>
+    <div>
+      <label class="font-semibold">Upload Poster (PDF/JPG/PNG)</label>
+      <input type="file" name="poster" required class="w-full">
+    </div>
+
+    <button type="submit" name="uploadPoster"
+            class="bg-[#10367d] text-white w-full py-2 rounded font-bold hover:bg-blue-900 transition">
+      Upload Poster
+    </button>
+
+  </form>
+</section>
+
 
 
   <!-- LIVE STATUS TRACKING -->
-  <section class="p-8 bg-blue-50">
-    <div class="max-w-3xl mx-auto">
-      <h2 class="text-3xl font-bold text-blue-900 mb-4">Live Case Tracking</h2>
+<section class="p-8 bg-blue-50">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="text-3xl font-bold text-blue-900 mb-4">Live Case Tracking</h2>
 
-      <form class="space-y-4 bg-gray-100 p-6 rounded-lg shadow">
-        <label class="font-semibold">Enter Case ID</label>
-        <input type="text" class="w-full p-2 border rounded" placeholder="MP-2025-1234">
+    <!-- Form to track case -->
+    <form id="trackCaseForm" class="space-y-4 bg-gray-100 p-6 rounded-lg shadow" method="POST" action="missing.php">
+      <label class="font-semibold" for="case_id">Enter Your Case ID</label>
+      <input type="text" id="case_id" name="case_id" class="w-full p-2 border rounded" placeholder="MP-2025-1234" required>
 
-        <button class="bg-[#10367d] text-white w-full py-2 rounded font-bold hover:bg-blue-900 transition">
-          Track Status
-        </button>
-      </form>
+      <button type="submit" class="bg-[#10367d] text-white w-full py-2 rounded font-bold hover:bg-blue-900 transition">
+        Track Status
+      </button>
+    </form>
 
-      <div class="bg-white p-5 rounded-lg shadow mt-4 border">
-        <h3 class="font-bold text-lg mb-2 text-[#10367d]">Status Updates</h3>
-        <p>No case selected.</p>
-      </div>
+    <!-- Result Box -->
+    <div class="bg-white p-5 rounded-lg shadow mt-4 border" id="resultBox">
+      <h3 class="font-bold text-lg mb-2 text-[#10367d]">Your Case Status</h3>
+      <p id="caseStatusText">No case submitted yet.</p>
     </div>
-  </section>
+  </div>
+</section>
+
 
 
   <!-- MAP-BASED SIGHTINGS -->
@@ -134,9 +155,10 @@
     <h2 class="text-3xl font-bold text-[#10367d] mb-3">Map-Based Sightings</h2>
     <p class="mb-3 text-gray-700">View real-time sightings reported by the public.</p>
 
-    <div class="w-full h-80 bg-gray-300 flex items-center justify-center rounded shadow">
-      Map Loading...
-    </div>
+   <div id="sightingsMap"
+     class="w-full h-80 rounded shadow border">
+</div>
+
   </section>
 
 
@@ -144,10 +166,11 @@
   <section class="p-8 max-w-5xl mx-auto">
     <h2 class="text-3xl font-bold text-[#10367d] mb-3">Heatmap of Missing Cases</h2>
     <p class="mb-3 text-gray-700">Hotspots of missing persons and safe/unsafe zones.</p>
+<div id="heatmap"
+     class="w-full h-80 rounded shadow border">
+</div>
 
-    <div class="w-full h-80 bg-gray-300 flex items-center justify-center rounded shadow">
-      Heatmap Loading...
-    </div>
+
   </section>
 
   <!-- VOLUNTEER NETWORK -->
@@ -473,6 +496,57 @@ function generateTicker() {
       Call 112 (Emergency)
     </a>
   </section>
+<script>
+/* ===========================
+   MAP: Sightings Map
+=========================== */
+
+const sightingsMap = L.map('sightingsMap').setView([17.3850, 78.4867], 12); // Hyderabad
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(sightingsMap);
+
+// Sample sighting markers
+const sightings = [
+  { lat: 17.387, lng: 78.491, text: "Sighting near Charminar" },
+  { lat: 17.448, lng: 78.392, text: "Reported near Kukatpally" },
+  { lat: 17.406, lng: 78.477, text: "Seen near Secunderabad" }
+];
+
+sightings.forEach(s => {
+  L.marker([s.lat, s.lng])
+    .addTo(sightingsMap)
+    .bindPopup(s.text);
+});
+
+
+/* ===========================
+   MAP: Heatmap (Basic)
+=========================== */
+
+const heatMap = L.map('heatmap').setView([17.3850, 78.4867], 11);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(heatMap);
+
+// Fake hotspot circles (replace with real data later)
+const hotspots = [
+  [17.39, 78.48],
+  [17.42, 78.45],
+  [17.36, 78.50]
+];
+
+hotspots.forEach(point => {
+  L.circle(point, {
+    radius: 1500,
+    color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.4
+  }).addTo(heatMap);
+});
+</script>
 
 </body>
 </html>
