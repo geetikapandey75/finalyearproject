@@ -98,15 +98,21 @@ if (!empty($vehicle_no)) {
                     <span class="text-orange-600 font-bold">Pending</span>
                 </p>
 
-                <form method="post" action="pay_challan.php" class="mt-2">
-                    <input type="hidden" name="challan_no" value="<?= $row['challan_no'] ?>">
-                    <button class="px-4 py-2 bg-blue-600 text-white rounded">
-                        Pay Now
+                <!-- UPDATED PAY NOW BUTTON -->
+                <form method="post" action="razorpay_payment.php" class="mt-2">
+                    <input type="hidden" name="service_type" value="challan">
+                    <input type="hidden" name="service_record_id" value="<?= $row['id'] ?>">
+                    <input type="hidden" name="amount" value="<?= $row['amount'] ?>">
+                    <input type="hidden" name="name" value="<?= $row['vehicle_no'] ?>">
+                    <input type="hidden" name="email" value="user@example.com">
+                    <input type="hidden" name="phone" value="9999999999">
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500">
+                        💳 Pay Now
                     </button>
                 </form>
             <?php } else { ?>
                 <p><strong>Status:</strong>
-                    <span class="text-green-600 font-bold">Paid</span>
+                    <span class="text-green-600 font-bold">Paid ✅</span>
                 </p>
             <?php } ?>
 
@@ -145,9 +151,9 @@ if (!empty($vehicle_no)) {
     }
     ?>
 
-    <a href="police-complaint.php"
+    <a href="e-challan.html"
        class="block text-center mt-6 text-blue-700 font-semibold">
-        Check Another Vehicle
+        ← Back to E-Challan Services
     </a>
 
 </div>

@@ -1,257 +1,269 @@
-<?php
-session_start();
-
-/* ================= AUTH ================= */
-if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'user') {
-    header("Location: home_page.php");
-    exit();
-}
-
-$user_id = $_SESSION['user_id'];
-
-/* ================= DB ================= */
-$conn = new mysqli("localhost", "root", "", "legal_assist");
-if ($conn->connect_error) {
-    die("DB Connection Failed");
-}
-
-$errorMsg = "";
-
-/* ================= BOOK APPOINTMENT ================= */
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit_appointment'])) {
-
-    $trackingID = "PASS-" . date("Y") . "-" . strtoupper(substr(md5(uniqid()), 0, 8));
-
-    $firstName = trim($_POST['firstName'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $phone = trim($_POST['phone'] ?? '');
-    $pskLocation = trim($_POST['pskLocation'] ?? '');
-    $appointmentDate = trim($_POST['appointmentDate'] ?? '');
-    $timeSlot = trim($_POST['timeSlot'] ?? '');
-    $serviceType = trim($_POST['serviceType'] ?? '');
-    $paymentAmount = (int)($_POST['paymentAmount'] ?? 0);
-
-    if (!$firstName || !$email || !$phone || !$pskLocation || !$appointmentDate || !$timeSlot || !$serviceType || $paymentAmount <= 0) {
-        $errorMsg = "All fields are required.";
-    } else {
-
-        $stmt = $conn->prepare("
-            INSERT INTO passport_appointments
-            (tracking_id, first_name, email, phone, psk_location, appointment_date, time_slot, service_type, amount, payment_status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
-        ");
-
-        $stmt->bind_param(
-            "ssssssssi",
-            $trackingID,
-            $firstName,
-            $email,
-            $phone,
-            $pskLocation,
-            $appointmentDate,
-            $timeSlot,
-            $serviceType,
-            $paymentAmount
-        );
-
-        if ($stmt->execute()) {
-            $_SESSION['payment'] = [
-                'service' => 'passport',
-                'id' => $conn->insert_id,
-                'amount' => $paymentAmount,
-                'tracking_id' => $trackingID
-            ];
-            header("Location: payment_gateway_integration.php");
-            exit();
-        } else {
-            $errorMsg = "Booking failed.";
-        }
-        $stmt->close();
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Passport Appointment Booking</title>
+  <meta charset="UTF-8" />
+  <title>Legal Assist – Welcome</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f9;
-    margin: 0;
-    padding: 0;
-}
-.container {
-    max-width: 900px;
-    margin: 30px auto;
-    background: white;
-    padding: 25px;
-    border-radius: 8px;
-}
-h1 {
-    color: #1f2937;
-}
-.section {
-    margin-bottom: 30px;
-}
-label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-}
-input, select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-}
-button {
-    background: #16a34a;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
-    border-radius: 5px;
-}
-button:disabled {
-    background: #9ca3af;
-}
-.error {
-    color: red;
-    font-weight: bold;
-}
-.info-box {
-    background: #f0fdf4;
-    padding: 15px;
-    border-left: 5px solid #22c55e;
-    margin-top: 20px;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-table td, table th {
-    border: 1px solid #ddd;
-    padding: 10px;
-}
-table th {
-    background: #e5e7eb;
-}
-.footer-note {
-    font-size: 14px;
-    color: #6b7280;
-    margin-top: 20px;
-}
-</style>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f4f6fb;
+      color: #222;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Top Bars */
+    .top-features-bar,
+    .top-links {
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+      padding: 12px 40px;
+      font-size: 14px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .top-features-bar {
+      justify-content: flex-start;
+    }
+
+    .top-links a {
+      font-weight: 500;
+      color: #2563eb;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 90vh;
+      background: linear-gradient(
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.55)
+      ),
+      url("https://images.unsplash.com/photo-1589829545856-d10d557cf95f") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .hero .tagline {
+      margin-top: 12px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    /* Auth Section */
+    .auth-container {
+      padding: 80px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .form-box {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      animation: fadeUp 0.5s ease;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-box h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 600;
+      color: #1e3a8a;
+    }
+
+    .form-box input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    .form-box input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+    }
+
+    .form-box button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .form-box button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(37,99,235,0.35);
+    }
+
+    .form-box p {
+      margin-top: 18px;
+      font-size: 14px;
+      text-align: center;
+      color: #374151;
+    }
+
+    .form-box p a {
+      color: #2563eb;
+      font-weight: 500;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Footer */
+    .footer {
+      background: #0f172a;
+      color: #cbd5f5;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .footer a {
+      color: #93c5fd;
+    }
+
+  </style>
 </head>
 
 <body>
-<div class="container">
-<h1>Passport Appointment Booking</h1>
 
-<?php if ($errorMsg): ?>
-<p class="error"><?= htmlspecialchars($errorMsg) ?></p>
-<?php endif; ?>
+  <!-- Top Navigation -->
+  <div class="top-features-bar">
+    <span><a href="about-us.html">About Us</a></span>
+    <span><a href="jobs.html">Jobs</a></span>
+  </div>
 
-<form method="POST" id="appointmentForm">
-<input type="hidden" name="submit_appointment" value="1">
+  <div class="top-links">
+    <a href="#" onclick="showForm('login')">Login</a> |
+    <a href="#" onclick="showForm('signup')">Sign Up</a>
+  </div>
 
-<div class="section">
-<h3>Applicant Details</h3>
+  <!-- Hero -->
+  <header class="hero">
+    <div>
+      <h1>Legal Assist</h1>
+      <p class="tagline">Your trusted guide for all legal & license services</p>
+      <p style="margin-top: 20px;">Login or Sign Up to continue</p>
+    </div>
+  </header>
 
-<label>Full Name</label>
-<input type="text" name="firstName" required>
+  <!-- Auth -->
+  <section id="auth-section" class="auth-container hidden">
 
-<label>Email</label>
-<input type="email" name="email" required>
-
-<label>Phone</label>
-<input type="text" name="phone" required>
-</div>
-
-<div class="section">
-<h3>Appointment Details</h3>
-
-<label>PSK Location</label>
-<select name="pskLocation" required>
-<option value="">Select</option>
-<option value="Hyderabad">Hyderabad</option>
-<option value="Bangalore">Bangalore</option>
-<option value="Delhi">Delhi</option>
-</select>
-
-<label>Appointment Date</label>
-<input type="date" name="appointmentDate" required>
-
-<label>Time Slot</label>
-<select name="timeSlot" required>
-<option value="">Select</option>
-<option>09:00 - 10:00</option>
-<option>10:00 - 11:00</option>
-<option>11:00 - 12:00</option>
-</select>
-
-<label>Service Type</label>
-<select name="serviceType" id="serviceType" required>
-<option value="">Select</option>
-<option value="Normal">Normal Passport</option>
-<option value="Tatkal">Tatkal Passport</option>
-</select>
-</div>
-
-<div class="section">
-<h3>Fees</h3>
-<table>
-<tr><th>Service</th><th>Amount (₹)</th></tr>
-<tr><td>Normal Passport</td><td>1500</td></tr>
-<tr><td>Tatkal Passport</td><td>3500</td></tr>
-</table>
-</div>
-
-<input type="hidden" name="paymentAmount" id="paymentAmount">
-
-<button type="submit" id="submitBtn">Proceed to Payment</button>
-</form>
-
-<div class="info-box">
-<h4>Important Notes</h4>
-<ul>
-<li>Carry original documents</li>
-<li>Police verification is mandatory</li>
-<li>Payment confirmation required</li>
-</ul>
-</div>
-
-<p class="footer-note">
-After successful payment, you will receive a tracking ID.
+    <div class="form-box" id="loginForm">
+      <h2>Login</h2>
+      <form action="home_login.php" method="POST">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <p style="text-align:right; font-size:13px; margin-top:-8px;">
+  <a href="forgot-password.php" style="color:#2563eb;">
+    Forgot password?
+  </a>
 </p>
-</div>
 
-<script>
-const form = document.getElementById("appointmentForm");
-const serviceType = document.getElementById("serviceType");
-const paymentAmount = document.getElementById("paymentAmount");
-const submitBtn = document.getElementById("submitBtn");
+        <button type="submit">Login</button>
+        <p>Don’t have an account? <a href="#" onclick="showForm('signup')">Sign Up</a></p>
+      </form>
+    </div>
 
-form.addEventListener("submit", function () {
+    <div class="form-box hidden" id="signupForm">
+      <h2>Create Account</h2>
+      <form action="home_signup.php" method="POST" id="signupFormElement">
+        <input type="text" name="full_name" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" minlength="8" required>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" minlength="8" required>
+        <button type="submit">Sign Up</button>
+        <p>Already have an account? <a href="#" onclick="showForm('login')">Login</a></p>
+      </form>
+    </div>
 
-    if (serviceType.value === "Normal") {
-        paymentAmount.value = 1500;
-    } else if (serviceType.value === "Tatkal") {
-        paymentAmount.value = 3500;
-    } else {
-        alert("Select service type");
-        event.preventDefault();
-        return;
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>📍 Hyderabad, India</p>
+    <p>📞 +91 9876543210</p>
+    <p>📧 contact@legalwebsite.com</p>
+    <p>© 2025 Legal Assist</p>
+  </footer>
+
+  <!-- JS (unchanged logic) -->
+  <script>
+    function showForm(type) {
+      document.getElementById("auth-section").classList.remove("hidden");
+      document.getElementById("loginForm").classList.add("hidden");
+      document.getElementById("signupForm").classList.add("hidden");
+
+      document.getElementById(type === 'login' ? "loginForm" : "signupForm")
+        .classList.remove("hidden");
+
+      window.scrollTo({
+        top: document.getElementById("auth-section").offsetTop - 40,
+        behavior: "smooth"
+      });
     }
 
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Processing...";
-});
-</script>
+    document.getElementById('signupFormElement').addEventListener('submit', function(e) {
+      const p = this.password.value;
+      const cp = this.confirm_password.value;
+      if (p !== cp) {
+        e.preventDefault();
+        alert("Passwords do not match");
+      }
+    });
+  </script>
 
 </body>
 </html>

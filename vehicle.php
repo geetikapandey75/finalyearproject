@@ -15,7 +15,7 @@ $message = "";
 $successMsg = "";
 $errorMsg = "";
 
-// ==================== PROBLEM 1: CLAIM YOUR VEHICLE ====================
+// ==================== CLAIM YOUR VEHICLE ====================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_claim'])) {
     $fullName   = trim($_POST['full_name']);
     $vehicleNo  = trim($_POST['vehicle_no']);
@@ -46,14 +46,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_claim'])) {
             } else {
                 $errorMsg = "Database error: " . $stmt->error;
             }
-
             $stmt->close();
         }
     }
 }
 
-// ==================== PROBLEM 2: AUCTION BIDDING ====================
+// ==================== AUCTION BIDDING ====================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_bid'])) {
+    header('Content-Type: application/json');
+    ob_clean();
+    error_reporting(0);
+    ini_set('display_errors', 0);
+
     $vehicleId = intval($_POST['vehicle_id']);
     $bidAmount = intval($_POST['bid_amount']);
     $bidderName = trim($_POST['bidder_name']);
@@ -65,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_bid'])) {
         exit;
     }
 
-    // Check current highest bid
     $checkStmt = $conn->prepare("SELECT MAX(bid_amount) as highest FROM auction_bids WHERE vehicle_id = ?");
     $checkStmt->bind_param("i", $vehicleId);
     $checkStmt->execute();
@@ -79,12 +82,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_bid'])) {
         exit;
     }
 
-    // Insert bid
-    $stmt = $conn->prepare("INSERT INTO auction_bids (vehicle_id, bid_amount, bidder_name, bidder_phone, bidder_email, bid_time) VALUES (?, ?, ?, ?, ?, NOW())");
-    $stmt->bind_param("iisss", $vehicleId, $bidAmount, $bidderName, $bidderPhone, $bidderEmail);
+    $year = date("Y");
+    do {
+        $random_number = rand(1000, 9999);
+        $bid_id = "BID-$year-$random_number";
+        $check = $conn->query("SELECT id FROM auction_bids WHERE bid_id = '$bid_id'");
+    } while ($check->num_rows > 0);
+
+    $stmt = $conn->prepare("INSERT INTO auction_bids (bid_id, vehicle_id, bid_amount, bidder_name, bidder_phone, bidder_email, bid_time) VALUES (?, ?, ?, ?, ?, ?, NOW())");
+    $stmt->bind_param("siisss", $bid_id, $vehicleId, $bidAmount, $bidderName, $bidderPhone, $bidderEmail);
 
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Bid placed successfully!', 'new_bid' => $bidAmount]);
+        echo json_encode([
+            'success' => true,
+            'message' => 'Bid placed successfully!',
+            'bid_id'  => $bid_id,
+            'new_bid' => $bidAmount
+        ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Error: ' . $stmt->error]);
     }
@@ -94,7 +108,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_bid'])) {
     exit;
 }
 
-// ==================== PROBLEM 2: USER SUBMIT VEHICLE FOR AUCTION ====================
+// ==================== TRACK BID STATUS ====================
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_bid'])) {
+    header('Content-Type: application/json');
+    ob_clean();
+
+    $trackBidId = trim($_POST['track_bid_id']);
+
+    if (empty($trackBidId)) {
+        echo json_encode(['success' => false, 'message' => 'Bid ID is required.']);
+        exit;
+    }
+
+    $stmt = $conn->prepare("
+        SELECT ab.bid_id, ab.bid_amount, ab.bidder_name, ab.bidder_phone, ab.bidder_email, ab.bid_time,
+               av.vehicle_no, av.model, av.auction_end,
+               (SELECT MAX(bid_amount) FROM auction_bids WHERE vehicle_id = ab.vehicle_id) as highest_bid
+        FROM auction_bids ab
+        JOIN auction_vehicles av ON ab.vehicle_id = av.id
+        WHERE ab.bid_id = ?
+    ");
+    $stmt->bind_param("s", $trackBidId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $bid = $result->fetch_assoc();
+        $status = ($bid['bid_amount'] == $bid['highest_bid']) ? 'Leading' : 'Outbid';
+
+        echo json_encode([
+            'success' => true,
+            'bid' => [
+                'bid_id' => $bid['bid_id'],
+                'bid_amount' => $bid['bid_amount'],
+                'highest_bid' => $bid['highest_bid'],
+                'auction_end' => $bid['auction_end'],
+                'status' => $status,
+                'vehicle_no' => $bid['vehicle_no'],
+                'model' => $bid['model']
+            ]
+        ]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Bid not found.']);
+    }
+
+    $stmt->close();
+    $conn->close();
+    exit;
+}
+
+// ==================== USER SUBMIT VEHICLE FOR AUCTION ====================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_vehicle_auction'])) {
     $vehicleNumber = trim($_POST['auction_vehicle_no']);
     $model = trim($_POST['auction_model']);
@@ -105,10 +168,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_vehicle_auctio
     $startingBid = intval($_POST['starting_bid']);
     $auctionEndDate = trim($_POST['auction_end_date']);
 
-    if (empty($vehicleNumber) || empty($model) || empty($type) || empty($auctionEndDate)) {
+    if (empty($vehicleNumber) || empty($model) || empty($type) || empty($auctionEndDate) || $startingBid <= 0) {
         $errorMsg = "All auction fields are required.";
     } else {
-        // Check if vehicle already exists
         $checkStmt = $conn->prepare("SELECT id FROM auction_vehicles WHERE vehicle_no = ?");
         $checkStmt->bind_param("s", $vehicleNumber);
         $checkStmt->execute();
@@ -125,17 +187,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_vehicle_auctio
 
             if ($stmt->execute()) {
                 $successMsg = "auction_submitted";
+                header("Location: vehicle.php?success=auction");
+                exit;
             } else {
                 $errorMsg = "Error submitting vehicle: " . $stmt->error;
             }
-
             $stmt->close();
         }
     }
 }
 
-// ==================== PROBLEM 3: INSURANCE CLAIM ====================
+// ==================== INSURANCE CLAIM ====================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_insurance'])) {
+    header('Content-Type: application/json');
+    ob_clean();
+
     $vehicleNo    = trim($_POST['vehicle_number']);
     $damageStatus = trim($_POST['damage_status']);
 
@@ -144,13 +210,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_insurance'])) 
         exit;
     }
 
-    // Handle file uploads
     $uploadedFiles = [];
     $targetDir = "uploads/insurance/";
     if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
 
     if (!empty($_FILES['damage_photos']['name'][0])) {
         foreach ($_FILES['damage_photos']['name'] as $key => $name) {
+            if ($_FILES['damage_photos']['error'][$key] !== UPLOAD_ERR_OK) continue;
+
             $tmpName = $_FILES['damage_photos']['tmp_name'][$key];
             $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
             $allowed = ['jpg','jpeg','png'];
@@ -165,10 +232,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_insurance'])) 
 
     $photos = implode(',', $uploadedFiles);
 
-    // Generate unique claim ID
     $claimId = "IC-" . date("Y") . "-" . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 6));
 
-    // Insert into database
     $stmt = $conn->prepare("INSERT INTO insurance_claims (claim_id, vehicle_no, damage_status, photo_files, status, submitted_at) VALUES (?, ?, ?, ?, 'Submitted', NOW())");
     $stmt->bind_param("ssss", $claimId, $vehicleNo, $damageStatus, $photos);
 
@@ -183,17 +248,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_insurance'])) 
     exit;
 }
 
-// ==================== FETCH AUCTION VEHICLES FROM DATABASE ====================
+// ==================== CHECK INSURANCE CLAIM STATUS ====================
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['check_claim_status'])) {
+    header('Content-Type: application/json');
+    ob_clean();
+
+    $claimId = trim($_POST['claim_id']);
+
+    if (empty($claimId)) {
+        echo json_encode(['success' => false, 'message' => 'Claim ID is required.']);
+        exit;
+    }
+
+    $stmt = $conn->prepare("SELECT claim_id, vehicle_no, damage_status, photo_files, status, submitted_at FROM insurance_claims WHERE claim_id = ?");
+    $stmt->bind_param("s", $claimId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $claim = $result->fetch_assoc();
+        $photoCount = empty($claim['photo_files']) ? 0 : count(explode(',', $claim['photo_files']));
+        
+        echo json_encode([
+            'success' => true,
+            'claim_id' => $claim['claim_id'],
+            'vehicle_no' => $claim['vehicle_no'],
+            'damage_status' => $claim['damage_status'],
+            'photo_count' => $photoCount,
+            'status' => $claim['status'],
+            'submitted_at' => date('d M Y, h:i A', strtotime($claim['submitted_at']))
+        ]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Claim not found.']);
+    }
+
+    $stmt->close();
+    $conn->close();
+    exit;
+}
+
+if (isset($_GET['success']) && $_GET['success'] === 'auction') {
+    $successMsg = "auction_submitted";
+}
+
+// ==================== FETCH AUCTION VEHICLES ====================
 $auctionQuery = "SELECT * FROM auction_vehicles WHERE auction_end >= CURDATE() ORDER BY id DESC";
 $auctionResult = $conn->query($auctionQuery);
 $dbVehicles = [];
 if ($auctionResult && $auctionResult->num_rows > 0) {
     while($row = $auctionResult->fetch_assoc()){
-        // Get highest bid
-        $vid = $row['id'];
-        $bidQuery = $conn->query("SELECT MAX(bid_amount) as highest FROM auction_bids WHERE vehicle_id = $vid");
-        $bidRow = $bidQuery->fetch_assoc();
+        $vid = intval($row['id']);
+        $bidQuery = $conn->prepare("SELECT MAX(bid_amount) as highest FROM auction_bids WHERE vehicle_id = ?");
+        $bidQuery->bind_param("i", $vid);
+        $bidQuery->execute();
+        $bidResult = $bidQuery->get_result();
+        $bidRow = $bidResult->fetch_assoc();
         $row['highest_bid'] = $bidRow['highest'] ?? $row['current_bid'];
+        $bidQuery->close();
         $dbVehicles[] = $row;
     }
 }
@@ -205,9 +316,9 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unclaimed Vehicles | Police Services</title>
+  <title>Unclaimed Vehicles | Legal Assist</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-blue-50 font-sans text-gray-900">
 
@@ -218,7 +329,7 @@ $conn->close();
       <nav class="space-x-4">
         <a href="vehicle.php" class="hover:underline font-semibold text-yellow-300">Unclaimed Vehicles</a>
         <a href="passport.php" class="hover:underline">Passport Services</a>
-        <a href="e-challan.html" class="hover:underline">E-Challan</a>
+        <a href="e-challan.php" class="hover:underline">E-Challan</a>
       </nav>
     </div>
   </header>
@@ -230,7 +341,7 @@ $conn->close();
       <div class="text-6xl mb-4">✅</div>
       <h3 class="text-2xl font-bold text-green-800 mb-2">Claim Submitted!</h3>
       <p class="text-gray-700 mb-4">Your vehicle claim has been successfully submitted. We will contact you soon.</p>
-      <button onclick="this.parentElement.parentElement.style.display='none'" class="bg-blue-600 text-white px-6 py-2 rounded">Close</button>
+      <button onclick="window.location.href='vehicle.php'" class="bg-blue-600 text-white px-6 py-2 rounded">Close</button>
     </div>
   </div>
   <?php endif; ?>
@@ -240,16 +351,10 @@ $conn->close();
     <div class="bg-white rounded-lg p-8 max-w-md text-center">
       <div class="text-6xl mb-4">✅</div>
       <h3 class="text-2xl font-bold text-green-800 mb-2">Vehicle Listed!</h3>
-      <p class="text-gray-700 mb-4">Your vehicle has been successfully listed for auction. Refresh the page to see it.</p>
-      <button onclick="window.location.reload()" class="bg-blue-600 text-white px-6 py-2 rounded">Refresh Page</button>
+      <p class="text-gray-700 mb-4">Your vehicle has been successfully listed for auction.</p>
+      <button onclick="window.location.href='vehicle.php'" class="bg-blue-600 text-white px-6 py-2 rounded">Close</button>
     </div>
   </div>
-  <script>
-    // Auto refresh after 2 seconds
-    setTimeout(function() {
-      window.location.reload();
-    }, 2000);
-  </script>
   <?php endif; ?>
 
   <?php if($errorMsg): ?>
@@ -266,16 +371,25 @@ $conn->close();
     <p class="mb-6 text-lg max-w-2xl mx-auto">View details of vehicles found and reported as unclaimed by the police department. If you identify your vehicle, you can initiate the claim process online.</p>
   </section>
 
-  <!-- Auction & Vehicle Section -->
+  <!-- 1. VEHICLE AUCTION SECTION (FIRST) -->
   <section class="container mx-auto px-6 py-12">
     <div class="bg-white rounded-xl shadow-lg p-8">
       <h3 class="text-2xl font-bold mb-6 text-blue-800 text-center">Vehicle Auction</h3>
 
-      <!-- Submit Your Vehicle Button -->
       <div class="text-center mb-6">
         <button onclick="document.getElementById('submitVehicleModal').classList.remove('hidden')" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-500">
           📤 Submit Your Vehicle for Auction
         </button>
+      </div>
+
+      <!-- Track Bid -->
+      <div class="max-w-md mx-auto mb-8">
+        <h4 class="text-xl font-semibold mb-4 text-center">Track Your Bid Status</h4>
+        <form id="trackBidForm" class="flex gap-2">
+          <input type="text" name="track_bid_id" placeholder="Enter BID ID (e.g. BID-2025-1234)" required class="flex-1 border p-3 rounded">
+          <button type="submit" class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700">Track</button>
+        </form>
+        <div id="trackBidResponse" class="mt-4"></div>
       </div>
 
       <!-- Auction Table -->
@@ -288,581 +402,487 @@ $conn->close();
               <th class="py-3 px-6 text-left">Type</th>
               <th class="py-3 px-6 text-left">Current Bid</th>
               <th class="py-3 px-6 text-left">Auction Ends</th>
-              <th class="py-3 px-6 text-left">Action</th>
+              <th class="py-3 px-6 text-left">Actions</th>
             </tr>
           </thead>
-          <tbody class="text-gray-700">
-            <!-- Hardcoded Vehicles (Your original 2) -->
-            <tr class="border-t hover:bg-blue-50">
-              <td class="py-3 px-6">TS09AB1234</td>
-              <td class="py-3 px-6">Honda Activa</td>
-              <td class="py-3 px-6">Scooter</td>
-              <td class="py-3 px-6" id="bid-1">₹25,000</td>
-              <td class="py-3 px-6">2025-12-25</td>
-              <td class="py-3 px-6">
-                <button onclick="openBidModal(1, 'TS09AB1234', 'Honda Activa', 25000)" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500">Bid Now</button>
-              </td>
-            </tr>
-            <tr class="border-t hover:bg-blue-50">
-              <td class="py-3 px-6">AP28CD5678</td>
-              <td class="py-3 px-6">Hyundai i20</td>
-              <td class="py-3 px-6">Car</td>
-              <td class="py-3 px-6" id="bid-2">₹75,000</td>
-              <td class="py-3 px-6">2025-12-28</td>
-              <td class="py-3 px-6">
-                <button onclick="openBidModal(2, 'AP28CD5678', 'Hyundai i20', 75000)" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500">Bid Now</button>
-              </td>
-            </tr>
-
-            <!-- Database Vehicles -->
-            <?php foreach($dbVehicles as $vehicle): ?>
-            <tr class="border-t hover:bg-blue-50">
-              <td class="py-3 px-6"><?php echo htmlspecialchars($vehicle['vehicle_no']); ?></td>
-              <td class="py-3 px-6"><?php echo htmlspecialchars($vehicle['model']); ?></td>
-              <td class="py-3 px-6"><?php echo htmlspecialchars($vehicle['type']); ?></td>
-              <td class="py-3 px-6" id="bid-<?php echo $vehicle['id']; ?>">₹<?php echo number_format($vehicle['highest_bid']); ?></td>
-              <td class="py-3 px-6"><?php echo date('Y-m-d', strtotime($vehicle['auction_end'])); ?></td>
-              <td class="py-3 px-6">
-                <button onclick="openBidModal(<?php echo $vehicle['id']; ?>, '<?php echo $vehicle['vehicle_no']; ?>', '<?php echo $vehicle['model']; ?>', <?php echo $vehicle['highest_bid']; ?>)" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500">Bid Now</button>
-              </td>
-            </tr>
-            <?php endforeach; ?>
+          <tbody>
+            <?php if (empty($dbVehicles)): ?>
+              <tr>
+                <td colspan="6" class="py-8 text-center text-gray-500">No active auctions at the moment.</td>
+              </tr>
+            <?php else: ?>
+              <?php foreach ($dbVehicles as $vehicle): ?>
+                <tr class="border-t hover:bg-gray-50">
+                  <td class="py-4 px-6 font-semibold"><?php echo htmlspecialchars($vehicle['vehicle_no']); ?></td>
+                  <td class="py-4 px-6"><?php echo htmlspecialchars($vehicle['model'] . ' ' . $vehicle['make']); ?></td>
+                  <td class="py-4 px-6"><?php echo htmlspecialchars($vehicle['type']); ?></td>
+                  <td class="py-4 px-6 font-bold text-green-700">₹<?php echo number_format($vehicle['highest_bid']); ?></td>
+                  <td class="py-4 px-6"><?php echo date('d M Y', strtotime($vehicle['auction_end'])); ?></td>
+                  <td class="py-4 px-6">
+                    <button onclick="openBidModal(<?php echo $vehicle['id']; ?>, '<?php echo htmlspecialchars(addslashes($vehicle['vehicle_no'])); ?>', <?php echo $vehicle['highest_bid']; ?>)" 
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                      Place Bid
+                    </button>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <!-- Claim Form -->
-  <section class="container mx-auto px-6 pb-12">
+  <!-- 2. CLAIM YOUR VEHICLE SECTION -->
+  <section class="container mx-auto px-6 py-12">
     <div class="bg-white rounded-xl shadow-lg p-8">
       <h3 class="text-2xl font-bold mb-6 text-blue-800 text-center">Claim Your Vehicle</h3>
-      <form class="space-y-6 max-w-2xl mx-auto" method="POST" action="" enctype="multipart/form-data">
-        <div>
-          <label class="block font-semibold mb-2">Full Name</label>
-          <input type="text" name="full_name" class="w-full p-4 border rounded-lg" placeholder="Enter your name" required>
+      <form action="" method="POST" enctype="multipart/form-data" class="max-w-2xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <input type="text" name="full_name" placeholder="Full Name" required class="border p-3 rounded">
+          <input type="text" name="vehicle_no" placeholder="Vehicle Number" required class="border p-3 rounded">
+          <input type="text" name="contact_no" placeholder="Contact Number" required class="border p-3 rounded">
+          <input type="file" name="proof" accept=".jpg,.jpeg,.png,.pdf" required class="border p-3 rounded">
         </div>
-        <div>
-          <label class="block font-semibold mb-2">Vehicle Number</label>
-          <input type="text" name="vehicle_no" class="w-full p-4 border rounded-lg" placeholder="Enter vehicle number" required>
+        <div class="text-center mt-8">
+          <button type="submit" name="submit_claim" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700">
+            Submit Claim
+          </button>
         </div>
-        <div>
-          <label class="block font-semibold mb-2">Contact Number</label>
-          <input type="tel" name="contact_no" class="w-full p-4 border rounded-lg" placeholder="Enter your contact number" required>
-        </div>
-        <div>
-          <label class="block font-semibold mb-2">Upload Proof of Ownership</label>
-          <input type="file" name="proof" class="w-full p-4 border rounded-lg" required>
-        </div>
-        <button type="submit" name="submit_claim" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 w-full">Submit Claim</button>
       </form>
     </div>
   </section>
 
-  <!-- Insurance Claim Helper -->
+  <!-- 3. INSURANCE CLAIM + STATUS (SIDE BY SIDE) -->
   <section class="container mx-auto px-6 py-12">
-    <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
-      <h3 class="text-2xl font-bold mb-6 text-blue-800 text-center">Insurance Claim Helper</h3>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
-      <form id="insuranceForm" class="space-y-6">
-        <div>
-          <label class="block font-semibold mb-2">Vehicle Number</label>
-          <input type="text" id="vehicleNumber" placeholder="Enter vehicle number" class="w-full p-4 border rounded-lg" required>
-        </div>
-
-        <div>
-          <label class="block font-semibold mb-2">Was the vehicle damaged when found?</label>
-          <select id="damageStatus" class="w-full p-4 border rounded-lg" required>
-            <option value="">Select</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block font-semibold mb-2">Upload Photos of Damage</label>
-          <input type="file" id="damagePhotos" multiple accept="image/*" class="w-full p-4 border rounded-lg">
-        </div>
-
-        <button type="button" onclick="submitInsuranceClaim()" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 w-full">Submit Insurance Claim</button>
-      </form>
-
-      <div id="insuranceSuccess" class="mt-6 p-6 bg-green-50 border-2 border-green-500 rounded-lg hidden">
-        <div class="text-center mb-4">
-          <div class="text-5xl mb-2">✅</div>
-          <h4 class="text-xl font-bold text-green-800">Insurance Claim Submitted!</h4>
-          <p class="text-gray-700 mt-2">Your claim ID: <span id="displayClaimId" class="font-mono font-bold text-blue-600"></span></p>
-        </div>
-        <button onclick="generatePDFReport()" class="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-500 w-full">Download PDF Report</button>
+      <!-- Insurance Claim Form -->
+      <div class="bg-white rounded-xl shadow-lg p-8">
+        <h3 class="text-2xl font-bold mb-6 text-blue-800 text-center">Insurance Claim</h3>
+        <form id="insuranceForm">
+          <input type="text" name="vehicle_number" placeholder="Vehicle Number" required class="w-full border p-3 rounded mb-4">
+          <textarea name="damage_status" placeholder="Describe Damage Status" required class="w-full border p-3 rounded mb-4 h-32"></textarea>
+          <input type="file" name="damage_photos[]" multiple accept="image/*" class="w-full border p-3 rounded mb-6">
+          <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700">
+            Submit Insurance Claim
+          </button>
+        </form>
+        <div id="insuranceResponse" class="mt-4 text-center font-bold"></div>
       </div>
+
+      <!-- Check Insurance Claim Status -->
+      <div class="bg-white rounded-xl shadow-lg p-8">
+        <h3 class="text-2xl font-bold mb-6 text-blue-800 text-center">Check Insurance Claim Status</h3>
+        <form id="trackInsuranceForm">
+          <input type="text" name="claim_id" placeholder="Enter Claim ID (e.g. IC-2025-ABCDEF)" required class="w-full border p-3 rounded mb-6">
+          <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700">
+            Check Status
+          </button>
+        </form>
+        <div id="trackInsuranceResponse" class="mt-6"></div>
+      </div>
+
     </div>
   </section>
 
-  <!-- Bid Modal -->
-  <div id="bidModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-8 max-w-md w-full">
-      <h3 class="text-2xl font-bold mb-4" id="bidModalTitle"></h3>
-      <p class="mb-4">Current Highest Bid: <span id="currentBid" class="font-bold text-green-600"></span></p>
-      
-      <form id="bidForm" class="space-y-4">
-        <input type="hidden" id="bidVehicleId">
-        <div>
-          <label class="block font-semibold mb-2">Your Name</label>
-          <input type="text" id="bidderName" class="w-full p-3 border rounded-lg" required>
+  <!-- Submit Vehicle Modal -->
+  <div id="submitVehicleModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 max-w-2xl w-full">
+      <h3 class="text-2xl font-bold mb-6 text-center">Submit Vehicle for Auction</h3>
+      <form action="" method="POST">
+        <div class="grid grid-cols-2 gap-4">
+          <input type="text" name="auction_vehicle_no" placeholder="Vehicle Number" required class="border p-3 rounded">
+          <input type="text" name="auction_model" placeholder="Model" required class="border p-3 rounded">
+          <input type="text" name="auction_type" placeholder="Type" required class="border p-3 rounded">
+          <input type="text" name="auction_color" placeholder="Color" required class="border p-3 rounded">
+          <input type="text" name="auction_make" placeholder="Make" required class="border p-3 rounded">
+          <input type="text" name="auction_location" placeholder="Location" required class="border p-3 rounded">
+          <input type="number" name="starting_bid" placeholder="Starting Bid (₹)" required class="border p-3 rounded">
+          <input type="date" name="auction_end_date" required class="border p-3 rounded">
         </div>
-        <div>
-          <label class="block font-semibold mb-2">Phone Number</label>
-          <input type="tel" id="bidderPhone" class="w-full p-3 border rounded-lg" required>
-        </div>
-        <div>
-          <label class="block font-semibold mb-2">Email</label>
-          <input type="email" id="bidderEmail" class="w-full p-3 border rounded-lg" required>
-        </div>
-        <div>
-          <label class="block font-semibold mb-2">Your Bid Amount (₹)</label>
-          <input type="number" id="bidAmount" class="w-full p-3 border rounded-lg" required>
-        </div>
-        <div class="flex gap-4">
-          <button type="button" onclick="submitBid()" class="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-500">Place Bid</button>
-          <button type="button" onclick="closeBidModal()" class="flex-1 bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-400">Cancel</button>
+        <div class="text-center mt-6">
+          <button type="button" onclick="document.getElementById('submitVehicleModal').classList.add('hidden')" class="bg-gray-500 text-white px-6 py-3 rounded mr-4">Cancel</button>
+          <button type="submit" name="submit_vehicle_auction" class="bg-green-600 text-white px-8 py-3 rounded">Submit</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Submit Vehicle Modal -->
-  <div id="submitVehicleModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 overflow-y-auto">
-    <div class="bg-white rounded-lg p-8 max-w-2xl w-full m-4">
-      <h3 class="text-2xl font-bold mb-4">Submit Your Vehicle for Auction</h3>
-      
-      <form id="auctionSubmitForm" method="POST" action="" enctype="multipart/form-data" class="space-y-4" onsubmit="return preventDoubleSubmit(this)">
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block font-semibold mb-2">Vehicle Number</label>
-            <input type="text" name="auction_vehicle_no" class="w-full p-3 border rounded-lg" required>
-          </div>
-          <div>
-            <label class="block font-semibold mb-2">Model</label>
-            <input type="text" name="auction_model" class="w-full p-3 border rounded-lg" required>
-          </div>
-          <div>
-            <label class="block font-semibold mb-2">Type</label>
-            <select name="auction_type" class="w-full p-3 border rounded-lg" required>
-              <option value="">Select Type</option>
-              <option value="Car">Car</option>
-              <option value="Bike">Bike</option>
-              <option value="Scooter">Scooter</option>
-              <option value="Auto">Auto</option>
-              <option value="Truck">Truck</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-semibold mb-2">Color</label>
-            <input type="text" name="auction_color" class="w-full p-3 border rounded-lg" required>
-          </div>
-          <div>
-            <label class="block font-semibold mb-2">Make/Brand</label>
-            <input type="text" name="auction_make" class="w-full p-3 border rounded-lg" required>
-          </div>
-          <div>
-            <label class="block font-semibold mb-2">Location</label>
-            <input type="text" name="auction_location" class="w-full p-3 border rounded-lg" required>
-          </div>
-          <div>
-            <label class="block font-semibold mb-2">Starting Bid (₹)</label>
-            <input type="number" name="starting_bid" class="w-full p-3 border rounded-lg" required>
-          </div>
-          <div>
-            <label class="block font-semibold mb-2">Auction End Date</label>
-            <input type="date" name="auction_end_date" class="w-full p-3 border rounded-lg" required>
-          </div>
-        </div>
-        <div class="flex gap-4">
-          <button type="submit" name="submit_vehicle_auction" class="flex-1 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-500">Submit Vehicle</button>
-          <button type="button" onclick="document.getElementById('submitVehicleModal').classList.add('hidden')" class="flex-1 bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-400">Cancel</button>
+  <!-- Bid Modal -->
+  <div id="bidModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 max-w-md w-full">
+      <h3 class="text-2xl font-bold mb-6 text-center">Place Your Bid</h3>
+      <form id="bidForm">
+        <input type="hidden" id="vehicle_id" name="vehicle_id">
+        <p class="mb-4">Vehicle: <span id="modal_vehicle_no" class="font-bold"></span></p>
+        <p class="mb-4">Current Highest: ₹<span id="modal_current_bid" class="font-bold"></span></p>
+        
+        <input type="number" name="bid_amount" id="bid_amount" placeholder="Your Bid Amount" required class="w-full border p-3 rounded mb-4">
+        <input type="text" name="bidder_name" placeholder="Name" required class="w-full border p-3 rounded mb-4">
+        <input type="tel" name="bidder_phone" placeholder="Phone" required class="w-full border p-3 rounded mb-4">
+        <input type="email" name="bidder_email" placeholder="Email" required class="w-full border p-3 rounded mb-4">
+        
+        <div id="bidResponse" class="mt-4 text-center font-bold"></div>
+        
+        <div class="text-center mt-6">
+          <button type="button" onclick="closeBidModal()" class="bg-gray-500 text-white px-6 py-3 rounded mr-4">Cancel</button>
+          <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded">Submit Bid</button>
         </div>
       </form>
     </div>
   </div>
 
   <script>
-    // Prevent double form submission
-    let isSubmitting = false;
-    function preventDoubleSubmit(form) {
-      if (isSubmitting) {
-        alert('Please wait... Your vehicle is being submitted.');
-        return false;
-      }
-      isSubmitting = true;
-      // Disable submit button
-      const submitBtn = form.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting...';
-      }
-      return true;
-    }
-
-    // Global variables for PDF generation
-    let globalClaimId = '';
-    let globalVehicleNo = '';
-    let globalDamageStatus = '';
-    let globalPhotoCount = 0;
-
-    // Bid Modal Functions
-    function openBidModal(vehicleId, vehicleNo, model, currentBid) {
+    function openBidModal(id, vehicleNo, currentBid) {
+      document.getElementById('vehicle_id').value = id;
+      document.getElementById('modal_vehicle_no').textContent = vehicleNo;
+      document.getElementById('modal_current_bid').textContent = new Intl.NumberFormat().format(currentBid);
+      document.getElementById('bid_amount').min = currentBid + 1;
+      document.getElementById('bid_amount').value = currentBid + 1000;
       document.getElementById('bidModal').classList.remove('hidden');
-      document.getElementById('bidModal').classList.add('flex');
-      document.getElementById('bidModalTitle').textContent = vehicleNo + ' - ' + model;
-      document.getElementById('currentBid').textContent = '₹' + currentBid.toLocaleString();
-      document.getElementById('bidVehicleId').value = vehicleId;
-      document.getElementById('bidAmount').min = currentBid + 1;
     }
 
     function closeBidModal() {
       document.getElementById('bidModal').classList.add('hidden');
-      document.getElementById('bidModal').classList.remove('flex');
       document.getElementById('bidForm').reset();
+      document.getElementById('bidResponse').innerHTML = '';
     }
 
-    function submitBid() {
-      const vehicleId = document.getElementById('bidVehicleId').value;
-      const bidAmount = document.getElementById('bidAmount').value;
-      const bidderName = document.getElementById('bidderName').value;
-      const bidderPhone = document.getElementById('bidderPhone').value;
-      const bidderEmail = document.getElementById('bidderEmail').value;
-
-      const formData = new FormData();
-      formData.append('submit_bid', '1');
-      formData.append('vehicle_id', vehicleId);
-      formData.append('bid_amount', bidAmount);
-      formData.append('bidder_name', bidderName);
-      formData.append('bidder_phone', bidderPhone);
-      formData.append('bidder_email', bidderEmail);
-
-      fetch('vehicle.php', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert(data.message);
-          document.getElementById('bid-' + vehicleId).textContent = '₹' + parseInt(data.new_bid).toLocaleString();
-          closeBidModal();
+    $('#bidForm').submit(function(e) {
+      e.preventDefault();
+      $.post('', $(this).serialize() + '&submit_bid=1', function(response) {
+        if (response.success) {
+          $('#bidResponse').html('<span class="text-green-600">Bid placed! Your Unique BID ID: <strong>' + response.bid_id + '</strong></span>');
+          setTimeout(() => location.reload(), 2500);
         } else {
-          alert(data.message);
+          $('#bidResponse').html('<span class="text-red-600">' + response.message + '</span>');
         }
-      })
-      .catch(error => {
-        alert('Error: ' + error);
-      });
-    }
+      }, 'json');
+    });
 
-    // Insurance Claim Functions
-    function submitInsuranceClaim() {
-      const vehicleNo = document.getElementById('vehicleNumber').value;
-      const damageStatus = document.getElementById('damageStatus').value;
-      const photos = document.getElementById('damagePhotos').files;
+    $('#trackBidForm').submit(function(e) {
+      e.preventDefault();
+      $.post('', $(this).serialize() + '&track_bid=1', function(response) {
+        if (response.success) {
+          const b = response.bid;
+          $('#trackBidResponse').html(`
+            <div class="bg-green-50 border border-green-400 p-4 rounded text-center">
+              <p class="font-bold text-xl">${b.vehicle_no} - ${b.model}</p>
+              <p>Your Bid: ₹${new Intl.NumberFormat().format(b.bid_amount)}</p>
+              <p>Highest: ₹${new Intl.NumberFormat().format(b.highest_bid)}</p>
+              <p class="font-bold text-2xl mt-2 ${b.status === 'Leading' ? 'text-green-600' : 'text-red-600'}">${b.status}</p>
+            </div>
+          `);
+        } else {
+          $('#trackBidResponse').html('<p class="text-red-600 font-bold">' + response.message + '</p>');
+        }
+      }, 'json');
+    });
 
-      if (!vehicleNo || !damageStatus) {
-        alert('Please fill all required fields');
-        return;
-      }
-
-      const formData = new FormData();
+    $('#insuranceForm').submit(function(e) {
+      e.preventDefault();
+      let formData = new FormData(this);
       formData.append('submit_insurance', '1');
-      formData.append('vehicle_number', vehicleNo);
-      formData.append('damage_status', damageStatus);
+      $.ajax({
+        url: '',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          if (response.success) {
+            $('#insuranceResponse').html('<p class="text-green-600 font-bold">Submitted! Claim ID: <strong>' + response.claim_id + '</strong></p>');
+          } else {
+            $('#insuranceResponse').html('<p class="text-red-600 font-bold">' + response.message + '</p>');
+          }
+        }
+      });
+    });
 
-      for (let i = 0; i < photos.length; i++) {
-        formData.append('damage_photos[]', photos[i]);
-      }
-
-      fetch('vehicle.php', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          globalClaimId = data.claim_id;
-          globalVehicleNo = vehicleNo;
-          globalDamageStatus = damageStatus;
-          globalPhotoCount = photos.length;
-
-          document.getElementById('displayClaimId').textContent = data.claim_id;
-          document.getElementById('insuranceSuccess').classList.remove('hidden');
-          document.getElementById('insuranceForm').reset();
+    $('#trackInsuranceForm').submit(function(e) {
+      e.preventDefault();
+      $.post('', $(this).serialize() + '&check_claim_status=1', function(response) {
+        if (response.success) {
+          $('#trackInsuranceResponse').html(`
+            <div class="bg-blue-50 border border-blue-400 p-6 rounded">
+              <p class="font-bold text-xl">Claim ID: ${response.claim_id}</p>
+              <p>Vehicle: ${response.vehicle_no}</p>
+              <p>Status: <strong class="text-blue-700">${response.status}</strong></p>
+              <p>Photos: ${response.photo_count}</p>
+              <p class="text-sm text-gray-600 mt-4">Submitted: ${response.submitted_at}</p>
+            </div>
+          `);
         } else {
-          alert(data.message);
+          $('#trackInsuranceResponse').html('<p class="text-red-600 font-bold">' + response.message + '</p>');
         }
-      })
-      .catch(error => {
-        alert('Error: ' + error);
-      });
-    }
+      }, 'json');
+    });
+    import React, { useState } from 'react';
+import { Upload, FileText, CheckCircle, Circle, Download, Trash2, Edit3, X } from 'lucide-react';
 
-    // Generate Professional PDF Report
-    function generatePDFReport() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      
-      const pageWidth = 210;
-      const pageHeight = 297;
-      let y = 20;
+const DocumentManagement = () => {
+  const [activeTab, setActiveTab] = useState('wallet');
+  const [documents, setDocuments] = useState([
+    { id: 1, name: 'Vehicle Registration.pdf', uploadDate: '2024-12-20', size: '2.3 MB', signed: true },
+    { id: 2, name: 'Insurance Policy.pdf', uploadDate: '2024-12-21', size: '1.8 MB', signed: true },
+  ]);
+  const [dragActive, setDragActive] = useState(false);
+  const [signature, setSignature] = useState('');
+  const [signatureData, setSignatureData] = useState(null);
+  const [steps, setSteps] = useState([
+    { id: 1, title: 'Upload Vehicle Documents', completed: true },
+    { id: 2, title: 'Upload Insurance Documents', completed: true },
+    { id: 3, title: 'Identity Verification', completed: false },
+    { id: 4, title: 'Sign Claim Forms', completed: false },
+    { id: 5, title: 'Submit for Review', completed: false },
+  ]);
 
-      // ============ HEADER WITH GRADIENT BACKGROUND ============
-      // Blue gradient background
-      doc.setFillColor(30, 58, 138);
-      doc.rect(0, 0, pageWidth, 50, 'F');
-      
-      // Company logo area (circle)
-      doc.setFillColor(255, 255, 255);
-      doc.circle(25, 25, 12, 'F');
-      doc.setFillColor(59, 130, 246);
-      doc.circle(25, 25, 10, 'F');
-      
-      // Company name
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(24);
-      doc.setFont(undefined, 'bold');
-      doc.text('LEGAL ASSIST', 45, 25);
-      
-      doc.setFontSize(12);
-      doc.setFont(undefined, 'normal');
-      doc.text('Vehicle Insurance Division', 45, 32);
-      
-      // Document title on right
-      doc.setFontSize(16);
-      doc.setFont(undefined, 'bold');
-      doc.text('INSURANCE CLAIM', pageWidth - 20, 25, { align: 'right' });
-      doc.setFontSize(10);
-      doc.setFont(undefined, 'normal');
-      doc.text('Official Document', pageWidth - 20, 32, { align: 'right' });
-      
-      y = 60;
+  const progress = (steps.filter(s => s.completed).length / steps.length) * 100;
 
-      // ============ CLAIM ID BOX ============
-      doc.setFillColor(59, 130, 246);
-      doc.roundedRect(20, y, pageWidth - 40, 20, 3, 3, 'F');
-      
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(14);
-      doc.setFont(undefined, 'bold');
-      doc.text('CLAIM ID: ' + globalClaimId, pageWidth / 2, y + 12, { align: 'center' });
-      
-      y += 30;
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+            <h1 className="text-3xl font-bold mb-2">Document Management Center</h1>
+            <p className="text-blue-100">Manage your claim documents and track progress</p>
+          </div>
 
-      // ============ CLAIM INFORMATION SECTION ============
-      doc.setTextColor(30, 58, 138);
-      doc.setFontSize(16);
-      doc.setFont(undefined, 'bold');
-      doc.text('CLAIM INFORMATION', 20, y);
-      
-      y += 2;
-      doc.setDrawColor(59, 130, 246);
-      doc.setLineWidth(0.5);
-      doc.line(20, y, 80, y);
-      
-      y += 10;
-      
-      // Info boxes
-      const boxHeight = 12;
-      const leftCol = 20;
-      const rightCol = 110;
-      
-      // Vehicle Number
-      doc.setFillColor(249, 250, 251);
-      doc.roundedRect(leftCol, y, 85, boxHeight, 2, 2, 'F');
-      doc.setTextColor(75, 85, 99);
-      doc.setFontSize(9);
-      doc.setFont(undefined, 'normal');
-      doc.text('Vehicle Number', leftCol + 3, y + 5);
-      doc.setTextColor(17, 24, 39);
-      doc.setFontSize(11);
-      doc.setFont(undefined, 'bold');
-      doc.text(globalVehicleNo, leftCol + 3, y + 10);
-      
-      // Claim Date
-      doc.setFillColor(249, 250, 251);
-      doc.roundedRect(rightCol, y, 80, boxHeight, 2, 2, 'F');
-      doc.setTextColor(75, 85, 99);
-      doc.setFontSize(9);
-      doc.setFont(undefined, 'normal');
-      doc.text('Claim Date', rightCol + 3, y + 5);
-      doc.setTextColor(17, 24, 39);
-      doc.setFontSize(11);
-      doc.setFont(undefined, 'bold');
-      doc.text(new Date().toLocaleDateString('en-GB'), rightCol + 3, y + 10);
-      
-      y += boxHeight + 5;
-      
-      // Damage Status
-      doc.setFillColor(249, 250, 251);
-      doc.roundedRect(leftCol, y, 85, boxHeight, 2, 2, 'F');
-      doc.setTextColor(75, 85, 99);
-      doc.setFontSize(9);
-      doc.setFont(undefined, 'normal');
-      doc.text('Damage Status', leftCol + 3, y + 5);
-      doc.setTextColor(17, 24, 39);
-      doc.setFontSize(11);
-      doc.setFont(undefined, 'bold');
-      const damageText = globalDamageStatus === 'Yes' ? 'Vehicle Damaged' : 'No Damage Reported';
-      doc.text(damageText, leftCol + 3, y + 10);
-      
-      // Photos Submitted
-      doc.setFillColor(249, 250, 251);
-      doc.roundedRect(rightCol, y, 80, boxHeight, 2, 2, 'F');
-      doc.setTextColor(75, 85, 99);
-      doc.setFontSize(9);
-      doc.setFont(undefined, 'normal');
-      doc.text('Photos Submitted', rightCol + 3, y + 5);
-      doc.setTextColor(17, 24, 39);
-      doc.setFontSize(11);
-      doc.setFont(undefined, 'bold');
-      doc.text(globalPhotoCount + ' Photo(s)', rightCol + 3, y + 10);
-      
-      y += boxHeight + 15;
+          {/* Tabs */}
+          <div className="flex border-b border-gray-200">
+            <button
+              onClick={() => setActiveTab('wallet')}
+              className={`flex-1 py-4 px-6 font-semibold transition-colors ${
+                activeTab === 'wallet'
+                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <FileText className="inline mr-2" size={20} />
+              Digital Wallet
+            </button>
+            <button
+              onClick={() => setActiveTab('progress')}
+              className={`flex-1 py-4 px-6 font-semibold transition-colors ${
+                activeTab === 'progress'
+                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <CheckCircle className="inline mr-2" size={20} />
+              Progress Tracker
+            </button>
+            <button
+              onClick={() => setActiveTab('upload')}
+              className={`flex-1 py-4 px-6 font-semibold transition-colors ${
+                activeTab === 'upload'
+                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <Upload className="inline mr-2" size={20} />
+              Upload Documents
+            </button>
+            <button
+              onClick={() => setActiveTab('signature')}
+              className={`flex-1 py-4 px-6 font-semibold transition-colors ${
+                activeTab === 'signature'
+                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <Edit3 className="inline mr-2" size={20} />
+              E-Signature
+            </button>
+          </div>
 
-      // ============ CLAIM STATUS SECTION ============
-      doc.setTextColor(30, 58, 138);
-      doc.setFontSize(16);
-      doc.setFont(undefined, 'bold');
-      doc.text('PROCESSING STATUS', 20, y);
-      
-      y += 2;
-      doc.setDrawColor(59, 130, 246);
-      doc.line(20, y, 90, y);
-      
-      y += 10;
-      
-      // Status items
-      const statuses = [
-        { label: 'Claim Submitted', status: 'Completed', color: [34, 197, 94] },
-        { label: 'Document Verification', status: 'In Progress', color: [234, 179, 8] },
-        { label: 'Assessment Review', status: 'Pending', color: [156, 163, 175] },
-        { label: 'Approval', status: 'Pending', color: [156, 163, 175] }
-      ];
-      
-      statuses.forEach((item, index) => {
-        // Status dot
-        doc.setFillColor(...item.color);
-        doc.circle(25, y + 3, 2.5, 'F');
-        
-        // Status label
-        doc.setTextColor(17, 24, 39);
-        doc.setFontSize(11);
-        doc.setFont(undefined, 'normal');
-        doc.text(item.label, 32, y + 5);
-        
-        // Status badge
-        doc.setFillColor(...item.color);
-        doc.roundedRect(pageWidth - 60, y, 40, 7, 2, 2, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(9);
-        doc.setFont(undefined, 'bold');
-        doc.text(item.status, pageWidth - 40, y + 5, { align: 'center' });
-        
-        y += 12;
-        
-        // Connecting line (except for last item)
-        if (index < statuses.length - 1) {
-          doc.setDrawColor(209, 213, 219);
-          doc.setLineWidth(0.3);
-          doc.line(25, y - 7, 25, y + 1);
-        }
-      });
-      
-      y += 10;
+          <div className="p-6">
+            {/* Digital Wallet Tab */}
+            {activeTab === 'wallet' && (
+              <div>
+                <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Documents</h2>
+                <div className="grid gap-4">
+                  {documents.map((doc) => (
+                    <div key={doc.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+                      <div className="flex items-center space-x-4 flex-1">
+                        <div className="bg-blue-100 p-3 rounded-lg">
+                          <FileText className="text-blue-600" size={24} />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-800">{doc.name}</h3>
+                          <p className="text-sm text-gray-500">
+                            Uploaded: {doc.uploadDate} • Size: {doc.size}
+                          </p>
+                        </div>
+                        {doc.signed && (
+                          <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                            Signed
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex space-x-2">
+                        <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                          <Download size={20} />
+                        </button>
+                        <button 
+                          onClick={() => setDocuments(documents.filter(doc => doc.id !== doc.id))}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                          <Trash2 size={20} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-      // ============ IMPORTANT INFORMATION BOX ============
-      doc.setFillColor(254, 243, 199);
-      doc.roundedRect(20, y, pageWidth - 40, 50, 3, 3, 'F');
-      
-      doc.setDrawColor(245, 158, 11);
-      doc.setLineWidth(0.5);
-      doc.roundedRect(20, y, pageWidth - 40, 50, 3, 3, 'S');
-      
-      doc.setTextColor(146, 64, 14);
-      doc.setFontSize(12);
-      doc.setFont(undefined, 'bold');
-      doc.text('⚠ IMPORTANT INFORMATION', 25, y + 8);
-      
-      doc.setTextColor(120, 53, 15);
-      doc.setFontSize(9);
-      doc.setFont(undefined, 'normal');
-      const importantInfo = [
-        '• Keep this document safe for future reference',
-        '• Processing typically takes 7-14 business days',
-        '• You will be contacted for any additional documents',
-        '• Track your claim status using ID: ' + globalClaimId
-      ];
-      
-      let infoY = y + 16;
-      importantInfo.forEach(info => {
-        doc.text(info, 25, infoY);
-        infoY += 6;
-      });
-      
-      y += 60;
+            {/* Progress Tracker Tab */}
+            {activeTab === 'progress' && (
+              <div>
+                <h2 className="text-2xl font-bold mb-4 text-gray-800">Claim Progress</h2>
+                
+                {/* Progress Bar */}
+                <div className="mb-8 bg-gray-200 rounded-full h-4 overflow-hidden">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-indigo-600 h-full rounded-full transition-all duration-500"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                <p className="text-center text-gray-600 mb-8 font-semibold">{progress.toFixed(0)}% Complete</p>
 
-      // ============ NEXT STEPS SECTION ============
-      doc.setTextColor(30, 58, 138);
-      doc.setFontSize(14);
-      doc.setFont(undefined, 'bold');
-      doc.text('NEXT STEPS', 20, y);
-      
-      y += 2;
-      doc.setDrawColor(59, 130, 246);
-      doc.line(20, y, 55, y);
-      
-      y += 8;
-      
-      const nextSteps = [
-        '1. Our team will verify your submitted documents within 2-3 business days',
-        '2. A vehicle assessment inspector will contact you to schedule inspection',
-        '3. Once approved, claim amount will be processed within 5-7 business days',
-        '4. You can track status anytime using your Claim ID on our website'
-      ];
-      
-      doc.setTextColor(55, 65, 81);
-      doc.setFontSize(9);
-      doc.setFont(undefined, 'normal');
-      nextSteps.forEach(step => {
-        const lines = doc.splitTextToSize(step, pageWidth - 50);
-        lines.forEach(line => {
-          doc.text(line, 25, y);
-          y += 5;
-        });
-        y += 2;
-      });
+                {/* Steps */}
+                <div className="space-y-4">
+                  {steps.map((step, index) => (
+                    <div key={step.id} className="flex items-start space-x-4">
+                      <div className="flex flex-col items-center">
+                        <button
+                          onClick={() => setSteps(steps.map(s => s.id === step.id ? {...s, completed: !s.completed} : s))}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            step.completed ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-400'
+                          }`}
+                        >
+                          {step.completed ? <CheckCircle size={24} /> : <Circle size={24} />}
+                        </button>
+                        {index < steps.length - 1 && (
+                          <div className={`w-1 h-12 ${step.completed ? 'bg-green-500' : 'bg-gray-200'}`}></div>
+                        )}
+                      </div>
+                      <div className="flex-1 pb-8">
+                        <h3 className={`font-semibold text-lg ${step.completed ? 'text-gray-800' : 'text-gray-500'}`}>
+                          {step.title}
+                        </h3>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-      // ============ FOOTER ============
-      y = pageHeight - 30;
-      
-      doc.setDrawColor(209, 213, 219);
-      doc.setLineWidth(0.3);
-      doc.line(20, y, pageWidth - 20, y);
-      
-      y += 8;
-      
-      doc.setTextColor(107, 114, 128);
-      doc.setFontSize(8);
-      doc.setFont(undefined, 'normal');
-      doc.text('Legal Assist - Vehicle Insurance Division', pageWidth / 2, y, { align: 'center' });
-      
-      y += 5;
-      doc.text('Email: claims@legalassist.com | Phone: +91-8897752518', pageWidth / 2, y, { align: 'center' });
-      
-      y += 5;
-      doc.setFontSize(7);
-      doc.text('Generated on: ' + new Date().toLocaleString('en-GB'), pageWidth / 2, y, { align: 'center' });
+            {/* Upload Tab */}
+            {activeTab === 'upload' && (
+              <div>
+                <h2 className="text-2xl font-bold mb-4 text-gray-800">Upload Documents</h2>
+                <div className="border-4 border-dashed border-gray-300 rounded-xl p-12 text-center bg-gray-50">
+                  <Upload className="mx-auto text-gray-400 mb-4" size={64} />
+                  <h3 className="text-xl font-semibold text-gray-700 mb-2">Upload Your Files</h3>
+                  <label className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold cursor-pointer hover:bg-blue-700 inline-block mt-4">
+                    Choose Files
+                    <input
+                      type="file"
+                      multiple
+                      onChange={(e) => e.target.files && handleFiles(e.target.files)}
+                      className="hidden"
+                    />
+                  </label>
+                  <p className="text-sm text-gray-400 mt-4">PDF, DOC, JPG, PNG</p>
+                </div>
+              </div>
+            )}
 
-      // Save PDF
-      doc.save('Insurance_Claim_' + globalClaimId + '.pdf');
-    }
+            {/* E-Signature Tab */}
+            {activeTab === 'signature' && (
+              <div>
+                <h2 className="text-2xl font-bold mb-4 text-gray-800">Electronic Signature</h2>
+                <div className="bg-gray-50 rounded-xl p-8 border-2 border-gray-200">
+                  <p className="text-gray-700 mb-6">
+                    Sign below to confirm all information is accurate.
+                  </p>
+                  
+                  {!signatureData ? (
+                    <div>
+                      <input
+                        type="text"
+                        value={signature}
+                        onChange={(e) => setSignature(e.target.value)}
+                        placeholder="Type your full name"
+                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-4 text-lg"
+                      />
+                      <div className="bg-white border-2 border-gray-300 rounded-lg p-8 mb-4 min-h-32 flex items-center justify-center">
+                        {signature ? (
+                          <div className="text-4xl font-bold text-blue-600 italic" style={{ fontFamily: 'cursive' }}>
+                            {signature}
+                          </div>
+                        ) : (
+                          <p className="text-gray-400">Your signature will appear here</p>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => {
+                          if(signature.trim()) {
+                            setSignatureData(signature);
+                            setSteps(steps.map(s => s.id === 4 ? {...s, completed: true} : s));
+                          }
+                        }}
+                        disabled={!signature.trim()}
+                        className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-300"
+                      >
+                        Sign Document
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="bg-white border-2 border-green-500 rounded-lg p-8 mb-4">
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-green-600 font-semibold flex items-center">
+                            <CheckCircle className="mr-2" size={20} />
+                            Document Signed
+                          </span>
+                          <button
+                            onClick={() => {
+                              setSignature('');
+                              setSignatureData(null);
+                            }}
+                            className="text-red-600 hover:bg-red-50 p-2 rounded-lg"
+                          >
+                            <X size={20} />
+                          </button>
+                        </div>
+                        <div className="text-4xl font-bold text-blue-600 italic mb-4" style={{ fontFamily: 'cursive' }}>
+                          {signatureData}
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Signed on: {new Date().toLocaleString()}
+                        </p>
+                      </div>
+                      <button className="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700">
+                        Download Signed Document
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DocumentManagement;
   </script>
-
 </body>
 </html>

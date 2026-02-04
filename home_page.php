@@ -119,7 +119,7 @@ session_start();
     <div class="overlay">
       <h1>Legal Assist</h1>
       <p class="tagline">Your trusted guide for all legal and license needs</p>
-      <p style="margin-top: 20px; font-size: 18px;">Login or Sign Up to access our services</p>
+      <p style="margin-top: 20px; font-size: 16px;">Login or Sign Up to access our services</p>
     </div>
   </header>
 

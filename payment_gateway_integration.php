@@ -10,8 +10,8 @@ if ($conn->connect_error) {
 }
 
 // Razorpay Configuration
-$razorpay_key_id = "rzp_test_RuyUcsfbG8XaIT"; // Your Test Key ID (Fixed typo)
-$razorpay_key_secret = "fliKTmw84hX8mblSM1CyRQ0D"; // Your Test Key Secret
+$razorpay_key_id = "rzp_test_RuyUcsfbG8XaIT";
+$razorpay_key_secret = "fliKTmw84hX8mblSM1CyRQ0D";
 
 // Get payment details from URL parameters
 $service_type = $_GET['service'] ?? '';
@@ -32,6 +32,7 @@ if (!in_array($service_type, $valid_services)) {
 // Fetch service details from respective tables
 $service_details = [];
 $service_name = '';
+$tracking_id = '';
 
 switch ($service_type) {
     case 'passport':
@@ -42,6 +43,7 @@ switch ($service_type) {
         if ($result->num_rows > 0) {
             $service_details = $result->fetch_assoc();
             $service_name = "Passport Appointment - " . ($service_details['service_type'] ?? '');
+            $tracking_id = $service_details['tracking_id'] ?? '';
         } else {
             die("Passport appointment not found");
         }
@@ -56,6 +58,7 @@ switch ($service_type) {
         if ($result->num_rows > 0) {
             $service_details = $result->fetch_assoc();
             $service_name = "MeeSeva - " . ($service_details['service'] ?? '');
+            $tracking_id = $service_details['application_number'] ?? '';
         } else {
             die("MeeSeva application not found");
         }
@@ -70,6 +73,7 @@ switch ($service_type) {
         if ($result->num_rows > 0) {
             $service_details = $result->fetch_assoc();
             $service_name = "Challan Payment - " . ($service_details['challan_no'] ?? '');
+            $tracking_id = $service_details['challan_no'] ?? '';
         } else {
             die("Challan not found");
         }
@@ -79,9 +83,9 @@ switch ($service_type) {
     case 'criminal_lawyer':
     case 'family_lawyer':
     case 'corporate_lawyer':
-        // Assuming you have a lawyers table or consultation bookings table
         $service_name = ucfirst(str_replace('_', ' ', $service_type)) . " Consultation";
         $service_details = ['first_name' => 'User', 'email' => '', 'phone' => ''];
+        $tracking_id = 'CONSULT-' . time();
         break;
         
     default:
@@ -92,7 +96,7 @@ switch ($service_type) {
 $order_id = "ORD_" . strtoupper($service_type) . "_" . time() . "_" . rand(1000, 9999);
 
 // Insert payment record
-$amount_in_paise = $amount * 100; // Razorpay expects amount in paise
+$amount_in_paise = $amount * 100;
 $stmt = $conn->prepare("
     INSERT INTO payments 
     (service_type, service_record_id, razorpay_order_id, amount, currency, payment_status) 
@@ -101,6 +105,7 @@ $stmt = $conn->prepare("
 $stmt->bind_param("sisd", $service_type, $service_id, $order_id, $amount);
 $stmt->execute();
 $payment_id = $conn->insert_id;
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -157,28 +162,28 @@ $payment_id = $conn->insert_id;
                             <span class="text-gray-900 font-mono"><?php echo $order_id; ?></span>
                         </div>
                         
-                        <?php if ($service_type == 'passport' && isset($service_details['tracking_id'])): ?>
+                        <?php if ($service_type == 'passport' && !empty($tracking_id)): ?>
                         <div class="flex justify-between border-b pb-3">
                             <span class="text-gray-600 font-semibold">Tracking ID:</span>
-                            <span class="text-gray-900 font-mono"><?php echo $service_details['tracking_id']; ?></span>
+                            <span class="text-gray-900 font-mono"><?php echo $tracking_id; ?></span>
                         </div>
                         <?php endif; ?>
                         
-                        <?php if ($service_type == 'meeseva' && isset($service_details['application_number'])): ?>
+                        <?php if ($service_type == 'meeseva' && !empty($tracking_id)): ?>
                         <div class="flex justify-between border-b pb-3">
                             <span class="text-gray-600 font-semibold">Application No:</span>
-                            <span class="text-gray-900 font-mono"><?php echo $service_details['application_number']; ?></span>
+                            <span class="text-gray-900 font-mono"><?php echo $tracking_id; ?></span>
                         </div>
                         <?php endif; ?>
                         
-                        <?php if ($service_type == 'challan' && isset($service_details['challan_no'])): ?>
+                        <?php if ($service_type == 'challan'): ?>
                         <div class="flex justify-between border-b pb-3">
                             <span class="text-gray-600 font-semibold">Challan No:</span>
-                            <span class="text-gray-900 font-mono"><?php echo $service_details['challan_no']; ?></span>
+                            <span class="text-gray-900 font-mono"><?php echo $service_details['challan_no'] ?? ''; ?></span>
                         </div>
                         <div class="flex justify-between border-b pb-3">
                             <span class="text-gray-600 font-semibold">Vehicle No:</span>
-                            <span class="text-gray-900 font-bold"><?php echo $service_details['vehicle_no']; ?></span>
+                            <span class="text-gray-900 font-bold"><?php echo $service_details['vehicle_no'] ?? ''; ?></span>
                         </div>
                         <?php endif; ?>
                         
@@ -232,6 +237,10 @@ $payment_id = $conn->insert_id;
     </footer>
 
     <script>
+        // Store service type and tracking ID for later use
+        const serviceType = '<?php echo $service_type; ?>';
+        const trackingId = '<?php echo addslashes($tracking_id); ?>';
+        
         function initiatePayment() {
             var options = {
                 "key": "<?php echo $razorpay_key_id; ?>",
@@ -241,7 +250,6 @@ $payment_id = $conn->insert_id;
                 "description": "<?php echo htmlspecialchars($service_name); ?>",
                 "order_id": "<?php echo $order_id; ?>",
                 "handler": function (response) {
-                    // Payment successful
                     verifyPayment(response);
                 },
                 "prefill": {
@@ -264,70 +272,35 @@ $payment_id = $conn->insert_id;
         }
 
         function verifyPayment(response) {
-            // Send payment details to server for verification
-            fetch('verify_payment.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_signature: response.razorpay_signature,
-                    payment_id: <?php echo $payment_id; ?>,
-                    service_type: '<?php echo $service_type; ?>',
-                    service_id: <?php echo $service_id; ?>
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = 'payment_success.php?payment_id=<?php echo $payment_id; ?>';
-                } else {
-                    alert('Payment verification failed. Please contact support.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred. Please contact support.');
-            });
-        }
-        // Add this to replace the existing verifyPayment function in payment_gateway.php
-
-function verifyPayment(response) {
-    // Send payment details to server for verification
+    console.log('🔐 Verifying payment signature...');
+    
+    const verificationData = {
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature: response.razorpay_signature,
+        payment_id: PAYMENT_ID,
+        service_type: SERVICE_TYPE,  // ← MUST BE HERE
+        service_id: SERVICE_ID
+    };
+    
     fetch('verify_payment.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-            payment_id: <?php echo $payment_id; ?>,
-            service_type: '<?php echo $service_type; ?>',
-            service_id: <?php echo $service_id; ?>
-        })
+        body: JSON.stringify(verificationData)
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Use redirect_url from response if available
-            if (data.redirect_url) {
-                window.location.href = data.redirect_url;
-            } else {
-                window.location.href = 'payment_success.php?payment_id=<?php echo $payment_id; ?>';
-            }
-        } else {
-            alert('Payment verification failed: ' + (data.message || 'Unknown error'));
-            window.location.href = 'passportdemo.php';
+            // ✅ THIS IS THE CRITICAL LINE
+            const redirectUrl = 'payment_success.php?service_type=' + encodeURIComponent(SERVICE_TYPE) + '&tracking_id=' + encodeURIComponent(TRACKING_ID);
+            
+            console.log('🔄 Redirecting to:', redirectUrl);
+            alert('Payment Successful! Redirecting to ' + SERVICE_TYPE + ' success page.');
+            
+            window.location.href = redirectUrl;
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred during payment verification. Please contact support.');
-        window.location.href = 'passport.php';
     });
 }
     </script>

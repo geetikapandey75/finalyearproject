@@ -26,7 +26,7 @@ use PHPMailer\PHPMailer\Exception;
 define('SMTP_HOST', 'smtp.gmail.com');
 define('SMTP_PORT', 587);
 define('SMTP_USERNAME', 'geetikapandey75@gmail.com');
-define('SMTP_PASSWORD', 'llda biay lxzr gilr');
+define('SMTP_PASSWORD', 'llgcpuqaqjexounu');
 define('SMTP_FROM_EMAIL', 'geetikapandey75@gmail.com');
 define('SMTP_FROM_NAME', 'MeeSeva Services - Legal Assist');
 

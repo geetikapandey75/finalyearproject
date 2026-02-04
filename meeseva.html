@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MeeSeva Services | Legal Assist</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Flatpickr -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <!-- Leaflet JS & CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
@@ -125,7 +123,7 @@
     <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
       <h3 class="text-2xl font-bold mb-6 text-blue-800 text-center">Apply for a MeeSeva Service</h3>
 
-      <form id="meesevaForm" action="meeseva.php" method="POST" class="space-y-6" onsubmit="return true;">
+      <form id="meesevaForm" action="meeseva.php" method="POST" class="space-y-6">
         <div>
           <label class="block font-semibold mb-2">Full Name</label>
           <input type="text" name="fullName" required class="w-full p-4 border rounded-lg">
@@ -186,13 +184,6 @@
           Submit & Book Appointment
         </button>
       </form>
-
-      <div id="confirmationBox" class="hidden mt-6 p-4 rounded-lg bg-green-100 text-green-800 text-center"></div>
-      
-      <div id="manageSection" class="hidden mt-6 text-center">
-        <button id="rescheduleBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg mr-4">Reschedule</button>
-        <button id="cancelBtn" class="bg-red-600 text-white px-6 py-3 rounded-lg">Cancel</button>
-      </div>
     </div>
   </section>
 
@@ -203,20 +194,180 @@
     dateFormat: "Y-m-d",
     disable: [date => date.getDay() === 0]
   });
-
-  /* Form will submit directly to PHP - no preventDefault */
-  
-  document.getElementById("rescheduleBtn")?.addEventListener("click", () => {
-    document.getElementById("confirmationBox").innerHTML = "⏳ Please select a new date & time and submit again.";
-  });
-
-  document.getElementById("cancelBtn")?.addEventListener("click", () => {
-    document.getElementById("confirmationBox").innerHTML = "❌ Appointment Cancelled.";
-    document.getElementById("manageSection").classList.add("hidden");
-  });
   </script>
 
-  <!-- ====================== ENHANCED CERTIFICATE DOWNLOAD PORTAL ====================== -->
+  <!-- ====================== FEES CALCULATOR & PAYMENT ====================== -->
+  <!-- ====================== FEES CALCULATOR & PAYMENT ====================== -->
+<section class="container mx-auto px-6 py-12">
+  <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
+    <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">MeeSeva Fees & Payment</h3>
+
+    <label class="block font-semibold mb-2">Enter Application Number</label>
+    <input 
+      type="text" 
+      id="applicationId" 
+      class="w-full p-4 border rounded-lg mb-4" 
+      placeholder="e.g., MS1234567890"
+    >
+    
+    <button 
+      id="fetchDetailsBtn" 
+      class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full mb-6"
+    >
+      Fetch Application Details
+    </button>
+
+    <div id="applicationDetails" class="mb-6 hidden">
+      <div class="bg-blue-50 rounded-lg p-6 mb-6">
+        <h4 class="font-semibold text-blue-700 mb-3">Application Details</h4>
+        <p class="mb-2"><strong>Name:</strong> <span id="detailName"></span></p>
+        <p class="mb-2"><strong>Service:</strong> <span id="detailService"></span></p>
+        <p class="mb-2"><strong>Center:</strong> <span id="detailCenter"></span></p>
+        <p class="mb-2"><strong>Date:</strong> <span id="detailDate"></span></p>
+        <p class="mb-2"><strong>Time:</strong> <span id="detailTime"></span></p>
+      </div>
+
+      <div id="feeBreakdown" class="mb-6">
+        <h4 class="font-semibold text-blue-700 mb-2">Fee Breakdown</h4>
+        <ul class="list-disc list-inside text-gray-700" id="feeList"></ul>
+        <p class="mt-2 font-semibold text-green-700">💡 Pay online for instant confirmation!</p>
+      </div>
+
+      <label class="block font-semibold mb-2">Select Payment Method</label>
+      <select id="paymentMethod" class="w-full p-4 border rounded-lg mb-6">
+        <option value="">-- Select Payment Method --</option>
+        <option value="upi">UPI</option>
+        <option value="card">Credit/Debit Card</option>
+        <option value="netbanking">Net Banking</option>
+        <option value="wallet">Wallet</option>
+      </select>
+
+      <button id="payBtn" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full mb-4">
+        Pay Now
+      </button>
+    </div>
+
+    <div id="paymentConfirmation" class="hidden p-4 rounded-lg bg-green-100 text-green-800 text-center"></div>
+  </div>
+</section>
+
+<script>
+  const serviceFees = {
+    'Residential Certificate': 30,
+    'Income Certificate': 30,
+    'Birth / Death Certificate': 30,
+    'Caste Certificate': 30,
+    'Other Service': 50
+  };
+
+  let currentApplicationData = null;
+
+  document.getElementById("fetchDetailsBtn").addEventListener("click", async function() {
+    const appId = document.getElementById("applicationId").value.trim();
+    
+    if (!appId) {
+      alert("Please enter your Application Number");
+      return;
+    }
+
+    // Show loading state
+    this.disabled = true;
+    this.textContent = "Fetching Details...";
+
+    try {
+      const formData = new FormData();
+      formData.append('application_number', appId);
+
+      const response = await fetch('fetch_application_details.php', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        currentApplicationData = data.application;
+        
+        // Display application details
+        document.getElementById("detailName").textContent = data.application.full_name;
+        document.getElementById("detailService").textContent = data.application.service;
+        document.getElementById("detailCenter").textContent = data.application.center_name;
+        document.getElementById("detailDate").textContent = data.application.appointment_date;
+        document.getElementById("detailTime").textContent = data.application.appointment_time;
+
+        // Calculate fee based on service
+        const fee = serviceFees[data.application.service] || 30;
+        document.getElementById("feeList").innerHTML = "<li><strong>Total Fee: ₹" + fee + "</strong></li>";
+
+        // Show details section
+        document.getElementById("applicationDetails").classList.remove("hidden");
+        
+        this.textContent = "Details Loaded Successfully";
+        this.classList.remove("bg-blue-600", "hover:bg-blue-500");
+        this.classList.add("bg-green-600");
+      } else {
+        alert(data.message || "Application not found. Please check your Application Number.");
+        this.textContent = "Fetch Application Details";
+        this.disabled = false;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert("Error fetching application details. Please try again.");
+      this.textContent = "Fetch Application Details";
+      this.disabled = false;
+    }
+  });
+
+  document.getElementById("payBtn").addEventListener("click", function() {
+    const method = document.getElementById("paymentMethod").value;
+    
+    if (!method) {
+      alert("Please select a payment method.");
+      return;
+    }
+
+    if (!currentApplicationData) {
+      alert("Please fetch application details first.");
+      return;
+    }
+
+    // Check if already paid
+    if (currentApplicationData.payment_status === 'paid') {
+      alert("This application has already been paid for.");
+      return;
+    }
+
+    // Calculate fee
+    const amount = serviceFees[currentApplicationData.service] || 30;
+
+    // Create form and submit to payment gateway
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'razorpay_payment.php';
+    
+    const fields = {
+      service_type: 'meeseva',
+      service_record_id: currentApplicationData.id,
+      amount: amount,
+      name: currentApplicationData.full_name,
+      email: currentApplicationData.email,
+      phone: currentApplicationData.contact_number,
+      tracking_id: currentApplicationData.application_number
+    };
+    
+    for (const key in fields) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = fields[key];
+      form.appendChild(input);
+    }
+    
+    document.body.appendChild(form);
+    form.submit();
+  });
+</script>
+   <!-- ====================== ENHANCED CERTIFICATE DOWNLOAD PORTAL ====================== -->
   <section class="container mx-auto px-6 py-12 bg-gradient-to-br from-purple-50 to-blue-50">
     <div class="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-2xl mx-auto animate-slide-in">
       
@@ -284,8 +435,7 @@
               <input 
                 type="email" 
                 id="certEmail" 
-                class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition" 
-                placeholder="your.email@example.com"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"  placeholder="your.email@example.com"
               >
               <p class="text-xs text-gray-500 mt-1">📧 OTP will be sent to this email</p>
             </div>
@@ -337,7 +487,7 @@
 
           <div class="text-center space-y-2">
             <p class="text-sm text-gray-600">
-              Didn't receive? 
+               Didn't receive? 
               <button id="certResendOtpBtn" class="text-blue-600 hover:underline font-semibold">Resend OTP</button>
             </p>
             <button id="certBackBtn" class="text-gray-600 hover:underline text-sm">
@@ -392,6 +542,13 @@
 
           <button 
             id="certNewDownloadBtn" 
+            class="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-… reen-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition">
+              📱 Share
+            </button>
+          </div>
+
+          <button 
+            id="certNewDownloadBtn" 
             class="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition"
           >
             Download Another Certificate
@@ -402,8 +559,13 @@
 
     </div>
   </section>
+  
 
-  <!-- Loading Overlay -->
+  <!-- ====================== APPLICATION STATUS TRACKER ====================== -->
+  
+  
+
+   <!-- Loading Overlay -->
   <div id="certLoadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
     <div class="bg-white rounded-2xl p-8 text-center max-w-sm">
       <div class="loading-dots mb-4 flex justify-center gap-2">
@@ -439,7 +601,8 @@
       };
       
       alertBox.className = `p-4 rounded-lg border-l-4 ${colors[type]} mb-6`;
-      alertBox.innerHTML = `<p class="font-semibold">${icons[type]} ${message}</p>`;
+alertBox.innerHTML = `<p class="font-semibold">${icons[type]} ${message}</p>`;
+
       alertBox.classList.remove('hidden');
       
       setTimeout(() => alertBox.classList.add('hidden'), 5000);
@@ -572,7 +735,8 @@
 
     document.getElementById('certDownloadBtn').addEventListener('click', function() {
       // Open PDF in new tab
-      window.open(`generate_appointment_certificate.php?app=${certCurrentAppData.appNumber}`, '_blank');
+window.open(`generate_appointment_certificate.php?app=${certCurrentAppData.appNumber}`, '_blank');
+
       certShowAlert('Opening certificate...', 'success');
     });
 
@@ -595,11 +759,13 @@
     document.getElementById('certEmailBtn').addEventListener('click', function() {
       const subject = 'MeeSeva Appointment Confirmation';
       const body = `Appointment No: ${certCurrentAppData.appNumber}`;
-      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
     });
 
     document.getElementById('certWhatsappBtn').addEventListener('click', function() {
-      const text = `MeeSeva Appointment - App No: ${certCurrentAppData.appNumber}`;
+const text = `MeeSeva Appointment - App No: ${certCurrentAppData.appNumber}`;
+
       window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
     });
   </script>
@@ -623,17 +789,7 @@
         <h4 class="text-xl font-semibold text-blue-700">Application Progress</h4>
         <ul class="relative border-l border-gray-300 ml-4">
           <li class="mb-6 ml-6">
-            <span class="absolute w-3 h-3 bg-blue-600 rounded-full -left-1.5 border border-white"></span>
-            <span class="font-semibold">Application Submitted</span>
-            <span id="step1Status" class="text-gray-500 ml-2">(Pending)</span>
-          </li>
-          <li class="mb-6 ml-6">
-            <span class="absolute w-3 h-3 bg-gray-300 rounded-full -left-1.5 border border-white"></span>
-            <span class="font-semibold">Document Verification</span>
-            <span id="step2Status" class="text-gray-500 ml-2">(Pending)</span>
-          </li>
-          <li class="mb-6 ml-6">
-            <span class="absolute w-3 h-3 bg-gray-300 rounded-full -left-1.5 border border-white"></span>
+              <span class="absolute w-3 h-3 bg-gray-300 rounded-full -left-1.5 border border-white"></span>
             <span class="font-semibold">Under Processing</span>
             <span id="step3Status" class="text-gray-500 ml-2">(Pending)</span>
           </li>
@@ -673,71 +829,85 @@
       step5: "Pending",
       expectedCompletion: "2025-12-20"
     };
+statusForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    statusForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const appNumber = document.getElementById("appNumber").value.trim();
-      if(!appNumber) {
-        alert("Please enter an application number.");
-        return;
-      }
+  const appNumber = document.getElementById("appNumber").value.trim();
+  if (!appNumber) {
+    alert("Please enter an application number.");
+    return;
+  }
 
-      // Show loading
-      statusTimeline.classList.add("hidden");
-      expectedDate.classList.add("hidden");
-      actions.classList.add("hidden");
+  statusTimeline.classList.add("hidden");
+  expectedDate.classList.add("hidden");
+  actions.classList.add("hidden");
 
-      try {
-        const formData = new FormData();
-        formData.append('application_number', appNumber);
+  // ✅ MOVE FUNCTION HERE
+  function showDemoStatus() {
+    statusTimeline.classList.remove("hidden");
+    expectedDate.classList.remove("hidden");
+    actions.classList.remove("hidden");
 
-        const response = await fetch('meeseva.php', {
-          method: 'POST',
-          body: formData
-        });
+    document.getElementById("step1Status").textContent = demoStatus.step1;
+    document.getElementById("step2Status").textContent = demoStatus.step2;
+    document.getElementById("step3Status").textContent = demoStatus.step3;
+    document.getElementById("step4Status").textContent = demoStatus.step4;
+    document.getElementById("step5Status").textContent = demoStatus.step5;
 
-        const html = await response.text();
-        
-        // Check if we got a valid response
-        if (html.includes('Application Status') || html.includes('not found')) {
-          // Create a temporary container to parse the response
-          const tempDiv = document.createElement('div');
-          tempDiv.innerHTML = html;
-          
-          // Find the status info in the response
-          const statusInfo = tempDiv.querySelector('.bg-blue-50, .bg-red-100');
-          
-          if (statusInfo) {
-            // Display the real status
-            statusTimeline.innerHTML = '<div class="bg-white p-6 rounded-lg shadow">' + statusInfo.innerHTML + '</div>';
-            statusTimeline.classList.remove("hidden");
-          } else {
-            // Fallback to demo status
-            showDemoStatus();
-          }
-        } else {
-          // Fallback to demo status
-          showDemoStatus();
-        }
-      } catch (error) {
-        console.error('Error:', error);
+    expectedDate.textContent =
+      `Estimated Completion Date: ${demoStatus.expectedCompletion}`;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append("application_number", appNumber);
+
+    const response = await fetch("meeseva.php", {
+      method: "POST",
+      body: formData
+    });
+
+    const html = await response.text();
+
+    if (html.includes("Application Status") || html.includes("not found")) {
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = html;
+
+      const statusInfo = tempDiv.querySelector(".bg-blue-50, .bg-red-100");
+
+      if (statusInfo) {
+        statusTimeline.innerHTML =
+          `<div class="bg-white p-6 rounded-lg shadow">${statusInfo.innerHTML}</div>`;
+        statusTimeline.classList.remove("hidden");
+      } else {
         showDemoStatus();
       }
+    } else {
+      showDemoStatus();
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    showDemoStatus();
+  }
+});
+
 
       function showDemoStatus() {
         statusTimeline.classList.remove("hidden");
         expectedDate.classList.remove("hidden");
         actions.classList.remove("hidden");
 
-        document.getElementById("step1Status").textContent = `(${demoStatus.step1})`;
-        document.getElementById("step2Status").textContent = `(${demoStatus.step2})`;
-        document.getElementById("step3Status").textContent = `(${demoStatus.step3})`;
-        document.getElementById("step4Status").textContent = `(${demoStatus.step4})`;
-        document.getElementById("step5Status").textContent = `(${demoStatus.step5})`;
+        document.getElementById("step1Status").textContent = demoStatus.step1;
 
-        expectedDate.textContent = `Estimated Completion Date: ${demoStatus.expectedCompletion}`;
-      }
-    });
+        document.getElementById("step2Status").textContent = demoStatus.step2;
+        document.getElementById("step3Status").textContent = demoStatus.step3;
+        document.getElementById("step4Status").textContent = demoStatus.step4;
+        document.getElementById("step5Status").textContent = demoStatus.step5;
+
+expectedDate.textContent = `Estimated Completion Date: ${demoStatus.expectedCompletion}`;
+      
+    }
+  
 
     document.getElementById("downloadReceipt").addEventListener("click", () => {
       alert('Receipt downloaded!');
@@ -747,6 +917,205 @@
       window.print();
     });
   </script>
+  <section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-5xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">🎫 Real-Time Queue Management</h2>
+      <p class="text-center text-gray-600 mb-8">Check live queue status or book your token online to skip the wait!</p>
+
+      <!-- Select Center -->
+      <div class="mb-6">
+        <label class="block font-semibold mb-2">Select MeeSeva Center</label>
+        <select id="queueCenter" class="w-full p-4 border rounded-lg">
+          <option value="">Choose a center</option>
+          <option value="madhapur">Madhapur MeeSeva</option>
+          <option value="kukatpally">Kukatpally MeeSeva</option>
+          <option value="secunderabad">Secunderabad MeeSeva</option>
+          <option value="ameerpet">Ameerpet MeeSeva</option>
+        </select>
+      </div>
+
+      <!-- Live Queue Status -->
+      <div id="queueStatus" class="hidden">
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+          <!-- Current Token -->
+          <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-6 rounded-xl text-center shadow-lg">
+            <div class="text-5xl font-bold mb-2" id="currentToken">A-045</div>
+            <div class="text-sm">Current Token Being Served</div>
+            <div class="mt-2 text-xs opacity-80">Updated just now</div>
+          </div>
+
+          <!-- Waiting People -->
+          <div class="bg-gradient-to-br from-orange-500 to-orange-700 text-white p-6 rounded-xl text-center shadow-lg">
+            <div class="text-5xl font-bold mb-2" id="waitingCount">23</div>
+            <div class="text-sm">People in Queue</div>
+            <div class="mt-2 text-xs opacity-80">Est. wait: <span id="estWait">46 mins</span></div>
+          </div>
+
+          <!-- Your Token -->
+          <div class="bg-gradient-to-br from-green-500 to-green-700 text-white p-6 rounded-xl text-center shadow-lg">
+            <div class="text-5xl font-bold mb-2" id="yourToken">--</div>
+            <div class="text-sm">Your Token Number</div>
+            <div class="mt-2 text-xs opacity-80">Book online now!</div>
+          </div>
+        </div>
+
+        <!-- Counter Status -->
+        <div class="bg-blue-50 p-6 rounded-lg mb-6">
+          <h3 class="text-xl font-semibold text-blue-800 mb-4">📊 Live Counter Status</h3>
+          <div class="grid md:grid-cols-4 gap-4" id="counterStatus">
+            <!-- Counter cards will be generated here -->
+          </div>
+        </div>
+
+        <!-- Book Token Online -->
+        <div class="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border-2 border-green-300">
+          <h3 class="text-xl font-semibold text-green-800 mb-4">⚡ Skip the Queue - Book Token Online</h3>
+          
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block font-semibold mb-2">Service Type</label>
+              <select id="tokenService" class="w-full p-3 border rounded-lg">
+                <option value="">Select service</option>
+                <option value="certificate">Certificate Services</option>
+                <option value="aadhaar">Aadhaar Services</option>
+                <option value="pension">Pension Services</option>
+                <option value="property">Property Registration</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold mb-2">Your Mobile Number</label>
+              <input type="tel" id="tokenMobile" class="w-full p-3 border rounded-lg" placeholder="Enter 10-digit mobile">
+            </div>
+          </div>
+
+          <button id="bookTokenBtn" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 w-full transition">
+            🎟️ Book My Token Now
+          </button>
+
+          <p class="text-sm text-gray-600 mt-3 text-center">
+            ✓ Get SMS when your turn approaches (10 tokens before)<br>
+            ✓ Arrive just in time - No waiting!
+          </p>
+        </div>
+
+        <!-- Token Confirmation -->
+        <div id="tokenConfirmation" class="hidden mt-6 p-6 bg-green-100 border-2 border-green-500 rounded-lg">
+          <h4 class="text-xl font-bold text-green-800 mb-3 text-center">✅ Token Booked Successfully!</h4>
+          <div class="bg-white p-6 rounded-lg text-center">
+            <div class="text-6xl font-bold text-green-600 mb-2" id="bookedToken">A-068</div>
+            <p class="text-gray-700 mb-4">Your Token Number</p>
+            <div class="space-y-2 text-left">
+              <p><strong>Center:</strong> <span id="confirmedCenter"></span></p>
+              <p><strong>Service:</strong> <span id="confirmedService"></span></p>
+              <p><strong>Estimated Wait:</strong> <span id="confirmedWait"></span></p>
+              <p><strong>SMS Alert:</strong> Will be sent to <span id="confirmedMobile"></span></p>
+            </div>
+            <div class="mt-4 p-3 bg-yellow-50 border border-yellow-300 rounded">
+              <p class="text-sm text-yellow-800">💡 You'll receive SMS when token <strong id="alertToken"></strong> is being served (10 tokens before yours)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+   <script>
+    // ====================== QUEUE MANAGEMENT LOGIC ======================
+    
+    const queueCenter = document.getElementById('queueCenter');
+    const queueStatus = document.getElementById('queueStatus');
+    const bookTokenBtn = document.getElementById('bookTokenBtn');
+    const tokenConfirmation = document.getElementById('tokenConfirmation');
+
+    // Mock data for different centers
+    const centerData = {
+      madhapur: { current: 'A-045', waiting: 23, avgTime: 2 },
+      kukatpally: { current: 'B-032', waiting: 18, avgTime: 2.5 },
+      secunderabad: { current: 'C-056', waiting: 31, avgTime: 1.8 },
+      ameerpet: { current: 'D-041', waiting: 15, avgTime: 2.2 }
+    };
+
+    // Show queue status when center is selected
+    queueCenter.addEventListener('change', function() {
+      if (this.value) {
+        const data = centerData[this.value];
+        document.getElementById('currentToken').textContent = data.current;
+        document.getElementById('waitingCount').textContent = data.waiting;
+        document.getElementById('estWait').textContent = Math.round(data.waiting * data.avgTime) + ' mins';
+        
+        // Generate counter status
+        generateCounterStatus();
+        queueStatus.classList.remove('hidden');
+      } else {
+        queueStatus.classList.add('hidden');
+      }
+    });
+
+    // Generate counter status cards
+    function generateCounterStatus() {
+      const counterDiv = document.getElementById('counterStatus');
+      const counters = [
+        { num: 1, status: 'Active', serving: 'A-045', type: 'Certificates', time: '2 mins' },
+        { num: 2, status: 'Active', serving: 'A-043', type: 'Aadhaar', time: '5 mins' },
+        { num: 3, status: 'Break', serving: '--', type: 'All Services', time: '10 mins' },
+        { num: 4, status: 'Active', serving: 'A-042', type: 'Pension', time: '3 mins' }
+      ];
+
+      counterDiv.innerHTML = counters.map(c => `
+        <div class="bg-white p-4 rounded-lg border ${c.status === 'Active' ? 'border-green-300' : 'border-gray-300'}">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-lg">Counter ${c.num}</span>
+            <span class="text-xs px-2 py-1 rounded ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}">
+              ${c.status}
+            </span>
+          </div>
+          <div class="text-2xl font-bold text-blue-600 mb-1">${c.serving}</div>
+          <div class="text-xs text-gray-600">${c.type}</div>
+          <div class="text-xs text-gray-500 mt-1">Avg: ${c.time}</div>
+        </div>
+      `).join('');
+    }
+
+    // Book token online
+    bookTokenBtn.addEventListener('click', function() {
+      const service = document.getElementById('tokenService').value;
+      const mobile = document.getElementById('tokenMobile').value;
+      const center = queueCenter.options[queueCenter.selectedIndex].text;
+
+      if (!service || !mobile || mobile.length !== 10) {
+        alert('Please fill all details correctly');
+        return;
+      }
+
+      // Generate token number
+      const prefix = ['A', 'B', 'C', 'D'][Math.floor(Math.random() * 4)];
+      const tokenNum = prefix + '-' + String(Math.floor(Math.random() * 900) + 100).padStart(3, '0');
+      const currentNum = parseInt(document.getElementById('currentToken').textContent.split('-')[1]);
+      const yourNum = parseInt(tokenNum.split('-')[1]);
+      const peopleAhead = yourNum - currentNum;
+      const waitTime = peopleAhead * 2;
+
+      document.getElementById('bookedToken').textContent = tokenNum;
+      document.getElementById('confirmedCenter').textContent = center;
+      document.getElementById('confirmedService').textContent = service;
+      document.getElementById('confirmedWait').textContent = waitTime + ' mins (approx)';
+      document.getElementById('confirmedMobile').textContent = mobile;
+      document.getElementById('alertToken').textContent = prefix + '-' + String(yourNum - 10).padStart(3, '0');
+      document.getElementById('yourToken').textContent = tokenNum;
+
+      tokenConfirmation.classList.remove('hidden');
+      tokenConfirmation.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Update current token every 30 seconds (simulation)
+    setInterval(() => {
+      if (!queueStatus.classList.contains('hidden')) {
+        const currentEl = document.getElementById('currentToken');
+        const parts = currentEl.textContent.split('-');
+        const newNum = String(parseInt(parts[1]) + 1).padStart(3, '0');
+        currentEl.textContent = parts[0] + '-' + newNum;
+      }
+    }, 30000);
+</script>
 
   <!-- ====================== CENTER LOCATOR ====================== -->
   <section class="container mx-auto px-6 py-12">
@@ -816,276 +1185,13 @@
           <p><strong>Contact:</strong> ${center.contact}</p>
           <p><strong>Parking:</strong> ${center.parking}</p>
           <p><strong>Rating:</strong> ${center.rating} ⭐</p>
-          <button class="bg-green-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-green-500" onclick="alert('Appointment booked at ${center.name}')">
-            Book Appointment
-          </button>
+          
         `;
       });
     });
   </script>
 
-  <!-- ====================== FEES CALCULATOR & PAYMENT ====================== -->
-  <section class="container mx-auto px-6 py-12">
-    <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
-      <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">MeeSeva Fees & Payment</h3>
 
-      <label class="block font-semibold mb-2">Select Service</label>
-      <select id="serviceType" class="w-full p-4 border rounded-lg mb-6">
-        <option value="">-- Select Service --</option>
-        <option value="certificate">Certificate Issuance</option>
-        <option value="property">Property Registration</option>
-        <option value="pension">Pension Services</option>
-        <option value="passport">Passport Services</option>
-      </select>
-
-      <div id="feeBreakdown" class="mb-6 hidden">
-        <h4 class="font-semibold text-blue-700 mb-2">Fee Breakdown</h4>
-        <ul class="list-disc list-inside text-gray-700" id="feeList"></ul>
-        <p class="mt-2 font-semibold text-green-700" id="onlineSave"></p>
-      </div>
-
-      <label class="block font-semibold mb-2">Select Payment Method</label>
-      <select id="paymentMethod" class="w-full p-4 border rounded-lg mb-6">
-        <option value="">-- Select Payment Method --</option>
-        <option value="upi">UPI</option>
-        <option value="card">Credit/Debit Card</option>
-        <option value="netbanking">Net Banking</option>
-        <option value="wallet">Wallet</option>
-      </select>
-
-      <button id="payBtn" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full mb-4">
-        Pay Now
-      </button>
-
-      <div id="paymentConfirmation" class="hidden p-4 rounded-lg bg-green-100 text-green-800 text-center"></div>
-
-      <div class="mt-6">
-        <h4 class="font-semibold text-blue-700 mb-2">Payment History</h4>
-        <ul id="paymentHistory" class="list-disc list-inside text-gray-700"></ul>
-      </div>
-    </div>
-  </section>
-
-  <script>
-    const serviceFees = {
-      certificate: { application: 50, processing: 20, service: 10, onlineSave: 50 },
-      property: { application: 100, processing: 50, service: 25, onlineSave: 50 },
-      pension: { application: 75, processing: 30, service: 15, onlineSave: 50 },
-      passport: { application: 150, processing: 50, service: 30, onlineSave: 50 }
-    };
-
-    const feeBreakdownDiv = document.getElementById("feeBreakdown");
-    const feeList = document.getElementById("feeList");
-    const onlineSave = document.getElementById("onlineSave");
-    const payBtn = document.getElementById("payBtn");
-    const paymentConfirmation = document.getElementById("paymentConfirmation");
-    const paymentHistory = document.getElementById("paymentHistory");
-
-    document.getElementById("serviceType").addEventListener("change", function() {
-      const service = this.value;
-      if (!service) {
-        feeBreakdownDiv.classList.add("hidden");
-        return;
-      }
-
-      const fees = serviceFees[service];
-      feeList.innerHTML = `
-        <li>Application Fee: ₹${fees.application}</li>
-        <li>Processing Fee: ₹${fees.processing}</li>
-        <li>Service Charge: ₹${fees.service}</li>
-        <li><strong>Total Online Fee: ₹${fees.application + fees.processing + fees.service - fees.onlineSave}</strong></li>
-        <li>Offline Fee: ₹${fees.application + fees.processing + fees.service}</li>
-      `;
-      onlineSave.textContent = `💡 Save ₹${fees.onlineSave} by applying online!`;
-      feeBreakdownDiv.classList.remove("hidden");
-    });
-
-    payBtn.addEventListener("click", () => {
-      const service = document.getElementById("serviceType").value;
-      const method = document.getElementById("paymentMethod").value;
-      if (!service || !method) {
-        alert("Please select both service and payment method.");
-        return;
-      }
-
-      const fees = serviceFees[service];
-      const totalPaid = fees.application + fees.processing + fees.service - fees.onlineSave;
-
-      paymentConfirmation.innerHTML = `✅ Payment of ₹${totalPaid} via ${method.toUpperCase()} successful! Receipt downloaded.`;
-      paymentConfirmation.classList.remove("hidden");
-
-      const li = document.createElement("li");
-      li.textContent = `${new Date().toLocaleString()}: Paid ₹${totalPaid} for ${service} via ${method.toUpperCase()}`;
-      paymentHistory.appendChild(li);
-    });
-  </script>
-
-  <!-- ====================== DOCUMENT UPLOAD ====================== -->
-  <section class="container mx-auto px-6 py-12">
-    <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
-      <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Document Upload & Verification</h3>
-
-      <form id="uploadForm">
-        <label class="block font-semibold mb-2">Upload Required Documents</label>
-        <input type="file" multiple id="fileInput" class="w-full p-4 border rounded-lg mb-4">
-        
-        <div id="docPreview" class="mb-4 grid grid-cols-2 md:grid-cols-3 gap-4"></div>
-
-        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-500 w-full mb-6">
-          Save Documents
-        </button>
-      </form>
-
-      <div id="uploadStatus" class="hidden p-3 bg-green-100 text-green-800 rounded-lg text-center mb-6"></div>
-    </div>
-  </section>
-
-  <script>
-    document.getElementById('fileInput').addEventListener('change', function(e) {
-      const preview = document.getElementById('docPreview');
-      preview.innerHTML = '';
-      
-      Array.from(e.target.files).forEach(file => {
-        const div = document.createElement('div');
-        div.className = 'border rounded p-2 text-sm';
-        div.innerHTML = `<p class="truncate">${file.name}</p><p class="text-xs text-gray-500">${(file.size/1024).toFixed(2)} KB</p>`;
-        preview.appendChild(div);
-      });
-    });
-
-    document.getElementById('uploadForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const status = document.getElementById('uploadStatus');
-      status.textContent = '✅ Documents uploaded successfully!';
-      status.classList.remove('hidden');
-    });
-  </script>
-
-  <!-- ====================== QUEUE MANAGEMENT ====================== -->
-  <section class="container mx-auto px-6 py-12">
-    <div class="bg-white rounded-xl shadow-lg p-8 max-w-5xl mx-auto">
-      <h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">🎫 Real-Time Queue Management</h2>
-      <p class="text-center text-gray-600 mb-8">Check live queue status or book your token online</p>
-
-      <div class="mb-6">
-        <label class="block font-semibold mb-2">Select MeeSeva Center</label>
-        <select id="queueCenter" class="w-full p-4 border rounded-lg">
-          <option value="">Choose a center</option>
-          <option value="madhapur">Madhapur MeeSeva</option>
-          <option value="kukatpally">Kukatpally MeeSeva</option>
-          <option value="secunderabad">Secunderabad MeeSeva</option>
-          <option value="ameerpet">Ameerpet MeeSeva</option>
-        </select>
-      </div>
-
-      <div id="queueStatus" class="hidden">
-        <div class="grid md:grid-cols-3 gap-6 mb-8">
-          <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-6 rounded-xl text-center shadow-lg">
-            <div class="text-5xl font-bold mb-2" id="currentToken">A-045</div>
-            <div class="text-sm">Current Token Being Served</div>
-          </div>
-
-          <div class="bg-gradient-to-br from-orange-500 to-orange-700 text-white p-6 rounded-xl text-center shadow-lg">
-            <div class="text-5xl font-bold mb-2" id="waitingCount">23</div>
-            <div class="text-sm">People in Queue</div>
-            <div class="mt-2 text-xs">Est. wait: <span id="estWait">46 mins</span></div>
-          </div>
-
-          <div class="bg-gradient-to-br from-green-500 to-green-700 text-white p-6 rounded-xl text-center shadow-lg">
-            <div class="text-5xl font-bold mb-2" id="yourToken">--</div>
-            <div class="text-sm">Your Token Number</div>
-          </div>
-        </div>
-
-        <div class="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border-2 border-green-300">
-          <h3 class="text-xl font-semibold text-green-800 mb-4">⚡ Skip the Queue - Book Token Online</h3>
-          
-          <div class="grid md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label class="block font-semibold mb-2">Service Type</label>
-              <select id="tokenService" class="w-full p-3 border rounded-lg">
-                <option value="">Select service</option>
-                <option value="certificate">Certificate Services</option>
-                <option value="aadhaar">Aadhaar Services</option>
-                <option value="pension">Pension Services</option>
-                <option value="property">Property Registration</option>
-              </select>
-            </div>
-            <div>
-              <label class="block font-semibold mb-2">Your Mobile Number</label>
-              <input type="tel" id="tokenMobile" class="w-full p-3 border rounded-lg" placeholder="Enter 10-digit mobile">
-            </div>
-          </div>
-
-          <button id="bookTokenBtn" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 w-full transition">
-            🎟️ Book My Token Now
-          </button>
-        </div>
-
-        <div id="tokenConfirmation" class="hidden mt-6 p-6 bg-green-100 border-2 border-green-500 rounded-lg">
-          <h4 class="text-xl font-bold text-green-800 mb-3 text-center">✅ Token Booked Successfully!</h4>
-          <div class="bg-white p-6 rounded-lg text-center">
-            <div class="text-6xl font-bold text-green-600 mb-2" id="bookedToken">A-068</div>
-            <p class="text-gray-700 mb-4">Your Token Number</p>
-            <div class="space-y-2 text-left">
-              <p><strong>Center:</strong> <span id="confirmedCenter"></span></p>
-              <p><strong>Service:</strong> <span id="confirmedService"></span></p>
-              <p><strong>Estimated Wait:</strong> <span id="confirmedWait"></span></p>
-              <p><strong>SMS Alert:</strong> <span id="confirmedMobile"></span></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <script>
-    const queueCenter = document.getElementById('queueCenter');
-    const queueStatus = document.getElementById('queueStatus');
-    const bookTokenBtn = document.getElementById('bookTokenBtn');
-    const tokenConfirmation = document.getElementById('tokenConfirmation');
-
-    const centerData = {
-      madhapur: { current: 'A-045', waiting: 23, avgTime: 2 },
-      kukatpally: { current: 'B-032', waiting: 18, avgTime: 2.5 },
-      secunderabad: { current: 'C-056', waiting: 31, avgTime: 1.8 },
-      ameerpet: { current: 'D-041', waiting: 15, avgTime: 2.2 }
-    };
-
-    queueCenter.addEventListener('change', function() {
-      if (this.value) {
-        const data = centerData[this.value];
-        document.getElementById('currentToken').textContent = data.current;
-        document.getElementById('waitingCount').textContent = data.waiting;
-        document.getElementById('estWait').textContent = Math.round(data.waiting * data.avgTime) + ' mins';
-        queueStatus.classList.remove('hidden');
-      } else {
-        queueStatus.classList.add('hidden');
-      }
-    });
-
-    bookTokenBtn.addEventListener('click', function() {
-      const service = document.getElementById('tokenService').value;
-      const mobile = document.getElementById('tokenMobile').value;
-      const center = queueCenter.options[queueCenter.selectedIndex].text;
-
-      if (!service || !mobile || mobile.length !== 10) {
-        alert('Please fill all details correctly');
-        return;
-      }
-
-      const tokenNum = 'A-' + String(Math.floor(Math.random() * 900) + 100).padStart(3, '0');
-
-      document.getElementById('bookedToken').textContent = tokenNum;
-      document.getElementById('confirmedCenter').textContent = center;
-      document.getElementById('confirmedService').textContent = service;
-      document.getElementById('confirmedWait').textContent = '30 mins (approx)';
-      document.getElementById('confirmedMobile').textContent = mobile;
-      document.getElementById('yourToken').textContent = tokenNum;
-
-      tokenConfirmation.classList.remove('hidden');
-    });
-  </script>
 
   <!-- WhatsApp Float Button -->
   <a href="https://wa.me/8897752518?text=Hello%20Legal%20Assist,%20I%20need%20help%20with%20your%20services" target="_blank" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">

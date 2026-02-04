@@ -16,7 +16,7 @@
 
   <!-- Navigation -->
   <nav class="bg-gradient-to-r from-blue-800 to-blue-600 text-white p-4 flex justify-center gap-6 font-semibold shadow-md">
-  <a href="appointment-form.html" class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-4 py-2 rounded-full shadow hover:from-yellow-300 hover:to-yellow-400 transition">Book an Appointment</a>
+  <a href="appointment-form.php" class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-4 py-2 rounded-full shadow hover:from-yellow-300 hover:to-yellow-400 transition">Book an Appointment</a>
   <a href="find-lawyer.html" class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-4 py-2 rounded-full shadow hover:from-yellow-300 hover:to-yellow-400 transition">Find a Lawyer</a>
 </nav>
 
@@ -205,32 +205,7 @@ document.getElementById('docCaseType').addEventListener('change', function() {
 });
 </script>
 <!--Consultation Slot Booking-->
-<section id="consultation" class="max-w-5xl mx-auto p-6 bg-white rounded shadow my-10">
-  <h2 class="text-2xl font-semibold text-blue-900 mb-4">Book Consultation Slot</h2>
-  <form id="consultForm" class="space-y-4">
-    <input type="text" placeholder="Your Name" id="userName" class="border p-2 w-full rounded" required>
-    <input type="email" placeholder="Email" id="userEmail" class="border p-2 w-full rounded" required>
-    <input type="date" id="consultDate" class="border p-2 w-full rounded" required>
-    <input type="time" id="consultTime" class="border p-2 w-full rounded" required>
-    <button type="button" onclick="bookConsultation()" class="bg-yellow-400 px-4 py-2 rounded font-semibold hover:bg-yellow-300">Book Slot</button>
-  </form>
-  <p id="consultMsg" class="mt-4 font-bold text-green-700"></p>
-</section>
 
-<script>
-function bookConsultation() {
-  const name = document.getElementById('userName').value;
-  const email = document.getElementById('userEmail').value;
-  const date = document.getElementById('consultDate').value;
-  const time = document.getElementById('consultTime').value;
-  
-  if(!name || !email || !date || !time) { alert("Fill all fields."); return; }
-  
-  document.getElementById('consultMsg').innerText = `Hi ${name}, your consultation is booked on ${date} at ${time}. We will contact you at ${email}.`;
-  
-  // Here you can integrate backend API to save booking or send email
-}
-</script>
 
 <!--Case Strength Checker-->
 <section id="case-strength" class="max-w-5xl mx-auto p-6 bg-white rounded shadow my-10">

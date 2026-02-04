@@ -11,7 +11,7 @@ define('SMTP_ENCRYPTION', 'tls'); // or 'ssl' for port 465
 
 // Your Gmail credentials
 define('SMTP_USERNAME', 'geetikapandey75@gmail.com'); // ⚠️ CHANGE THIS
-define('SMTP_PASSWORD', 'llda biay lxzr gilr'); // ⚠️ CHANGE THIS (App Password, not regular password)
+define('SMTP_PASSWORD', 'llgc puqa qjex ounu'); // ⚠️ CHANGE THIS (App Password, not regular password)
 
 // Sender information
 define('SMTP_FROM_EMAIL', 'geetikapandey75@gmail.com'); // ⚠️ CHANGE THIS

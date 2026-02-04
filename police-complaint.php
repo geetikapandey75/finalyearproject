@@ -20,7 +20,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
 <body>
   <header class="hero small-hero">
     <div class="overlay">
-      <h1>File a Police Complaint</h1>
+      <h1>Citizen Police Services</h1>
       <p>Your safety is our priority – report issues quickly and securely.</p>
     </div>
   </header>
@@ -32,11 +32,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
   </section>
   
   <section class="services-grid">
-    <a href="missing.php" class="service-box green">Missing Persons</a>
-    <a href="vehicle.php" class="service-box pink">Unclaimed Vehicles</a>
     <a href="passport.php" class="service-box red">Passport Verification</a>
     <a href="meeseva.html" class="service-box red">Meeseva Services</a>
+        <a href="missing.php" class="service-box green">Missing Persons</a>
+
     <a href="e-challan.html" class="service-box red">E-Challan Details</a>
+        <a href="vehicle.php" class="service-box pink">Unclaimed Vehicles</a>
+
   </section>
   
   <section class="emergency">
@@ -75,6 +77,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
       </div>
     </footer>
   </div>
+ 
+
+
+
+
+
+
   
   <a href="https://wa.me/8897752518?text=Hello%20Legal%20Assist,%20I%20need%20help%20with%20your%20services" target="_blank" id="whatsapp-button">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="Chat with us on WhatsApp">

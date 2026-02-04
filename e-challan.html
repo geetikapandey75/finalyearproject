@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>E-Challan Services</title>
   <script src="https://cdn.tailwindcss.com"></script>
+   <!-- Leaflet CSS - MUST be loaded BEFORE Leaflet JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+  
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
 </head>
 <body class="bg-blue-50 font-sans text-gray-900">
 
@@ -248,173 +257,507 @@ document.getElementById("queryForm").addEventListener("submit", function(e) {
   });
 </script>
 
-<!-- Search & View Challans -->
-<section id="search-challan" class="bg-white rounded-xl shadow-lg p-8">
-  <h3 class="text-2xl font-bold mb-6 text-center">Search & View Challans</h3>
+<!-- Traffic Rules & Penalties Guide -->
+<section class="mt-10 bg-white text-gray-800 rounded-2xl p-6 shadow-md border border-gray-200">
 
-  <div class="space-y-4 max-w-xl mx-auto">
-    <div>
-      <label class="block font-semibold mb-1">Vehicle Number</label>
-      <input type="text" id="vehicle" class="w-full p-3 border rounded-lg" placeholder="Enter Vehicle Number">
-    </div>
-    <div>
-      <label class="block font-semibold mb-1">Challan Number</label>
-      <input type="text" id="challan" class="w-full p-3 border rounded-lg" placeholder="Enter Challan Number">
-    </div>
-    <div>
-      <label class="block font-semibold mb-1">License Number</label>
-      <input type="text" id="license" class="w-full p-3 border rounded-lg" placeholder="Enter License Number">
-    </div>
-    <div>
-      <label class="block font-semibold mb-1">Filter by Status</label>
-      <select id="status" class="w-full p-3 border rounded-lg">
-        <option value="">All</option>
-        <option value="Paid">Paid</option>
-        <option value="Unpaid">Unpaid</option>
-      </select>
-    </div>
-    <div>
-      <label class="block font-semibold mb-1">Violation Type</label>
-      <select id="violation" class="w-full p-3 border rounded-lg">
-        <option value="">All</option>
-        <option value="No Helmet">No Helmet</option>
-        <option value="Triple Riding">Triple Riding</option>
-        <option value="Signal Jump">Signal Jump</option>
-        <option value="Overspeeding">Overspeeding</option>
-        <option value="Wrong Parking">Wrong Parking</option>
-      </select>
-    </div>
-    <div class="flex gap-4">
-      <div class="flex-1">
-        <label class="block font-semibold mb-1">Date From</label>
-        <input type="date" id="from" class="w-full p-3 border rounded-lg">
-      </div>
-      <div class="flex-1">
-        <label class="block font-semibold mb-1">Date To</label>
-        <input type="date" id="to" class="w-full p-3 border rounded-lg">
-      </div>
-    </div>
+  <h2 class="text-2xl font-semibold text-center mb-1">
+    🚦 Traffic Rules & Penalties Guide
+  </h2>
+  <p class="text-center text-sm text-gray-500 mb-6">
+    Know the rule • Avoid the fine • Stay safe
+  </p>
 
-    <button id="searchBtn" class="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold w-full hover:bg-blue-600">
-      Search Challans
-    </button>
+  <!-- Search -->
+  <input
+    type="text"
+    id="ruleSearch"
+    placeholder="Search violation (helmet, signal, license...)"
+    class="w-full mb-5 px-4 py-2 rounded-lg bg-gray-50 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+    onkeyup="filterTrafficRules()"
+  />
+
+  <!-- Table -->
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm border border-gray-300 rounded-lg overflow-hidden" id="rulesTable">
+      <thead class="bg-gray-100 text-gray-700">
+        <tr>
+          <th class="px-4 py-3 text-left font-medium">Violation</th>
+          <th class="px-4 py-3 text-left font-medium">Fine (₹)</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3">Riding without helmet</td>
+          <td class="px-4 py-3">1000</td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3">Not wearing seat belt</td>
+          <td class="px-4 py-3">1000</td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3">Signal jumping</td>
+          <td class="px-4 py-3">1000</td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3">Over-speeding</td>
+          <td class="px-4 py-3">1000 – 2000</td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3">Using mobile while driving</td>
+          <td class="px-4 py-3">1000</td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3">Driving without license</td>
+          <td class="px-4 py-3">5000</td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3">Driving without insurance</td>
+          <td class="px-4 py-3">2000</td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3">Wrong-side driving</td>
+          <td class="px-4 py-3">1000</td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3">Drunk and drive</td>
+          <td class="px-4 py-3">10000 + Jail</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <div id="output" class="mt-6 max-w-xl mx-auto"></div>
+  <!-- Tip -->
+  <div class="mt-6 flex items-start gap-3 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg text-sm text-green-800">
+    💡 Paying challans on time helps avoid legal trouble and extra penalties.
+  </div>
+
+  <!-- Rights -->
+  <div class="mt-6 bg-gray-50 p-5 rounded-xl border border-gray-200">
+    <h3 class="text-lg font-semibold text-orange-600 mb-3">
+      ⚖️ Know Your Rights
+    </h3>
+    <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+      <li>Police cannot collect cash without an official receipt.</li>
+      <li>You can verify challan details online anytime.</li>
+      <li>You can dispute an incorrect challan with valid proof.</li>
+    </ul>
+  </div>
+
+  
+
 </section>
 
+
+  <!-- Emergency Contacts -->
+  <div class="bg-red-50 border-2 border-red-200 rounded-xl p-6 mt-8">
+    <h3 class="text-xl font-bold text-red-900 mb-4">🚨 Emergency Contacts</h3>
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="bg-white p-4 rounded-lg text-center hover:shadow-md transition">
+        <p class="text-3xl font-bold text-red-600">100</p>
+        <p class="text-sm text-gray-600">Police Emergency</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg text-center hover:shadow-md transition">
+        <p class="text-3xl font-bold text-red-600">102</p>
+        <p class="text-sm text-gray-600">Ambulance</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg text-center hover:shadow-md transition">
+        <p class="text-3xl font-bold text-red-600">1073</p>
+        <p class="text-sm text-gray-600">Traffic Helpline</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+<!-- ====================== POLICE STATION LOCATOR (FIXED) ====================== -->
+<section class="container mx-auto px-6 py-12" id="policeStationSection">
+  
+  <!-- Header -->
+  <div class="text-center mb-10">
+    <h2 class="text-4xl font-bold text-blue-900 mb-3"> Find Nearest Police Station</h2>
+    <p class="text-gray-600 text-lg">Locate police stations near you for emergency assistance</p>
+  </div>
+
+  <!-- Location Button -->
+  <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-800">Your Location</p>
+          <p class="text-sm text-gray-500" id="policeLocationText">Click button to detect</p>
+        </div>
+      </div>
+      
+      <button 
+        id="policeFindBtn" 
+        class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-md"
+        onclick="findMyPoliceStations()"
+      >
+       Find Nearby Stations
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div id="policeLoadingState" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8">
+    <div class="flex flex-col items-center justify-center">
+      <div class="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+      <p class="text-gray-700 font-semibold">Locating police stations near you...</p>
+      <p class="text-gray-500 text-sm mt-2">This may take a few seconds</p>
+    </div>
+  </div>
+
+  <!-- Map Container -->
+  <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <h3 class="text-2xl font-bold text-gray-800 mb-4"> Map View</h3>
+    <div id="myPoliceMap" style="height: 500px; width: 100%; border-radius: 12px; border: 2px solid #e5e7eb;"></div>
+  </div>
+
+  <!-- Results Container -->
+  <div id="policeResultsBox" class="hidden">
+    <h3 class="text-2xl font-bold text-gray-800 mb-6"> Nearby Police Stations</h3>
+    <div id="policeStationsListBox" class="grid md:grid-cols-2 gap-6"></div>
+  </div>
+
+  <!-- No Results Message -->
+  <div id="noPoliceResultsBox" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-lg">
+    <div class="flex items-center">
+      <svg class="w-6 h-6 text-yellow-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+      </svg>
+      <div>
+        <p class="font-semibold text-yellow-800">No police stations found nearby</p>
+        <p class="text-sm text-yellow-700">Try again or check your location settings</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emergency Contacts -->
+  <div class="bg-red-50 border-2 border-red-200 rounded-xl p-6 mt-8">
+    <h3 class="text-xl font-bold text-red-900 mb-4">🚨 Emergency Contacts</h3>
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="bg-white p-4 rounded-lg text-center hover:shadow-md transition">
+        <p class="text-3xl font-bold text-red-600">100</p>
+        <p class="text-sm text-gray-600">Police Emergency</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg text-center hover:shadow-md transition">
+        <p class="text-3xl font-bold text-red-600">102</p>
+        <p class="text-sm text-gray-600">Ambulance</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg text-center hover:shadow-md transition">
+        <p class="text-3xl font-bold text-red-600">1073</p>
+        <p class="text-sm text-gray-600">Traffic Helpline</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- Police Locator Script - CLEAN VERSION -->
 <script>
-const searchBtn = document.getElementById("searchBtn");
+// Global variables for police station locator
+var myPoliceMap = null;
+var myUserMarker = null;
+var myPoliceMarkers = [];
+var myUserLat = null;
+var myUserLng = null;
 
-searchBtn.addEventListener("click", () => {
-    const vehicle = document.getElementById("vehicle").value.trim().toUpperCase();
-    const challan = document.getElementById("challan").value.trim().toUpperCase();
-    const license = document.getElementById("license").value.trim().toUpperCase();
-    const status = document.getElementById("status").value;
-    const violation = document.getElementById("violation").value;
-    const from = document.getElementById("from").value;
-    const to = document.getElementById("to").value;
-
-    if (!vehicle && !challan && !license) {
-        alert("Enter at least one filter (Vehicle, Challan, or License)");
-        return;
-    }
-
-    // Fetch from backend
-    const params = new URLSearchParams({
-        action: "search_challans",
-        vehicle, challan, license, status, violation, from, to
-    });
-
-    fetch("api/api.php?" + params.toString())
-    .then(res => res.json())
-    .then(data => {
-        displayResults(data);
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error fetching challans");
-    });
+// Initialize map when page loads
+window.addEventListener('load', function() {
+  console.log('Initializing police map...');
+  
+  // Check if Leaflet is loaded
+  if (typeof L === 'undefined') {
+    console.error('Leaflet is not loaded!');
+    alert('Map library not loaded. Please refresh the page.');
+    return;
+  }
+  
+  try {
+    myPoliceMap = L.map('myPoliceMap').setView([20.5937, 78.9629], 5);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(myPoliceMap);
+    
+    console.log('Police map initialized successfully');
+  } catch(e) {
+    console.error('Error initializing map:', e);
+  }
 });
 
-function displayResults(challans) {
-    const out = document.getElementById("output");
-    out.innerHTML = "";
+// Custom marker icons
+var blueIconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png';
+var redIconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png';
+var shadowUrl = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png';
 
-    if(!challans || challans.length === 0){
-        out.innerHTML = `<div class="bg-gray-100 p-4 rounded-lg text-center">No challans found.</div>`;
-        return;
-    }
+var blueMarkerIcon = L.icon({
+  iconUrl: blueIconUrl,
+  shadowUrl: shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
 
-    challans.forEach(ch => {
-        out.innerHTML += `
-        <div class="bg-blue-50 p-4 rounded-lg mb-4 shadow-sm">
-            <p><strong>Challan No:</strong> ${ch.challanNo}</p>
-            <p><strong>Vehicle:</strong> ${ch.vehicle}</p>
-            <p><strong>License:</strong> ${ch.license}</p>
-            <p><strong>Violation:</strong> ${ch.violation}</p>
-            <p><strong>Date:</strong> ${ch.date}</p>
-            <p><strong>Amount:</strong> ₹${ch.amount}</p>
-            <p><strong>Status:</strong> <span class="${ch.status==='Paid'?'text-green-600':'text-red-600'}">${ch.status}</span></p>
-        </div>`;
-    });
-}
-</script>
+var redMarkerIcon = L.icon({
+  iconUrl: redIconUrl,
+  shadowUrl: shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
 
-<script>
-// Dummy challan data (replace with real API if available)
-const challans = [
-    { challanNo:"CH001", vehicle:"TS09AB1234", license:"DL09XY0001", violation:"No Helmet", date:"2025-01-05", amount:500, status:"Unpaid" },
-    { challanNo:"CH002", vehicle:"TS09AB1234", license:"DL09XY0001", violation:"Signal Jump", date:"2025-01-15", amount:1000, status:"Paid" },
-    { challanNo:"CH003", vehicle:"TS10CD7788", license:"DL55AB9001", violation:"Overspeeding", date:"2025-02-10", amount:1500, status:"Unpaid" },
-    { challanNo:"CH004", vehicle:"TS10CD7788", license:"DL55AB9001", violation:"Wrong Parking", date:"2025-03-01", amount:200, status:"Paid" }
-];
-
-function searchChallans() {
-    const v = document.getElementById("vehicle").value.trim().toUpperCase();
-    const c = document.getElementById("challan").value.trim().toUpperCase();
-    const l = document.getElementById("license").value.trim().toUpperCase();
-    const status = document.getElementById("status").value;
-    const violation = document.getElementById("violation").value;
-    const from = document.getElementById("from").value;
-    const to = document.getElementById("to").value;
-
-    let result = challans.filter(ch => 
-        (!v || ch.vehicle.includes(v)) &&
-        (!c || ch.challanNo.includes(c)) &&
-        (!l || ch.license.includes(l)) &&
-        (!status || ch.status === status) &&
-        (!violation || ch.violation === violation) &&
-        (!from || ch.date >= from) &&
-        (!to || ch.date <= to)
+// Main function to find police stations
+function findMyPoliceStations() {
+  console.log('Find button clicked!');
+  
+  var btn = document.getElementById('policeFindBtn');
+  var loadingState = document.getElementById('policeLoadingState');
+  var resultsBox = document.getElementById('policeResultsBox');
+  var noResultsBox = document.getElementById('noPoliceResultsBox');
+  var locationText = document.getElementById('policeLocationText');
+  
+  // Reset UI
+  resultsBox.classList.add('hidden');
+  noResultsBox.classList.add('hidden');
+  loadingState.classList.remove('hidden');
+  btn.disabled = true;
+  btn.textContent = '⏳ Detecting Location...';
+  
+  // Clear previous markers
+  myPoliceMarkers.forEach(function(marker) {
+    myPoliceMap.removeLayer(marker);
+  });
+  myPoliceMarkers = [];
+  
+  if (myUserMarker) {
+    myPoliceMap.removeLayer(myUserMarker);
+  }
+  
+  // Get user location
+  if (navigator.geolocation) {
+    console.log('Requesting location...');
+    
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        console.log('Location received:', position.coords);
+        
+        myUserLat = position.coords.latitude;
+        myUserLng = position.coords.longitude;
+        
+        locationText.textContent = 'Location: ' + myUserLat.toFixed(4) + ', ' + myUserLng.toFixed(4);
+        locationText.className = 'text-sm text-green-600 font-semibold';
+        
+        // Center map on user
+        myPoliceMap.setView([myUserLat, myUserLng], 14);
+        
+        // Add user marker
+        myUserMarker = L.marker([myUserLat, myUserLng], {icon: blueMarkerIcon})
+          .addTo(myPoliceMap)
+          .bindPopup('<b>Your Location</b>')
+          .openPopup();
+        
+        // Search for police stations
+        searchNearbyPoliceStations(myUserLat, myUserLng);
+      },
+      function(error) {
+        console.error('Location error:', error);
+        
+        loadingState.classList.add('hidden');
+        btn.disabled = false;
+        btn.textContent = '📍 Find Nearby Stations';
+        
+        var errorMsg = 'Unable to detect location';
+        if (error.code === 1) {
+          errorMsg = 'Location permission denied. Please enable location access.';
+        } else if (error.code === 2) {
+          errorMsg = 'Location unavailable. Please try again.';
+        } else if (error.code === 3) {
+          errorMsg = 'Location request timed out. Please try again.';
+        }
+        
+        locationText.textContent = errorMsg;
+        locationText.className = 'text-sm text-red-600';
+        alert(errorMsg);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
     );
-
-    displayResults(result);
+  } else {
+    loadingState.classList.add('hidden');
+    btn.disabled = false;
+    btn.textContent = '📍 Find Nearby Stations';
+    alert('Geolocation is not supported by your browser');
+  }
 }
 
-function displayResults(result) {
-    const out = document.getElementById("output");
-    out.innerHTML = "";
-
-    if(result.length === 0) {
-        out.innerHTML = `<div class="bg-gray-100 p-4 rounded-lg text-center">No challans found.</div>`;
-        return;
+// Search using Overpass API
+function searchNearbyPoliceStations(lat, lng) {
+  console.log('Searching police stations near:', lat, lng);
+  
+  var radius = 5000; // 5km
+  var overpassUrl = 'https://overpass-api.de/api/interpreter';
+  
+  var query = '[out:json][timeout:25];' +
+    '(node["amenity"="police"](around:' + radius + ',' + lat + ',' + lng + ');' +
+    'way["amenity"="police"](around:' + radius + ',' + lat + ',' + lng + ');' +
+    'relation["amenity"="police"](around:' + radius + ',' + lat + ',' + lng + ');' +
+    ');out center;';
+  
+  fetch(overpassUrl, {
+    method: 'POST',
+    body: 'data=' + encodeURIComponent(query),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
-
-    result.forEach(ch => {
-        out.innerHTML += `
-        <div class="bg-blue-50 p-4 rounded-lg mb-4 shadow-sm">
-            <p><strong>Challan No:</strong> ${ch.challanNo}</p>
-            <p><strong>Vehicle:</strong> ${ch.vehicle}</p>
-            <p><strong>License:</strong> ${ch.license}</p>
-            <p><strong>Violation:</strong> ${ch.violation}</p>
-            <p><strong>Date:</strong> ${ch.date}</p>
-            <p><strong>Amount:</strong> ₹${ch.amount}</p>
-            <p><strong>Status:</strong> <span class="${ch.status==='Paid'?'text-green-600':'text-red-600'}">${ch.status}</span></p>
-        </div>`;
-    });
+  })
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(data) {
+    console.log('Received police stations:', data.elements.length);
+    displayPoliceStations(data.elements);
+  })
+  .catch(function(error) {
+    console.error('Error fetching stations:', error);
+    
+    var loadingState = document.getElementById('policeLoadingState');
+    var noResultsBox = document.getElementById('noPoliceResultsBox');
+    var btn = document.getElementById('policeFindBtn');
+    
+    loadingState.classList.add('hidden');
+    noResultsBox.classList.remove('hidden');
+    btn.disabled = false;
+    btn.textContent = '🔄 Try Again';
+  });
 }
+
+// Display police stations
+function displayPoliceStations(stations) {
+  var loadingState = document.getElementById('policeLoadingState');
+  var resultsBox = document.getElementById('policeResultsBox');
+  var listBox = document.getElementById('policeStationsListBox');
+  var noResultsBox = document.getElementById('noPoliceResultsBox');
+  var btn = document.getElementById('policeFindBtn');
+  
+  loadingState.classList.add('hidden');
+  btn.disabled = false;
+  btn.textContent = '🔄 Refresh Results';
+  
+  if (stations.length === 0) {
+    noResultsBox.classList.remove('hidden');
+    return;
+  }
+  
+  // Process stations
+  var processed = [];
+  stations.forEach(function(station) {
+    var stationLat = station.lat || (station.center ? station.center.lat : null);
+    var stationLng = station.lon || (station.center ? station.center.lon : null);
+    
+    if (stationLat && stationLng) {
+      processed.push({
+        name: station.tags.name || 'Police Station',
+        lat: stationLat,
+        lng: stationLng,
+        address: station.tags['addr:full'] || station.tags['addr:street'] || 'Address not available',
+        distance: getDistanceKm(myUserLat, myUserLng, stationLat, stationLng)
+      });
+    }
+  });
+  
+  // Sort by distance
+  processed.sort(function(a, b) {
+    return a.distance - b.distance;
+  });
+  
+  // Display
+  resultsBox.classList.remove('hidden');
+  listBox.innerHTML = '';
+  
+  processed.slice(0, 10).forEach(function(station, index) {
+    addPoliceStationMarker(station, index + 1);
+    createPoliceStationCard(station, index + 1);
+  });
+}
+
+// Add marker
+function addPoliceStationMarker(station, num) {
+  var marker = L.marker([station.lat, station.lng], {icon: redMarkerIcon})
+    .addTo(myPoliceMap)
+    .bindPopup(
+      '<div style="padding: 8px;">' +
+      '<h3 style="font-weight: bold; margin-bottom: 4px;">' + num + '. ' + station.name + '</h3>' +
+      '<p style="font-size: 12px; color: #666; margin-bottom: 4px;">' + station.address + '</p>' +
+      '<p style="font-size: 12px; font-weight: 600; color: #2563eb;">📍 ' + station.distance.toFixed(2) + ' km away</p>' +
+      '</div>'
+    );
+  
+  myPoliceMarkers.push(marker);
+}
+
+// Create card
+function createPoliceStationCard(station, num) {
+  var listBox = document.getElementById('policeStationsListBox');
+  
+  var card = document.createElement('div');
+  card.className = 'bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all cursor-pointer';
+  
+  card.innerHTML = 
+    '<div class="flex items-start justify-between mb-3">' +
+      '<div class="flex items-center gap-2">' +
+        '<span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">' + num + '</span>' +
+        '<h4 class="font-bold text-lg text-gray-800">' + station.name + '</h4>' +
+      '</div>' +
+    '</div>' +
+    '<p class="text-gray-600 text-sm mb-3 flex items-start gap-2">' +
+      '<svg class="w-4 h-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">' +
+        '<path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>' +
+      '</svg>' +
+      '<span>' + station.address + '</span>' +
+    '</p>' +
+    '<div class="flex items-center justify-between text-sm">' +
+      '<span class="text-blue-600 font-semibold">📍 ' + station.distance.toFixed(2) + ' km away</span>' +
+      '<a href="https://www.google.com/maps/dir/?api=1&origin=' + myUserLat + ',' + myUserLng + '&destination=' + station.lat + ',' + station.lng + '" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-xs font-semibold">Get Directions</a>' +
+    '</div>';
+  
+  card.addEventListener('click', function() {
+    myPoliceMap.setView([station.lat, station.lng], 16);
+    myPoliceMarkers[num - 1].openPopup();
+  });
+  
+  listBox.appendChild(card);
+}
+
+// Calculate distance
+function getDistanceKm(lat1, lon1, lat2, lon2) {
+  var R = 6371;
+  var dLat = (lat2 - lat1) * Math.PI / 180;
+  var dLon = (lon2 - lon1) * Math.PI / 180;
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+          Math.sin(dLon/2) * Math.sin(dLon/2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
+console.log('Police locator script loaded');
 </script>
+
 
 <!-- Safe Driving Mini Game -->
 <section class="bg-white rounded-xl shadow-lg p-6 mt-10 max-w-md mx-auto">
@@ -441,6 +784,16 @@ function displayResults(result) {
     </button>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
 
 <!-- JS -->
 <script>
@@ -554,6 +907,12 @@ loadSDQuestion();
     cursor: pointer;
   }
 </style>
+
+
+</script>
+
+
+
 
 <a href="https://wa.me/8897752518?text=Hello%20Legal%20Assist,%20I%20need%20help%20with%20your%20services" target="_blank" id="whatsapp-button">
   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="Chat with us on WhatsApp">

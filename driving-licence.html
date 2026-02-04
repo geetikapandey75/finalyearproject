@@ -8,7 +8,6 @@
 </head>
 <body class="bg-gray-50 font-sans text-gray-900">
 
-  <!-- Existing Navigation Bar -->
   <header class="bg-gray-900 text-white p-4">
     <div class="container mx-auto flex justify-between items-center">
       <h1 class="text-xl font-bold">Legal Assist</h1>
@@ -21,35 +20,30 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
   <section class="text-center py-16 bg-gradient-to-r from-gray-800 to-gray-600 text-white">
     <h2 class="text-4xl font-bold mb-4">Driving Licence Services</h2>
-    <p class="mb-6 text-lg">Apply, check status, upload documents, find agents & learn the rules — all in one place.</p>
+    <p class="mb-6 text-lg">Apply, check status, upload documents, find agents & learn the rules</p>
   </section>
 
-  <!-- Content -->
   <main class="container mx-auto px-6 py-12 space-y-12">
 
-    <!-- Two Huge Buttons for License Types -->
     <section id="licenseChoice" class="bg-white rounded-xl shadow-lg p-8">
       <h3 class="text-2xl font-bold mb-6 text-center">Choose Your Licence Type</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
         <button onclick="showLearnerTest()" class="bg-blue-600 text-white px-12 py-16 rounded-xl font-bold text-3xl hover:bg-blue-500 transition shadow-xl">
-          🎓 LEARNER'S LICENCE
+          LEARNER'S LICENCE
         </button>
         <button onclick="showPermanentTest()" class="bg-green-600 text-white px-12 py-16 rounded-xl font-bold text-3xl hover:bg-green-500 transition shadow-xl">
-          🚗 PERMANENT LICENCE
+          PERMANENT LICENCE
         </button>
       </div>
     </section>
 
-    <!-- Learner's Licence Test Section -->
     <section id="learnerTest" class="bg-white rounded-xl shadow-lg p-8 hidden">
       <h3 class="text-2xl font-bold mb-4">Learner's Licence Test</h3>
       <p class="mb-4 text-gray-700">Answer all 10 questions correctly. You need at least 5/10 to apply.</p>
 
       <div id="learnerQuiz" class="space-y-4 max-w-xl mx-auto">
-        <!-- Question 1 -->
         <div>
           <label class="block font-semibold mb-2">1. What does a red traffic light mean?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="stop" required>
@@ -60,7 +54,6 @@
           </select>
         </div>
 
-        <!-- Question 2 -->
         <div>
           <label class="block font-semibold mb-2">2. Wearing a helmet while riding a two-wheeler is?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="mandatory" required>
@@ -71,7 +64,6 @@
           </select>
         </div>
 
-        <!-- Question 3 -->
         <div>
           <label class="block font-semibold mb-2">3. Speed limit in a city area is usually?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="50" required>
@@ -82,7 +74,6 @@
           </select>
         </div>
 
-        <!-- Question 4 -->
         <div>
           <label class="block font-semibold mb-2">4. What should you do at a yellow traffic light?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="slow" required>
@@ -93,7 +84,6 @@
           </select>
         </div>
 
-        <!-- Question 5 -->
         <div>
           <label class="block font-semibold mb-2">5. Pedestrian crossing should be used by?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="pedestrians" required>
@@ -104,7 +94,6 @@
           </select>
         </div>
 
-        <!-- Question 6 -->
         <div>
           <label class="block font-semibold mb-2">6. Is it allowed to use a mobile phone while driving?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="no" required>
@@ -115,7 +104,6 @@
           </select>
         </div>
 
-        <!-- Question 7 -->
         <div>
           <label class="block font-semibold mb-2">7. What does a yield sign indicate?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="slow" required>
@@ -126,7 +114,6 @@
           </select>
         </div>
 
-        <!-- Question 8 -->
         <div>
           <label class="block font-semibold mb-2">8. Maximum penalty for drunk driving can include?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="both" required>
@@ -137,7 +124,6 @@
           </select>
         </div>
 
-        <!-- Question 9 -->
         <div>
           <label class="block font-semibold mb-2">9. At a roundabout, vehicles must?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="clockwise" required>
@@ -148,7 +134,6 @@
           </select>
         </div>
 
-        <!-- Question 10 -->
         <div>
           <label class="block font-semibold mb-2">10. Parking on a highway shoulder is?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="allowed" required>
@@ -167,13 +152,11 @@
       <p id="learnerResult" class="mt-4 font-bold text-center text-lg"></p>
     </section>
 
-    <!-- Permanent Licence Test Section -->
     <section id="permanentTest" class="bg-white rounded-xl shadow-lg p-8 hidden">
       <h3 class="text-2xl font-bold mb-4">Permanent Licence Test</h3>
       <p class="mb-4 text-gray-700">Answer all 10 questions correctly. You need at least 5/10 to apply.</p>
 
       <div id="permanentQuiz" class="space-y-4 max-w-xl mx-auto">
-        <!-- Question 1 -->
         <div>
           <label class="block font-semibold mb-2">1. Maximum speed on a national highway in India is?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="100" required>
@@ -184,7 +167,6 @@
           </select>
         </div>
 
-        <!-- Question 2 -->
         <div>
           <label class="block font-semibold mb-2">2. When overtaking another vehicle, you should?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="right" required>
@@ -195,7 +177,6 @@
           </select>
         </div>
 
-        <!-- Question 3 -->
         <div>
           <label class="block font-semibold mb-2">3. At an uncontrolled intersection, you should?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="slow" required>
@@ -206,7 +187,6 @@
           </select>
         </div>
 
-        <!-- Question 4 -->
         <div>
           <label class="block font-semibold mb-2">4. The safe following distance between vehicles is?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="2sec" required>
@@ -217,7 +197,6 @@
           </select>
         </div>
 
-        <!-- Question 5 -->
         <div>
           <label class="block font-semibold mb-2">5. When parking uphill without a curb, turn your wheels?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="right" required>
@@ -228,7 +207,6 @@
           </select>
         </div>
 
-        <!-- Question 6 -->
         <div>
           <label class="block font-semibold mb-2">6. Using high beam headlights in city areas is?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="not-allowed" required>
@@ -239,7 +217,6 @@
           </select>
         </div>
 
-        <!-- Question 7 -->
         <div>
           <label class="block font-semibold mb-2">7. A continuous yellow line on the road means?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="no-overtaking" required>
@@ -250,7 +227,6 @@
           </select>
         </div>
 
-        <!-- Question 8 -->
         <div>
           <label class="block font-semibold mb-2">8. Before changing lanes, you must?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="all" required>
@@ -261,7 +237,6 @@
           </select>
         </div>
 
-        <!-- Question 9 -->
         <div>
           <label class="block font-semibold mb-2">9. The validity of a permanent driving licence is?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="20years" required>
@@ -272,7 +247,6 @@
           </select>
         </div>
 
-        <!-- Question 10 -->
         <div>
           <label class="block font-semibold mb-2">10. When an ambulance is approaching with sirens, you should?</label>
           <select class="w-full p-3 border rounded-lg" data-answer="give-way" required>
@@ -291,17 +265,15 @@
       <p id="permanentResult" class="mt-4 font-bold text-center text-lg"></p>
     </section>
 
-    <!-- Flashcards Section -->
     <section id="flashcardsSection" class="bg-white rounded-xl shadow-lg p-8 hidden">
       <h3 class="text-2xl font-bold mb-4">Traffic Signs Flashcards</h3>
       <p class="mb-4 text-gray-700">Study these important traffic signs before your test.</p>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         
-        <!-- Flashcard 1 -->
         <div class="perspective">
           <div class="relative w-full h-40 transform-style-preserve-3d transition-transform duration-500 hover:rotate-y-180">
             <div class="absolute w-full h-full bg-yellow-300 flex items-center justify-center rounded-lg backface-hidden font-bold text-3xl">
-              🚦
+              LIGHT
             </div>
             <div class="absolute w-full h-full bg-green-200 flex items-center justify-center rounded-lg backface-hidden rotate-y-180 font-semibold text-center px-2">
               Traffic Light - Stop / Go / Slow
@@ -309,11 +281,10 @@
           </div>
         </div>
 
-        <!-- Flashcard 2 -->
         <div class="perspective">
           <div class="relative w-full h-40 transform-style-preserve-3d transition-transform duration-500 hover:rotate-y-180">
             <div class="absolute w-full h-full bg-red-300 flex items-center justify-center rounded-lg backface-hidden font-bold text-3xl">
-              ⛔
+              STOP
             </div>
             <div class="absolute w-full h-full bg-blue-200 flex items-center justify-center rounded-lg backface-hidden rotate-y-180 font-semibold text-center px-2">
               No Entry
@@ -321,11 +292,10 @@
           </div>
         </div>
 
-        <!-- Flashcard 3 -->
         <div class="perspective">
           <div class="relative w-full h-40 transform-style-preserve-3d transition-transform duration-500 hover:rotate-y-180">
             <div class="absolute w-full h-full bg-orange-300 flex items-center justify-center rounded-lg backface-hidden font-bold text-3xl">
-              🛑
+              HALT
             </div>
             <div class="absolute w-full h-full bg-purple-200 flex items-center justify-center rounded-lg backface-hidden rotate-y-180 font-semibold text-center px-2">
               Stop Sign
@@ -333,11 +303,10 @@
           </div>
         </div>
 
-        <!-- Flashcard 4 -->
         <div class="perspective">
           <div class="relative w-full h-40 transform-style-preserve-3d transition-transform duration-500 hover:rotate-y-180">
             <div class="absolute w-full h-full bg-green-300 flex items-center justify-center rounded-lg backface-hidden font-bold text-3xl">
-              🛣️
+              ROAD
             </div>
             <div class="absolute w-full h-full bg-yellow-200 flex items-center justify-center rounded-lg backface-hidden rotate-y-180 font-semibold text-center px-2">
               Highway / Expressway
@@ -353,16 +322,15 @@
       </div>
     </section>
 
-    <!-- Calendar Section -->
     <section id="calendar" class="bg-white rounded-xl shadow-lg p-8">
       <h3 class="text-2xl font-bold mb-4">Test Schedule Calendar</h3>
       <p class="mb-4 text-gray-700">View available test dates and plan your driving test accordingly.</p>
       
       <div class="max-w-3xl mx-auto">
         <div class="flex justify-between items-center mb-4">
-          <button onclick="prevMonth()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500">← Previous</button>
+          <button onclick="prevMonth()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500">Previous</button>
           <h4 id="monthYear" class="text-xl font-bold"></h4>
-          <button onclick="nextMonth()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500">Next →</button>
+          <button onclick="nextMonth()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500">Next</button>
         </div>
         
         <div class="grid grid-cols-7 gap-2">
@@ -397,7 +365,6 @@
       </div>
     </section>
 
-    <!-- Guidelines -->
     <section id="guidelines" class="bg-white rounded-xl shadow-lg p-8">
       <h3 class="text-2xl font-bold mb-4">Eligibility & Rules</h3>
       <ul class="list-disc list-inside space-y-2 text-gray-700">
@@ -411,15 +378,14 @@
       </ul>
     </section>
 
-    <!-- Apply Form -->
     <section id="apply" class="bg-white rounded-xl shadow-lg p-8 hidden">
       <h3 class="text-2xl font-bold mb-6">Apply for Driving Licence</h3>
 
       <div class="bg-green-100 border-l-4 border-green-500 p-4 mb-6">
-        <p class="font-semibold text-green-700">✓ Test Passed! You can now apply for your licence.</p>
+        <p class="font-semibold text-green-700">Test Passed! You can now apply for your licence.</p>
       </div>
 
-      <div class="space-y-6 max-w-2xl mx-auto">
+      <form action="drive.php" method="POST" class="space-y-6 max-w-2xl mx-auto">
         <div>
           <label class="block font-semibold mb-2">Full Name</label>
           <input type="text" name="full_name" class="w-full p-4 border rounded-lg" placeholder="Enter your name" required>
@@ -427,7 +393,7 @@
 
         <div>
           <label class="block font-semibold mb-2">Date of Birth</label>
-          <input type="date" name="dob" class="w-full p-4 border rounded-lg" required>
+          <input type="date" name="date_of_birth" class="w-full p-4 border rounded-lg" required>
         </div>
 
         <div>
@@ -437,118 +403,164 @@
 
         <div>
           <label class="block font-semibold mb-2">Phone Number</label>
-          <input type="tel" name="phone" class="w-full p-4 border rounded-lg" placeholder="Enter your phone number" required>
+          <input type="tel" name="phone_number" class="w-full p-4 border rounded-lg" placeholder="Enter your phone number" required>
         </div>
 
         <button type="submit" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full">
           Submit Application
         </button>
-      </div>
+      </form>
     </section>
 
-    <!-- Sections below only shown when not in test mode -->
     <div id="otherSections">
-      <!-- Application Status -->
-<section id="status" class="bg-white rounded-xl shadow-lg p-8">
-  <h3 class="text-2xl font-bold mb-4">Check Application Status</h3>
+      <section id="status" class="bg-white rounded-xl shadow-lg p-8">
+        <h3 class="text-2xl font-bold mb-4">Check Application Status</h3>
 
-  <form action="driving-form.php" method="POST" class="space-y-4 max-w-md mx-auto">
-    
-    <!-- tells backend what to do -->
-    <input type="hidden" name="action" value="check_status">
+        <form action="drive.php" method="POST" class="space-y-4 max-w-md mx-auto">
+          <input type="hidden" name="action" value="check_status">
 
-    <input 
-      type="text" 
-      name="application_id"
-      class="w-full p-4 border rounded-lg"
-      placeholder="Enter Application ID"
-      required
-    >
+          <input 
+            type="text" 
+            name="application_id"
+            class="w-full p-4 border rounded-lg"
+            placeholder="Enter Application ID"
+            required
+          >
 
-    <button 
-      type="submit"
-      class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full"
-    >
-      Check Status
-    </button>
-
-  </form>
-</section>
-
-
-      <!-- Upload Documents -->
-      <section id="upload" class="bg-white rounded-xl shadow-lg p-8">
-        <h3 class="text-2xl font-bold mb-4">Upload Required Documents</h3>
-        <div class="space-y-4 max-w-md mx-auto">
-          <input type="file" class="w-full p-4 border rounded-lg" required>
-          <button type="submit" class="bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-400 w-full">Upload</button>
-        </div>
+          <button 
+            type="submit"
+            class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full"
+          >
+            Check Status
+          </button>
+        </form>
       </section>
 
-      <!-- Agents -->
+      <section id="upload" class="bg-white rounded-xl shadow-lg p-8">
+        <h3 class="text-2xl font-bold mb-4">Upload Required Documents</h3>
+        <form action="drive.php" method="POST" enctype="multipart/form-data" class="space-y-4 max-w-md mx-auto">
+          <input type="hidden" name="action" value="upload_document">
+          <input type="file" name="document" class="w-full p-4 border rounded-lg" required>
+          <button type="submit" class="bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-400 w-full">Upload</button>
+        </form>
+      </section>
+
       <section id="agents" class="bg-white rounded-xl shadow-lg p-8">
         <h3 class="text-2xl font-bold mb-4">Find a Driving Licence Agent</h3>
         <p class="text-gray-700 mb-4">Need help with the process? Find registered agents near you.</p>
-        <a href="https://www.google.com/search?q=driving+licence+agent+near+me" target="_blank" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-500">Search Agents</a>
+        <a href="https://www.google.com/search?q=driving+licence+agent+near+me" target="_blank" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-500 inline-block">Search Agents</a>
       </section>
 
-      <!-- Slot Booking -->
       <section id="slotBooking" class="bg-white rounded-xl shadow-lg p-8">
-  <h3 class="text-2xl font-bold mb-4">Book a Slot for Driving Test</h3>
+        <h3 class="text-2xl font-bold mb-4">Book a Slot for Driving Test</h3>
 
-  <form action="driving-backend.php" method="POST" class="space-y-4 max-w-md mx-auto">
+        <form action="drive.php" method="POST" class="space-y-4 max-w-md mx-auto">
+          <input type="hidden" name="action" value="book_slot">
 
-    <!-- tells backend this is slot booking -->
-    <input type="hidden" name="action" value="book_slot">
+           <!-- Applicant Name -->
+    <div>
+      <label class="block font-semibold mb-1">Applicant Name</label>
+      <input
+        type="text"
+        name="applicant_name"
+        class="w-full p-4 border rounded-lg"
+        placeholder="Enter full name"
+        required
+      >
+    </div>
 
-    <label class="block font-semibold">Select Date</label>
-    <input 
-      type="date" 
-      name="test_date" 
-      class="w-full p-4 border rounded-lg" 
-      required
-    >
+    <!-- Applicant Age -->
+    <div>
+      <label class="block font-semibold mb-1">Age</label>
+      <input
+        type="number"
+        name="applicant_age"
+        min="18"
+        class="w-full p-4 border rounded-lg"
+        placeholder="Enter age"
+        required
+      >
+    </div>
 
-    <label class="block font-semibold">Select Time</label>
-    <select 
-      name="test_time" 
-      class="w-full p-4 border rounded-lg" 
-      required
-    >
-      <option value="">Select slot</option>
-      <option value="09:00">09:00 AM</option>
-      <option value="11:00">11:00 AM</option>
-      <option value="13:00">01:00 PM</option>
-      <option value="15:00">03:00 PM</option>
-    </select>
+    <!-- Applicant Address -->
+    <div>
+      <label class="block font-semibold mb-1">Address</label>
+      <textarea
+        name="applicant_address"
+        class="w-full p-4 border rounded-lg"
+        rows="3"
+        placeholder="Enter full address"
+        required
+      ></textarea>
+    </div>
 
-    <label class="block font-semibold">Select Location</label>
-    <select 
-      name="test_location" 
-      class="w-full p-4 border rounded-lg" 
-      required
-    >
-      <option value="">Select RTO / Test Center</option>
-      <option value="KPHB RTO">KPHB RTO</option>
-      <option value="Amberpet RTO">Amberpet RTO</option>
-      <option value="HITEC City RTO">HITEC City RTO</option>
-      <option value="Nallakunta RTO">Nallakunta RTO</option>
-      <option value="Gachibowli Driving Test Center">Gachibowli Driving Test Center</option>
-      <option value="Malkajgiri RTO">Malkajgiri RTO</option>
-    </select>
+    <!-- Test Date -->
+    <div>
+      <label class="block font-semibold mb-1">Select Date</label>
+      <input
+        type="date"
+        name="test_date"
+        class="w-full p-4 border rounded-lg"
+        required
+      >
+    </div>
 
-    <button 
-      type="submit" 
+    <!-- Test Time -->
+    <div>
+      <label class="block font-semibold mb-1">Select Time</label>
+      <select
+        name="test_time"
+        class="w-full p-4 border rounded-lg"
+        required
+      >
+        <option value="">Select slot</option>
+        <option value="09:00 AM">09:00 AM</option>
+        <option value="11:00 AM">11:00 AM</option>
+        <option value="01:00 PM">01:00 PM</option>
+        <option value="03:00 PM">03:00 PM</option>
+      </select>
+    </div>
+
+    <!-- Test Location -->
+    <div>
+      <label class="block font-semibold mb-1">Select Location</label>
+      <select
+        name="test_location"
+        class="w-full p-4 border rounded-lg"
+        required
+      >
+        <option value="">Select RTO / Test Center</option>
+        <option value="KPHB RTO">KPHB RTO</option>
+        <option value="Amberpet RTO">Amberpet RTO</option>
+        <option value="HITEC City RTO">HITEC City RTO</option>
+        <option value="Nallakunta RTO">Nallakunta RTO</option>
+        <option value="Gachibowli Driving Test Center">Gachibowli Driving Test Center</option>
+        <option value="Malkajgiri RTO">Malkajgiri RTO</option>
+      </select>
+    </div>
+
+    <button
+      type="submit"
       class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full"
     >
       Book Slot
     </button>
-
   </form>
 </section>
 
 
-      <!-- Acts -->
+
+
+
+
+
+
+
+
+
+
+
+
       <section id="acts" class="bg-white rounded-xl shadow-lg p-8">
         <h3 class="text-2xl font-bold mb-4">Acts & Rules</h3>
         <ul class="list-disc list-inside space-y-2 text-gray-700">
@@ -560,7 +572,6 @@
 
   </main>
 
-  <!-- WhatsApp Button -->
   <a id="whatsapp-button" href="https://wa.me/1234567890" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
   </a>
@@ -606,7 +617,6 @@ let currentLicenseType = '';
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 
-// Calendar functionality
 function renderCalendar() {
   const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
@@ -619,14 +629,12 @@ function renderCalendar() {
   const calendarDays = document.getElementById('calendarDays');
   calendarDays.innerHTML = '';
   
-  // Empty cells for days before month starts
   for (let i = 0; i < firstDay; i++) {
     const emptyDiv = document.createElement('div');
     emptyDiv.className = 'p-2';
     calendarDays.appendChild(emptyDiv);
   }
   
-  // Actual days
   const today = new Date();
   for (let day = 1; day <= daysInMonth; day++) {
     const dayDiv = document.createElement('div');
@@ -634,7 +642,6 @@ function renderCalendar() {
                     currentMonth === today.getMonth() && 
                     currentYear === today.getFullYear();
     
-    // Random availability for demo (you can replace with actual data)
     const isAvailable = Math.random() > 0.3;
     
     let bgColor = 'bg-gray-100 hover:bg-gray-200';
@@ -675,7 +682,6 @@ function selectDate(day) {
   alert(`Selected date: ${day}/${currentMonth + 1}/${currentYear}`);
 }
 
-// Initialize calendar on page load
 document.addEventListener('DOMContentLoaded', function() {
   renderCalendar();
 });

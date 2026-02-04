@@ -28,26 +28,11 @@ if ($conn->connect_error) {
     die("Database Connection Failed: " . $conn->connect_error);
 }
 
+// INITIALIZE ALL VARIABLES AT THE TOP
 $errorMsg   = "";
 $trackingID = "";
 $statusResult = "";
-
-// Display success message after payment
-$showSuccessMessage = false;
-if (isset($_GET['payment_success']) && $_GET['payment_success'] == '1' && isset($_GET['tracking_id'])) {
-    $showSuccessMessage = true;
-    $successTrackingID = $_GET['tracking_id'];
-    
-    // Get applicant details
-    $stmt = $conn->prepare("SELECT first_name, service_type, appointment_date, psk_location FROM passport_appointments WHERE tracking_id = ?");
-    $stmt->bind_param("s", $successTrackingID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows > 0) {
-        $successData = $result->fetch_assoc();
-    }
-    $stmt->close();
-}
+$trackingData = null;
 
 // Handle appointment form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit_appointment'])) {
@@ -109,8 +94,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit_appointment'])
                 $inserted_id = $conn->insert_id;
                 $stmt->close();
                 
-                // FIXED: Redirect with correct parameter name that payment_gateway.php expects
-                header("Location: payment_gateway.php?service=passport&id=" . $inserted_id . "&amount=" . $paymentAmount);
+                // Store data in session for payment page
+                $_SESSION['payment_data'] = [
+                    'service_type' => 'passport',
+                    'service_record_id' => $inserted_id,
+                    'amount' => $paymentAmount,
+                    'tracking_id' => $trackingID,
+                    'name' => $firstName,
+                    'email' => $email,
+                    'phone' => $phone
+                ];
+                
+                // Redirect to payment page
+                header("Location: razorpay_payment.php");
                 exit();
             } else {
                 $errorMsg = "Failed to book appointment: " . $stmt->error;
@@ -230,61 +226,7 @@ $conn->close();
     </div>
   </header>
 
-  <!-- Success Message After Payment -->
-  <?php if($showSuccessMessage && isset($successData)): ?>
-  <div class="container mx-auto px-6 py-4">
-    <div class="bg-green-50 border-2 border-green-400 p-6 rounded-lg shadow-xl">
-      <div class="text-center">
-        <div class="text-6xl mb-4">✅</div>
-        <h3 class="text-3xl font-bold text-green-800 mb-4">Payment Successful!</h3>
-        <p class="text-green-700 text-lg mb-6">Your passport appointment has been confirmed successfully.</p>
-        
-        <div class="bg-white p-6 rounded-xl shadow-lg max-w-2xl mx-auto mb-6">
-          <div class="grid grid-cols-2 gap-4 text-left">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Tracking ID:</p>
-              <p class="text-2xl font-bold text-blue-600 font-mono"><?php echo htmlspecialchars($successTrackingID); ?></p>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Applicant Name:</p>
-              <p class="text-xl font-bold text-gray-800"><?php echo htmlspecialchars($successData['first_name']); ?></p>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Service Type:</p>
-              <p class="text-lg font-semibold text-gray-800"><?php echo htmlspecialchars($successData['service_type']); ?></p>
-            </div>
-            <div>
-              <p class="text-sm text-gray-600 mb-1">PSK Location:</p>
-              <p class="text-lg font-semibold text-gray-800"><?php echo htmlspecialchars($successData['psk_location']); ?></p>
-            </div>
-            <div class="col-span-2">
-              <p class="text-sm text-gray-600 mb-1">Appointment Date:</p>
-              <p class="text-lg font-semibold text-gray-800"><?php echo htmlspecialchars($successData['appointment_date']); ?></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded mb-4">
-          <p class="text-sm text-yellow-800">
-            <strong>⚠️ IMPORTANT:</strong> Please save your tracking ID: <span class="font-mono font-bold"><?php echo htmlspecialchars($successTrackingID); ?></span>
-          </p>
-          <p class="text-sm text-yellow-800 mt-2">You'll need this to track your passport application status.</p>
-        </div>
-
-        <div class="flex gap-4 justify-center">
-          <button onclick="copyTrackingID('<?php echo htmlspecialchars($successTrackingID); ?>')" 
-                  class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500">
-            📋 Copy Tracking ID
-          </button>
-          <a href="#status-tracker" 
-             class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-500 inline-block">
-            🔍 Track Status Now
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <?php endif; ?>
+  
 
   <!-- Error Message Alert -->
   <?php if($errorMsg && !isset($trackingData)): ?>
@@ -300,21 +242,22 @@ $conn->close();
     <h2 class="text-4xl font-bold mb-4">Passport Services</h2>
     <p class="mb-6 text-lg max-w-2xl mx-auto">Easily apply for new passports, renewals, or check your passport application status through our official portal.</p>
   </section>
-
-  <!-- Live Application Status Tracker - MOVED TO TOP -->
-  <section id="status-tracker" class="container mx-auto px-6 py-12">
+  
+ 
+  <!-- Live Application Status Tracker -->
+  <section class="container mx-auto px-6 py-12">
     <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
       <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">🔍 Live Application Status Tracker</h3>
       <p class="text-center text-gray-600 mb-6">Enter your tracking ID to check real-time status of your passport application</p>
       
-      <form method="POST" action="passport.php#status-tracker" class="mb-6">
+      <form method="POST" action="passport.php" class="mb-6">
         <div class="flex flex-col md:flex-row gap-4">
           <input 
             type="text" 
             name="tracking_id" 
             placeholder="Enter Tracking ID (e.g., PASS-2025-XXXXXXXX)" 
             class="flex-1 p-4 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
-            value="<?php echo isset($trackingData) ? $trackingData['tracking_id'] : ''; ?>"
+            value="<?php echo isset($trackingData) ? htmlspecialchars($trackingData['tracking_id']) : ''; ?>"
             required>
           <button 
             type="submit" 
@@ -438,6 +381,86 @@ $conn->close();
     </div>
   </section>
 
+  <!-- REST OF YOUR HTML CONTINUES HERE... -->
+  <!-- I'll continue with the booking form section -->
+   
+  
+  <!-- Book Appointment Section -->
+  <section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
+      <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Book Appointment & Pay Online</h3>
+      <p class="mb-6 text-gray-700 text-center">
+        Schedule your Passport Seva Kendra (PSK) appointment and pay applicable fees securely online.
+      </p>
+
+      <!-- Appointment Form -->
+      <form method="POST" action="passport.php" id="appointmentForm" class="space-y-6">
+
+        <div>
+          <label class="block font-semibold mb-2">First Name</label>
+          <input type="text" id="firstName" name="firstName" class="w-full p-4 border rounded-lg" placeholder="Enter your first name" required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Email Address</label>
+          <input type="email" id="email" name="email" class="w-full p-4 border rounded-lg" placeholder="Enter your email" required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Phone Number</label>
+          <input type="tel" id="phone" name="phone" class="w-full p-4 border rounded-lg" placeholder="Enter your phone number" required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Select PSK Location</label>
+          <select id="pskLocation" name="pskLocation" class="w-full p-4 border rounded-lg" required>
+            <option value="">Select PSK</option>
+            <option value="Secunderabad PSK">Secunderabad PSK</option>
+            <option value="Hyderabad PSK">Hyderabad PSK</option>
+            <option value="Kukatpally PSK">Kukatpally PSK</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Select Date</label>
+          <input type="date" id="appointmentDate" name="appointmentDate" class="w-full p-4 border rounded-lg" required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Select Time Slot</label>
+          <select id="timeSlot" name="timeSlot" class="w-full p-4 border rounded-lg" required>
+            <option value="">Select Time</option>
+            <option value="10:00 AM">10:00 AM</option>
+            <option value="11:00 AM">11:00 AM</option>
+            <option value="12:00 PM">12:00 PM</option>
+            <option value="01:00 PM">01:00 PM</option>
+            <option value="02:00 PM">02:00 PM</option>
+            <option value="03:00 PM">03:00 PM</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Service Type</label>
+          <select id="serviceType" name="serviceType" class="w-full p-4 border rounded-lg" required>
+            <option value="">Select Service</option>
+            <option value="New Passport">New Passport</option>
+            <option value="Renewal / Reissue">Renewal / Reissue</option>
+            <option value="Tatkal">Tatkal</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Amount to Pay (INR)</label>
+          <input type="text" id="paymentAmount" name="paymentAmount" class="w-full p-4 border rounded-lg bg-gray-100" value="0" readonly>
+        </div>
+
+        <button type="submit" name="submit_appointment" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full">
+          Proceed to Pay & Book Appointment
+        </button>
+
+      </form>
+    </div>
+  </section>
   <!-- Service Overview -->
   <section class="container mx-auto px-6 py-12">
     <h3 class="text-3xl font-bold text-center text-blue-800 mb-10">Our Passport Services</h3>
@@ -472,7 +495,7 @@ $conn->close();
         </div>
         <div class="bg-white rounded-xl p-6 shadow-md">
           <h4 class="text-blue-700 font-semibold mb-2">Step 3</h4>
-          <p>Pay the applicable fee and schedule an appointment.</p>
+          <p>Pay the applicable fee and schedulule an appointment.</p>
         </div>
         <div class="bg-white rounded-xl p-6 shadow-md">
           <h4 class="text-blue-700 font-semibold mb-2">Step 4</h4>
@@ -496,121 +519,360 @@ $conn->close();
     </div>
   </section>
 
-  <!-- Book Appointment & Pay Online -->
+  
+<!-- Fees Calculator -->
   <section class="container mx-auto px-6 py-12">
     <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
-      <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Book Appointment & Pay Online</h3>
-      <p class="mb-6 text-gray-700 text-center">
-        Schedule your Passport Seva Kendra (PSK) appointment and pay applicable fees securely online.
-      </p>
-
-      <!-- Appointment Form -->
-      <form method="POST" action="passport.php" id="appointmentForm" class="space-y-6">
-
-        <div>
-          <label class="block font-semibold mb-2">First Name</label>
-          <input type="text" id="firstName" name="firstName" class="w-full p-4 border rounded-lg" placeholder="Enter your first name" required>
-        </div>
-
-        <div>
-          <label class="block font-semibold mb-2">Email Address</label>
-          <input type="email" id="email" name="email"  class="w-full p-4 border rounded-lg" placeholder="Enter your email" required>
-        </div>
-
-        <div>
-          <label class="block font-semibold mb-2">Phone Number</label>
-          <input type="tel" id="phone" name="phone" class="w-full p-4 border rounded-lg" placeholder="Enter your phone number" required>
-        </div>
-
-        <div>
-          <label class="block font-semibold mb-2">Select PSK Location</label>
-          <select id="pskLocation" name="pskLocation"  class="w-full p-4 border rounded-lg" required>
-            <option value="">Select PSK</option>
-            <option value="Secunderabad PSK">Secunderabad PSK</option>
-            <option value="Hyderabad PSK">Hyderabad PSK</option>
-            <option value="Kukatpally PSK">Kukatpally PSK</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block font-semibold mb-2">Select Date</label>
-          <input type="date" id="appointmentDate" name="appointmentDate" class="w-full p-4 border rounded-lg" required>
-        </div>
-
-        <div>
-          <label class="block font-semibold mb-2">Select Time Slot</label>
-          <select id="timeSlot"  name="timeSlot" class="w-full p-4 border rounded-lg" required>
-            <option value="">Select Time</option>
-            <option value="10:00 AM">10:00 AM</option>
-            <option value="11:00 AM">11:00 AM</option>
-            <option value="12:00 PM">12:00 PM</option>
-            <option value="01:00 PM">01:00 PM</option>
-            <option value="02:00 PM">02:00 PM</option>
-            <option value="03:00 PM">03:00 PM</option>
-          </select>
-        </div>
-
+      <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Fees Calculator</h3>
+      <form id="feesForm" class="space-y-6">
         <div>
           <label class="block font-semibold mb-2">Service Type</label>
-          <select id="serviceType" name="serviceType" class="w-full p-4 border rounded-lg" required>
-            <option value="">Select Service</option>
-            <option value="New Passport">New Passport</option>
-            <option value="Renewal / Reissue">Renewal / Reissue</option>
-            <option value="Tatkal">Tatkal</option>
+          <select id="feesService" class="w-full p-4 border rounded-lg">
+            <option value="normal">New / Renewal (Normal)</option>
+            <option value="tatkal">Tatkal</option>
           </select>
         </div>
-
         <div>
-          <label class="block font-semibold mb-2">Amount to Pay (INR)</label>
-          <input type="text" id="paymentAmount" name="paymentAmount"  class="w-full p-4 border rounded-lg bg-gray-100" value="0" readonly>
+          <label class="block font-semibold mb-2">Number of Pages</label>
+          <select id="pages" class="w-full p-4 border rounded-lg">
+            <option value="36">36</option>
+            <option value="60">60</option>
+          </select>
         </div>
-
-        <button type="submit"
-        name="submit_appointment"
-        class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full">
-  Proceed to Pay & Book Appointment
-</button>
-
+        <div>
+          <label class="block font-semibold mb-2">Validity Period (Years)</label>
+          <input type="number" id="validity" class="w-full p-4 border rounded-lg" value="10">
+        </div>
+        <button type="button" onclick="calculateFees()" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 w-full">Calculate Fees</button>
       </form>
+      <p class="mt-4 font-semibold text-gray-800">Total Fees: ₹<span id="totalFees">0</span></p>
     </div>
   </section>
+  <script>
+    const serviceFees = {
+            "New Passport": 1500,
+      "Renewal / Reissue": 1200,
+      "Tatkal": 3500
+    };
+
+    const serviceType = document.getElementById("serviceType");
+    const paymentAmount = document.getElementById("paymentAmount");
+
+    serviceType.addEventListener("change", () => {
+      const fee = serviceFees[serviceType.value] || 0;
+      paymentAmount.value = fee;
+    });
+
+    function closeModal() {
+      document.getElementById('successModal').style.display = 'none';
+      window.scrollTo(0, 0);
+    }
+  </script>
+  <!-- Appointment Slot Finder -->
+  <section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
+      <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Appointment Slot Finder</h3>
+      
+      <div class="mb-6">
+        <label class="block font-semibold mb-2">Select Passport Seva Kendra (PSK)</label>
+        <select id="pskSelect" class="w-full p-4 border rounded-lg">
+          <option value="madhapur">Madhapur PSK</option>
+          <option value="kukatpally">Kukatpally PSK</option>
+          <option value="secunderabad">Secunderabad PSK</option>
+        </select>
+      </div>
+
+      <div class="mb-6">
+        <label class="block font-semibold mb-2">Select Date</label>
+        <input type="date" id="slotAppointmentDate" class="w-full p-4 border rounded-lg">
+      </div>
+
+      <div class="mb-6">
+        <label class="block font-semibold mb-2">Available Time Slots</label>
+        <select id="slotTimeSlot" class="w-full p-4 border rounded-lg">
+          <option value="">Select a time slot</option>
+        </select>
+      </div>
+
+      <button onclick="findEarliestSlot()" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 w-full mb-4">
+        Find Earliest Available Slot
+      </button>
+
+      <button onclick="confirmAppointmentSlot()" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full">
+        Confirm Appointment & Add to Google Calendar
+      </button>
+
+      <p id="confirmationMsg" class="mt-4 text-gray-700 font-semibold hidden"></p>
+    </div>
+  </section>
+
+  <script>
+const timeSlots = {
+  madhapur: ["09:00 AM", "10:00 AM", "11:00 AM", "02:00 PM", "03:00 PM"],
+  kukatpally: ["10:00 AM", "11:30 AM", "01:00 PM", "03:00 PM", "04:00 PM"],
+  secunderabad: ["09:30 AM", "11:00 AM", "01:30 PM", "02:30 PM", "04:00 PM"]
+};
+
+document.getElementById('pskSelect').addEventListener('change', updateTimeSlots);
+document.getElementById('slotAppointmentDate').addEventListener('change', updateTimeSlots);
+
+function updateTimeSlots() {
+  const psk = document.getElementById('pskSelect').value;
+  const timeSlotSelect = document.getElementById('slotTimeSlot');
+  timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+
+  if (psk && timeSlots[psk]) {
+    timeSlots[psk].forEach(slot => {
+      const option = document.createElement('option');
+      option.value = slot;
+      option.textContent = slot;
+      timeSlotSelect.appendChild(option);
+    });
+  }
+}
+
+function findEarliestSlot() {
+  const psk = document.getElementById('pskSelect').value;
+  const timeSlotSelect = document.getElementById('slotTimeSlot');
+
+  if (psk && timeSlots[psk]) {
+    timeSlotSelect.value = timeSlots[psk][0];
+    alert(`Earliest slot at ${psk.toUpperCase()}: ${timeSlots[psk][0]}`);
+  } else {
+    alert("Select a PSK first");
+  }
+}
+
+function convertTo24Hour(timeStr) {
+  const [time, modifier] = timeStr.split(" ");
+  let [hours, minutes] = time.split(":").map(Number);
+
+  if (modifier === "PM" && hours !== 12) hours += 12;
+  if (modifier === "AM" && hours === 12) hours = 0;
+
+  return `${hours.toString().padStart(2, '0')}${minutes.toString().padStart(2, '0')}00`;
+}
+
+function confirmAppointmentSlot() {
+  const psk = document.getElementById('pskSelect').value;
+  const date = document.getElementById('slotAppointmentDate').value;
+  const time = document.getElementById('slotTimeSlot').value;
+
+  if (!psk || !date || !time) {
+    alert("Please select PSK, date, and time slot");
+    return;
+  }
+
+  const msg = `Appointment confirmed at ${psk.toUpperCase()} on ${date} at ${time}. SMS/Email sent.`;
+  const confirmationMsg = document.getElementById('confirmationMsg');
+  confirmationMsg.textContent = msg;
+  confirmationMsg.classList.remove('hidden');
+
+  // Convert to Google Calendar format
+  const startTime = convertTo24Hour(time);
+  const endHour = parseInt(startTime.slice(0,2)) + 1; // 1 hour slot
+  const endTime = `${endHour.toString().padStart(2,'0')}${startTime.slice(2)}`;
+
+  const dateStr = date.replace(/-/g,"");
+  const gcalLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Passport+Appointment+(${psk.toUpperCase()})&dates=${dateStr}T${startTime}/${dateStr}T${endTime}&details=Passport+appointment+at+${psk.toUpperCase()}+on+${date}+at+${time}&location=${psk}+PSK`;
+
+  window.open(gcalLink, "_blank");
+}
+</script>
+
+
+  <!-- Tatkal vs Normal Comparison -->
+  <section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-5xl mx-auto">
+      <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Tatkal vs Normal Passport Services</h3>
+      
+      <div class="overflow-x-auto mb-6">
+        <table class="min-w-full border border-gray-200">
+          <thead class="bg-blue-100">
+            <tr>
+              <th class="py-3 px-6 text-left">Feature</th>
+              <th class="py-3 px-6 text-left">Normal</th>
+              <th class="py-3 px-6 text-left">Tatkal</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-t">
+              <td class="py-3 px-6">Processing Time</td>
+              <td class="py-3 px-6">15-30 days</td>
+              <td class="py-3 px-6">1-7 days</td>
+            </tr>
+            <tr class="border-t">
+              <td class="py-3 px-6">Cost</td>
+              <td class="py-3 px-6">₹1,500 (36 pages)</td>
+              <td class="py-3 px-6">₹3,500 (36 pages)</td>
+            </tr>
+            <tr class="border-t">
+              <td class="py-3 px-6">Documents Required</td>
+              <td class="py-3 px-6">Basic documents (DOB, Address proof, ID)</td>
+              <td class="py-3 px-6">Same as normal + additional verification</td>
+            </tr>
+            <tr class="border-t">
+              <td class="py-3 px-6">Appointment Availability</td>
+              <td class="py-3 px-6">Regular slots</td>
+              <td class="py-3 px-6">Limited Tatkal slots daily</td>
+            </tr>
+            <tr class="border-t">
+              <td class="py-3 px-6">Real User Processing Data</td>
+              <td class="py-3 px-6">Average 20 days</td>
+              <td class="py-3 px-6">Average 4 days</td>
+            </tr>
+             </tbody>
+        </table>
+      </div>
+
+      <div class="bg-blue-50 p-6 rounded-lg">
+        <h4 class="text-xl font-semibold text-blue-700 mb-4">Is Tatkal Worth It?</h4>
+        <p class="mb-4">Estimate the value of choosing Tatkal based on urgency and cost.</p>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block font-semibold mb-2">Days Needed Urgently</label>
+            <input type="number" id="urgentDays" class="w-full p-3 border rounded-lg" placeholder="e.g., 5" min="1">
+          </div>
+          <div>
+            <label class="block font-semibold mb-2">Willingness to Pay Extra (₹)</label>
+            <input type="number" id="extraCost" class="w-full p-3 border rounded-lg" placeholder="e.g., 2000" min="0">
+          </div>
+        </div>
+
+        <button onclick="calculateTatkal()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500">Check Recommendation</button>
+        <p id="tatkalResult" class="mt-4 font-semibold text-gray-700"></p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function calculateTatkal() {
+      const urgentDays = parseInt(document.getElementById('urgentDays').value);
+      const extraCost = parseInt(document.getElementById('extraCost').value);
+
+      if(!urgentDays || urgentDays <= 0 || isNaN(extraCost) || extraCost < 0){
+        alert("Please enter valid numbers");
+        return;
+      }
+
+      const normalAvgDays = 20;
+      const tatkalAvgDays = 4;
+
+      let recommendation = "";
+
+      if(urgentDays <= tatkalAvgDays){
+        recommendation = "Tatkal is recommended. You will get your passport faster.";
+      } else if(extraCost >= 2000){
+        recommendation = "Tatkal is suitable if you are willing to pay the extra cost for faster processing.";
+      } else {
+        recommendation = "Normal service is sufficient for your needs.";
+      }
+
+      document.getElementById('tatkalResult').textContent = recommendation;
+    }
+  </script>
+
+  <!-- Police Verification Preparation -->
+  <section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
+      <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Police Verification Preparation</h3>
+      
+      <p class="mb-4 text-gray-700">Prepare for the for the police verification step of your passport application. This ensures a smooth verification process at your residence.</p>
+    
+    <ul class="list-disc list-inside space-y-3 text-gray-700">
+      <li><strong>What police will verify:</strong> Identity, address, and background details as provided in your application.</li>
+      <li><strong>Questions they might ask:</strong> Employment details, family members, neighbors, and purpose of passport.</li>
+       <li><strong>Documents to keep ready at home:</strong> Original proof of address, proof of identity, and supporting documents for verification.</li>
+      <li><strong>Neighbor verification requirements:</strong> Neighbors may be asked to confirm your residence and identity.</li>
+      <li><strong>Landlord NOC:</strong> If you are renting, keep a No Objection Certificate ready from your landlord.</li>
+      <li><strong>Timeline expectations:</strong> Police verification usually completes within 7–15 days depending on the area.</li>
+      <li><strong>How to handle verification visit:</strong> Be polite, answer all questions accurately, and provide documents when requested.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ====================== Passport Eligibility Checker ====================== -->
+<section class="container mx-auto px-6 py-12">
+  <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
+    <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Passport Eligibility Checker</h3>
+    
+    <p class="mb-6 text-gray-700 text-center">Answer a few questions to check if you are eligible for a passport and what type you can apply for.</p>
+    
+    <form id="eligibilityForm" class="space-y-4">
+      <div>
+        <label class="block font-semibold mb-2">1. Are you at least 18 years old?</label>
+        <select class="w-full p-4 border rounded-lg" required>
+          <option value="">Select</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-2">2. Do you have valid proof of address?</label>
+        <select class="w-full p-4 border rounded-lg" required>
+          <option value="">Select</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-2">3. Do you have proof of identity?</label>
+        <select class="w-full p-4 border rounded-lg" required>
+          <option value="">Select</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-2">4. Are you a government employee, diplomat, or special category?</label>
+        <select class="w-full p-4 border rounded-lg" required>
+          <option value="">Select</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-2">5. Do you have any legal disqualifications (criminal cases, banned status)?</label>
+        <select class="w-full p-4 border rounded-lg" required>
+          <option value="">Select</option>
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+      <button type="button" onclick="checkEligibility()" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 w-full">Check Eligibility</button>
+    </form>
+
+    <div id="eligibilityResult" class="mt-6 text-center text-lg font-semibold text-gray-700"></div>
+  </div>
+</section>
+
+<script>
+  function checkEligibility() {
+    const form = document.getElementById('eligibilityForm');
+    const values = Array.from(form.querySelectorAll('select')).map(select => select.value.toLowerCase());
+    let message = "";
+
+    if (values.includes("no")) {
+      message = "You may not be fully eligible for a passport. Please review your documents and requirements.";
+    } else if (values.includes("yes") && values[4] === "no") {
+      message = "You are eligible to apply for a passport. Proceed with the application.";
+    } else if (values[4] === "yes") {
+      message = "You may face restrictions due to disqualifications. Please contact the Passport Seva office for guidance.";
+    } else {
+      message = "Eligibility check inconclusive. Please ensure all questions are answered correctly.";
+    }
+
+    document.getElementById('eligibilityResult').innerText = message;
+  }
+</script>
 
   <!-- Footer -->
   <footer class="bg-blue-900 text-white text-center py-4">
     © 2025 Legal Assist | Passport Services
   </footer>
-  
-  <style>
-  #whatsapp-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-  }
-
-  #whatsapp-button img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    cursor: pointer;
-  }
-</style>
-
-<a href="https://wa.me/8897752518?text=Hello%20Legal%20Assist,%20I%20need%20help%20with%20your%20services" target="_blank" id="whatsapp-button">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="Chat with us on WhatsApp">
-</a>
 
   <script>
-    // Copy Tracking ID Function
-    function copyTrackingID(trackingID) {
-      navigator.clipboard.writeText(trackingID).then(function() {
-        alert('Tracking ID copied to clipboard: ' + trackingID);
-      }, function(err) {
-        alert('Failed to copy tracking ID');
-      });
-    }
-
     // Service Type Fee Mapping
     const serviceFees = {
       "New Passport": 1500,
@@ -626,33 +888,10 @@ $conn->close();
       paymentAmount.value = fee;
     });
 
-    // Form Validation Before Submission
-    document.getElementById('appointmentForm').addEventListener('submit', function(e) {
-      const serviceTypeVal = document.getElementById('serviceType').value;
-      const paymentAmountVal = document.getElementById('paymentAmount').value;
-      
-      if (!serviceTypeVal) {
-        e.preventDefault();
-        alert('Please select a service type');
-        return false;
-      }
-      
-      if (!paymentAmountVal || paymentAmountVal <= 0) {
-        e.preventDefault();
-        alert('Please select a valid service type with amount');
-        return false;
-      }
-      
-      // Show loading state
-      const submitBtn = e.target.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '⏳ Processing...';
-    });
-
     // Set minimum date for appointment (today)
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('appointmentDate').setAttribute('min', today);
   </script>
-
+ 
 </body>
 </html>

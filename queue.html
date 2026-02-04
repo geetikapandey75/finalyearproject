@@ -1,0 +1,1217 @@
+<!-- ====================== REAL-TIME QUEUE MANAGEMENT ====================== -->
+ <html>
+    <head>
+        <body>
+            <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MeeSeva Services | Legal Assist</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <style>
+    .otp-input {
+      transition: all 0.3s ease;
+    }
+    .otp-input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      outline: none;
+      transform: scale(1.05);
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .animate-slide-in {
+      animation: slideIn 0.5s ease-out;
+    }
+    .loading-dots span {
+      animation: pulse 1.4s infinite;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="bg-blue-50 font-sans text-gray-900">
+
+  <!-- Navbar -->
+  <header class="bg-blue-900 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">Legal Assist</h1>
+      <nav class="space-x-4">
+        <a href="index.html" class="hover:underline">Home</a>
+        <a href="driving.html" class="hover:underline">Driving</a>
+        <a href="passport.html" class="hover:underline">Passport</a>
+        <a href="police.html" class="hover:underline">Police</a>
+        <a href="meeseva.html" class="hover:underline font-semibold">MeeSeva</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="text-center py-16 bg-gradient-to-r from-blue-800 to-indigo-600 text-white">
+    <h2 class="text-4xl font-bold mb-4">MeeSeva Services</h2>
+    <p class="text-lg max-w-2xl mx-auto mb-6">Access all essential government-to-citizen services in one place — apply for certificates, pay bills, track applications, and more.</p>
+    <a href="#services" class="bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300">Explore Services</a>
+  </section>
+
+  <!-- Overview Section -->
+  <section id="services" class="container mx-auto px-6 py-12">
+    <h3 class="text-3xl font-bold text-center text-blue-800 mb-10">Popular MeeSeva Services</h3>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition">
+        <h4 class="text-xl font-semibold text-blue-700 mb-3">🏠 Residential Certificate</h4>
+        <p>Apply for proof of residence for school, job, or government documentation purposes.</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition">
+        <h4 class="text-xl font-semibold text-blue-700 mb-3">🎓 Caste / Income Certificate</h4>
+        <p>Request caste and income certificates for education, employment, or subsidy benefits.</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition">
+        <h4 class="text-xl font-semibold text-blue-700 mb-3">📄 Birth & Death Certificate</h4>
+        <p>Get certified records of birth or death issued by local municipal authorities.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step-by-Step Process -->
+  <section class="bg-blue-100 py-12">
+    <div class="container mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center text-blue-800 mb-10">How to Apply via MeeSeva</h3>
+      <div class="grid md:grid-cols-4 gap-8 text-center">
+        <div class="bg-white rounded-xl p-6 shadow-md">
+          <h4 class="text-blue-700 font-semibold mb-2">Step 1</h4>
+          <p>Register or log in to the official MeeSeva portal.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-md">
+          <h4 class="text-blue-700 font-semibold mb-2">Step 2</h4>
+          <p>Select the required service and fill in the online form.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-md">
+          <h4 class="text-blue-700 font-semibold mb-2">Step 3</h4>
+          <p>Upload necessary documents and make payment if applicable.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-md">
+          <h4 class="text-blue-700 font-semibold mb-2">Step 4</h4>
+          <p>Track your application and download the certificate once approved.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Documents Checklist -->
+  <section class="container mx-auto px-6 py-12">
+    <h3 class="text-3xl font-bold text-center text-blue-800 mb-10">Documents Required</h3>
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
+      <ul class="list-disc list-inside space-y-3 text-gray-700">
+        <li>Aadhaar Card (Mandatory ID Proof)</li>
+        <li>Address Proof (Electricity Bill / Voter ID / Ration Card)</li>
+        <li>Passport-size Photograph</li>
+        <li>Supporting Documents (depending on service type)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Application Form -->
+  <section class="container mx-auto px-6 py-16">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+      <h3 class="text-2xl font-bold mb-6 text-blue-800 text-center">Apply for a MeeSeva Service</h3>
+
+      <form id="meesevaForm" action="meeseva.php" method="POST" class="space-y-6">
+        <div>
+          <label class="block font-semibold mb-2">Full Name</label>
+          <input type="text" name="fullName" required class="w-full p-4 border rounded-lg">
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Email Address</label>
+          <input type="email" name="email" required class="w-full p-4 border rounded-lg">
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Contact Number</label>
+          <input type="tel" name="contactNumber" required pattern="[0-9]{10}" class="w-full p-4 border rounded-lg">
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Select Service</label>
+          <select name="service" id="service" required class="w-full p-4 border rounded-lg">
+            <option value="">Select Service</option>
+            <option value="Residential Certificate">Residential Certificate</option>
+            <option value="Income Certificate">Income Certificate</option>
+            <option value="Birth / Death Certificate">Birth / Death Certificate</option>
+            <option value="Caste Certificate">Caste Certificate</option>
+            <option value="Other Service">Other Service</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Select MeeSeva Center</label>
+          <select name="center" id="center" required class="w-full p-4 border rounded-lg">
+            <option value="">Choose Center</option>
+            <option>Madhapur MeeSeva</option>
+            <option>Kukatpally MeeSeva</option>
+            <option>Secunderabad MeeSeva</option>
+            <option>Ameerpet MeeSeva</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Select Appointment Date</label>
+          <input type="text" name="appointment_date" id="appointmentDate" required class="w-full p-4 border rounded-lg">
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Select Time Slot</label>
+          <select name="appointment_time" id="appointmentTime" required class="w-full p-4 border rounded-lg">
+            <option value="">Choose Time</option>
+            <option>09:00 AM</option>
+            <option>10:00 AM</option>
+            <option>11:00 AM</option>
+            <option>01:00 PM</option>
+            <option>02:00 PM</option>
+            <option>03:00 PM</option>
+          </select>
+        </div>
+
+        <button type="submit" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full">
+          Submit & Book Appointment
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+  /* Calendar */
+  flatpickr("#appointmentDate", {
+    minDate: "today",
+    dateFormat: "Y-m-d",
+    disable: [date => date.getDay() === 0]
+  });
+  </script>
+
+  <!-- ====================== FEES CALCULATOR & PAYMENT ====================== -->
+  <!-- ====================== FEES CALCULATOR & PAYMENT ====================== -->
+<section class="container mx-auto px-6 py-12">
+  <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
+    <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">MeeSeva Fees & Payment</h3>
+
+    <label class="block font-semibold mb-2">Enter Application Number</label>
+    <input 
+      type="text" 
+      id="applicationId" 
+      class="w-full p-4 border rounded-lg mb-4" 
+      placeholder="e.g., MS1234567890"
+    >
+    
+    <button 
+      id="fetchDetailsBtn" 
+      class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full mb-6"
+    >
+      Fetch Application Details
+    </button>
+
+    <div id="applicationDetails" class="mb-6 hidden">
+      <div class="bg-blue-50 rounded-lg p-6 mb-6">
+        <h4 class="font-semibold text-blue-700 mb-3">Application Details</h4>
+        <p class="mb-2"><strong>Name:</strong> <span id="detailName"></span></p>
+        <p class="mb-2"><strong>Service:</strong> <span id="detailService"></span></p>
+        <p class="mb-2"><strong>Center:</strong> <span id="detailCenter"></span></p>
+        <p class="mb-2"><strong>Date:</strong> <span id="detailDate"></span></p>
+        <p class="mb-2"><strong>Time:</strong> <span id="detailTime"></span></p>
+      </div>
+
+      <div id="feeBreakdown" class="mb-6">
+        <h4 class="font-semibold text-blue-700 mb-2">Fee Breakdown</h4>
+        <ul class="list-disc list-inside text-gray-700" id="feeList"></ul>
+        <p class="mt-2 font-semibold text-green-700">💡 Pay online for instant confirmation!</p>
+      </div>
+
+      <label class="block font-semibold mb-2">Select Payment Method</label>
+      <select id="paymentMethod" class="w-full p-4 border rounded-lg mb-6">
+        <option value="">-- Select Payment Method --</option>
+        <option value="upi">UPI</option>
+        <option value="card">Credit/Debit Card</option>
+        <option value="netbanking">Net Banking</option>
+        <option value="wallet">Wallet</option>
+      </select>
+
+      <button id="payBtn" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full mb-4">
+        Pay Now
+      </button>
+    </div>
+
+    <div id="paymentConfirmation" class="hidden p-4 rounded-lg bg-green-100 text-green-800 text-center"></div>
+  </div>
+</section>
+
+<script>
+  const serviceFees = {
+    'Residential Certificate': 30,
+    'Income Certificate': 30,
+    'Birth / Death Certificate': 30,
+    'Caste Certificate': 30,
+    'Other Service': 50
+  };
+
+  let currentApplicationData = null;
+
+  document.getElementById("fetchDetailsBtn").addEventListener("click", async function() {
+    const appId = document.getElementById("applicationId").value.trim();
+    
+    if (!appId) {
+      alert("Please enter your Application Number");
+      return;
+    }
+
+    // Show loading state
+    this.disabled = true;
+    this.textContent = "Fetching Details...";
+
+    try {
+      const formData = new FormData();
+      formData.append('application_number', appId);
+
+      const response = await fetch('fetch_application_details.php', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        currentApplicationData = data.application;
+        
+        // Display application details
+        document.getElementById("detailName").textContent = data.application.full_name;
+        document.getElementById("detailService").textContent = data.application.service;
+        document.getElementById("detailCenter").textContent = data.application.center_name;
+        document.getElementById("detailDate").textContent = data.application.appointment_date;
+        document.getElementById("detailTime").textContent = data.application.appointment_time;
+
+        // Calculate fee based on service
+        const fee = serviceFees[data.application.service] || 30;
+        document.getElementById("feeList").innerHTML = "<li><strong>Total Fee: ₹" + fee + "</strong></li>";
+
+        // Show details section
+        document.getElementById("applicationDetails").classList.remove("hidden");
+        
+        this.textContent = "Details Loaded Successfully";
+        this.classList.remove("bg-blue-600", "hover:bg-blue-500");
+        this.classList.add("bg-green-600");
+      } else {
+        alert(data.message || "Application not found. Please check your Application Number.");
+        this.textContent = "Fetch Application Details";
+        this.disabled = false;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert("Error fetching application details. Please try again.");
+      this.textContent = "Fetch Application Details";
+      this.disabled = false;
+    }
+  });
+
+  document.getElementById("payBtn").addEventListener("click", function() {
+    const method = document.getElementById("paymentMethod").value;
+    
+    if (!method) {
+      alert("Please select a payment method.");
+      return;
+    }
+
+    if (!currentApplicationData) {
+      alert("Please fetch application details first.");
+      return;
+    }
+
+    // Check if already paid
+    if (currentApplicationData.payment_status === 'paid') {
+      alert("This application has already been paid for.");
+      return;
+    }
+
+    // Calculate fee
+    const amount = serviceFees[currentApplicationData.service] || 30;
+
+    // Create form and submit to payment gateway
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'razorpay_payment.php';
+    
+    const fields = {
+      service_type: 'meeseva',
+      service_record_id: currentApplicationData.id,
+      amount: amount,
+      name: currentApplicationData.full_name,
+      email: currentApplicationData.email,
+      phone: currentApplicationData.contact_number,
+      tracking_id: currentApplicationData.application_number
+    };
+    
+    for (const key in fields) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = fields[key];
+      form.appendChild(input);
+    }
+    
+    document.body.appendChild(form);
+    form.submit();
+  });
+</script>
+   <!-- ====================== ENHANCED CERTIFICATE DOWNLOAD PORTAL ====================== -->
+  <section class="container mx-auto px-6 py-12 bg-gradient-to-br from-purple-50 to-blue-50">
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-2xl mx-auto animate-slide-in">
+      
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-white text-center">
+        <div class="inline-block p-4 bg-white bg-opacity-20 rounded-full mb-4">
+          <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <h2 class="text-3xl font-bold mb-2">Download Appointment Certificate</h2>
+        <p class="text-blue-100 text-lg">Get Your Appointment Confirmation</p>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="bg-gray-50 p-6">
+        <div class="flex justify-between items-center relative">
+          <div class="absolute left-0 right-0 top-5 h-1 bg-gray-300" style="z-index: 0;"></div>
+          
+          <div class="flex flex-col items-center relative z-10 flex-1">
+            <div id="certStep1Circle" class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg">1</div>
+            <span class="text-xs mt-2 font-semibold text-blue-600">Details</span>
+          </div>
+          
+          <div class="flex flex-col items-center relative z-10 flex-1">
+            <div id="certStep2Circle" class="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-bold">2</div>
+            <span class="text-xs mt-2 text-gray-500">Verify</span>
+          </div>
+          
+          <div class="flex flex-col items-center relative z-10 flex-1">
+            <div id="certStep3Circle" class="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-bold">3</div>
+            <span class="text-xs mt-2 text-gray-500">Download</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert Box -->
+      <div id="certAlertBox" class="hidden mx-6 mt-6"></div>
+
+      <!-- Content Area -->
+      <div class="p-8">
+
+        <!-- Step 1: Enter Details -->
+        <div id="certStep1Content">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Enter Your Details</h3>
+          
+          <div class="space-y-5">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">
+                <span class="text-red-500">*</span> Application Number
+              </label>
+              <input 
+                type="text" 
+                id="certApplicationNumber" 
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition" 
+                placeholder="e.g., MS1234567890"
+              >
+              <p class="text-xs text-gray-500 mt-1">📝 Found in your booking confirmation</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">
+                <span class="text-red-500">*</span> Registered Email
+              </label>
+              <input 
+                type="email" 
+                id="certEmail" 
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"  placeholder="your.email@example.com"
+              >
+              <p class="text-xs text-gray-500 mt-1">📧 OTP will be sent to this email</p>
+            </div>
+
+            <button 
+              id="certSendOtpBtn" 
+              class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+            >
+              📨 Send OTP to Email
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Verify OTP (Hidden) -->
+        <div id="certStep2Content" class="hidden">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Verify OTP</h3>
+          
+          <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r-lg">
+            <p class="text-sm text-blue-800">
+              <strong>OTP sent to:</strong> <span id="certMaskedEmail" class="font-mono"></span><br>
+              <span class="text-xs">⏱️ Valid for 10 minutes</span>
+            </p>
+          </div>
+
+          <div id="certAppointmentPreview" class="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl mb-6 border border-purple-200">
+            <p class="text-sm font-semibold text-purple-900 mb-2">📅 Your Appointment:</p>
+            <p class="text-sm text-purple-800">
+              <strong>Date:</strong> <span id="certPreviewDate"></span><br>
+              <strong>Time:</strong> <span id="certPreviewTime"></span>
+            </p>
+          </div>
+
+          <label class="block text-sm font-semibold text-gray-700 mb-3 text-center">Enter 6-Digit OTP</label>
+          <div class="flex justify-center gap-2 mb-6">
+            <input type="text" maxlength="1" class="cert-otp-input w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg" data-index="0">
+            <input type="text" maxlength="1" class="cert-otp-input w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg" data-index="1">
+            <input type="text" maxlength="1" class="cert-otp-input w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg" data-index="2">
+            <input type="text" maxlength="1" class="cert-otp-input w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg" data-index="3">
+            <input type="text" maxlength="1" class="cert-otp-input w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg" data-index="4">
+            <input type="text" maxlength="1" class="cert-otp-input w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg" data-index="5">
+          </div>
+
+          <button 
+            id="certVerifyOtpBtn" 
+            class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all mb-4"
+          >
+            ✓ Verify & Download Certificate
+          </button>
+
+          <div class="text-center space-y-2">
+            <p class="text-sm text-gray-600">
+               Didn't receive? 
+              <button id="certResendOtpBtn" class="text-blue-600 hover:underline font-semibold">Resend OTP</button>
+            </p>
+            <button id="certBackBtn" class="text-gray-600 hover:underline text-sm">
+              ← Change details
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Success & Download (Hidden) -->
+        <div id="certStep3Content" class="hidden text-center">
+          <div class="mb-6">
+            <div class="inline-block p-4 bg-green-100 rounded-full mb-4">
+              <svg class="w-20 h-20 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <h3 class="text-3xl font-bold text-green-600 mb-2">Verification Successful!</h3>
+            <p class="text-gray-600">Your appointment confirmation is ready</p>
+          </div>
+
+          <!-- Appointment Summary -->
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 mb-6 text-left">
+            <h4 class="font-bold text-lg text-blue-900 mb-4 text-center">📋 Appointment Summary</h4>
+            <div class="space-y-2 text-sm">
+              <p><strong class="text-blue-900">Application:</strong> <span id="certSummaryAppNo"></span></p>
+              <p><strong class="text-blue-900">Name:</strong> <span id="certSummaryName"></span></p>
+              <p><strong class="text-blue-900">Service:</strong> <span id="certSummaryService"></span></p>
+              <p><strong class="text-blue-900">Center:</strong> <span id="certSummaryCenter"></span></p>
+              <p><strong class="text-blue-900">Date:</strong> <span id="certSummaryDate"></span></p>
+              <p><strong class="text-blue-900">Time:</strong> <span id="certSummaryTime"></span></p>
+            </div>
+          </div>
+
+          <button 
+            id="certDownloadBtn" 
+            class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all mb-3"
+          >
+            📥 Download Certificate (PDF)
+          </button>
+
+          <div class="flex gap-2 mb-6">
+            <button id="certPrintBtn" class="flex-1 bg-gray-600 text-white px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+              🖨️ Print
+            </button>
+            <button id="certEmailBtn" class="flex-1 bg-indigo-600 text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition">
+              📧 Email
+            </button>
+            <button id="certWhatsappBtn" class="flex-1 bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition">
+              📱 Share
+            </button>
+          </div>
+
+          <button 
+            id="certNewDownloadBtn" 
+            class="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-… reen-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition">
+              📱 Share
+            </button>
+          </div>
+
+          <button 
+            id="certNewDownloadBtn" 
+            class="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition"
+          >
+            Download Another Certificate
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+  
+
+  <!-- ====================== APPLICATION STATUS TRACKER ====================== -->
+  
+  
+
+   <!-- Loading Overlay -->
+  <div id="certLoadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-8 text-center max-w-sm">
+      <div class="loading-dots mb-4 flex justify-center gap-2">
+        <span class="w-3 h-3 bg-blue-600 rounded-full inline-block"></span>
+        <span class="w-3 h-3 bg-blue-600 rounded-full inline-block"></span>
+        <span class="w-3 h-3 bg-blue-600 rounded-full inline-block"></span>
+      </div>
+      <p class="text-gray-700 font-semibold text-lg" id="certLoadingText">Processing...</p>
+    </div>
+  </div>
+
+  <script>
+    // Certificate Download System
+    let certCurrentAppData = null;
+    const certOtpInputs = document.querySelectorAll('.cert-otp-input');
+
+    function certShowLoading(text = 'Processing...') {
+      document.getElementById('certLoadingText').textContent = text;
+      document.getElementById('certLoadingOverlay').classList.remove('hidden');
+    }
+
+    function certHideLoading() {
+      document.getElementById('certLoadingOverlay').classList.add('hidden');
+    }
+
+    function certShowAlert(message, type = 'info') {
+      const alertBox = document.getElementById('certAlertBox');
+      const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+      const colors = {
+        success: 'bg-green-100 border-green-400 text-green-800',
+        error: 'bg-red-100 border-red-400 text-red-800',
+        info: 'bg-blue-100 border-blue-400 text-blue-800'
+      };
+      
+      alertBox.className = `p-4 rounded-lg border-l-4 ${colors[type]} mb-6`;
+alertBox.innerHTML = `<p class="font-semibold">${icons[type]} ${message}</p>`;
+
+      alertBox.classList.remove('hidden');
+      
+      setTimeout(() => alertBox.classList.add('hidden'), 5000);
+    }
+
+    function certUpdateStep(step) {
+      const circles = ['certStep1Circle', 'certStep2Circle', 'certStep3Circle'];
+      const contents = ['certStep1Content', 'certStep2Content', 'certStep3Content'];
+      
+      circles.forEach((id, idx) => {
+        const circle = document.getElementById(id);
+        if (idx + 1 <= step) {
+          circle.className = 'w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg';
+        } else {
+          circle.className = 'w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-bold';
+        }
+      });
+      
+      contents.forEach((id, idx) => {
+        document.getElementById(id).classList.toggle('hidden', idx + 1 !== step);
+      });
+    }
+
+    certOtpInputs.forEach((input, index) => {
+      input.addEventListener('input', function() {
+        if (this.value.length === 1 && index < certOtpInputs.length - 1) {
+          certOtpInputs[index + 1].focus();
+        }
+      });
+      
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !this.value && index > 0) {
+          certOtpInputs[index - 1].focus();
+        }
+      });
+      
+      input.addEventListener('keypress', function(e) {
+        if (!/[0-9]/.test(e.key)) e.preventDefault();
+      });
+    });
+
+    document.getElementById('certSendOtpBtn').addEventListener('click', async function() {
+      const appNumber = document.getElementById('certApplicationNumber').value.trim();
+      const email = document.getElementById('certEmail').value.trim();
+
+      if (!appNumber || !email) {
+        certShowAlert('Please enter both application number and email', 'error');
+        return;
+      }
+
+      certShowLoading('Sending OTP to your email...');
+
+      try {
+        const formData = new FormData();
+        formData.append('action', 'sendAppointmentOTP');
+        formData.append('application_number', appNumber);
+        formData.append('email', email);
+
+        const response = await fetch('meeseva_appointment_system.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        certHideLoading();
+
+        if (data.success) {
+          document.getElementById('certMaskedEmail').textContent = data.email_masked;
+          document.getElementById('certPreviewDate').textContent = data.appointment_date;
+          document.getElementById('certPreviewTime').textContent = data.appointment_time;
+          certCurrentAppData = { appNumber, email };
+          
+          certUpdateStep(2);
+          certOtpInputs[0].focus();
+          certShowAlert('OTP sent successfully! Check your email', 'success');
+        } else {
+          certShowAlert(data.message || 'Failed to send OTP', 'error');
+        }
+      } catch (error) {
+        certHideLoading();
+        console.error('Error:', error);
+        certShowAlert('Network error. Please check your connection and try again.', 'error');
+      }
+    });
+
+    document.getElementById('certVerifyOtpBtn').addEventListener('click', async function() {
+      const otp = Array.from(certOtpInputs).map(input => input.value).join('');
+
+      if (otp.length !== 6) {
+        certShowAlert('Please enter complete 6-digit OTP', 'error');
+        return;
+      }
+
+      certShowLoading('Verifying OTP...');
+
+      try {
+        const formData = new FormData();
+        formData.append('action', 'verifyAppointmentOTP');
+        formData.append('application_number', certCurrentAppData.appNumber);
+        formData.append('otp', otp);
+
+        const response = await fetch('meeseva_appointment_system.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        certHideLoading();
+
+        if (data.success) {
+          const apt = data.appointment_data;
+          document.getElementById('certSummaryAppNo').textContent = apt.application_number;
+          document.getElementById('certSummaryName').textContent = apt.full_name;
+          document.getElementById('certSummaryService').textContent = apt.service;
+          document.getElementById('certSummaryCenter').textContent = apt.center_name;
+          document.getElementById('certSummaryDate').textContent = apt.appointment_date;
+          document.getElementById('certSummaryTime').textContent = apt.appointment_time;
+          
+          certUpdateStep(3);
+          certShowAlert('Verification successful!', 'success');
+        } else {
+          certShowAlert(data.message || 'Invalid OTP', 'error');
+        }
+      } catch (error) {
+        certHideLoading();
+        console.error('Error:', error);
+        certShowAlert('Network error. Please try again.', 'error');
+      }
+    });
+
+    document.getElementById('certDownloadBtn').addEventListener('click', function() {
+      // Open PDF in new tab
+window.open(`generate_appointment_certificate.php?app=${certCurrentAppData.appNumber}`, '_blank');
+
+      certShowAlert('Opening certificate...', 'success');
+    });
+
+    document.getElementById('certResendOtpBtn').addEventListener('click', function() {
+      certOtpInputs.forEach(input => input.value = '');
+      document.getElementById('certSendOtpBtn').click();
+    });
+
+    document.getElementById('certBackBtn').addEventListener('click', function() {
+      certUpdateStep(1);
+      certOtpInputs.forEach(input => input.value = '');
+    });
+
+    document.getElementById('certNewDownloadBtn').addEventListener('click', function() {
+      location.reload();
+    });
+
+    document.getElementById('certPrintBtn').addEventListener('click', () => window.print());
+
+    document.getElementById('certEmailBtn').addEventListener('click', function() {
+      const subject = 'MeeSeva Appointment Confirmation';
+      const body = `Appointment No: ${certCurrentAppData.appNumber}`;
+window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    });
+
+    document.getElementById('certWhatsappBtn').addEventListener('click', function() {
+const text = `MeeSeva Appointment - App No: ${certCurrentAppData.appNumber}`;
+
+      window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+    });
+  </script>
+
+  <!-- ====================== APPLICATION STATUS TRACKER ====================== -->
+  <section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
+      <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Check MeeSeva Application Status</h3>
+
+      <form id="statusForm" class="mb-8">
+        <div class="mb-6">
+          <label class="block font-semibold mb-2">Enter Application / Acknowledgment Number</label>
+          <input type="text" id="appNumber" class="w-full p-4 border rounded-lg" placeholder="e.g. MS1234567890" required>
+        </div>
+        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full mb-6">
+          Check Status
+        </button>
+      </form>
+
+      <div id="statusTimeline" class="space-y-4 hidden">
+        <h4 class="text-xl font-semibold text-blue-700">Application Progress</h4>
+        <ul class="relative border-l border-gray-300 ml-4">
+          <li class="mb-6 ml-6">
+              <span class="absolute w-3 h-3 bg-gray-300 rounded-full -left-1.5 border border-white"></span>
+            <span class="font-semibold">Under Processing</span>
+            <span id="step3Status" class="text-gray-500 ml-2">(Pending)</span>
+          </li>
+          <li class="mb-6 ml-6">
+            <span class="absolute w-3 h-3 bg-gray-300 rounded-full -left-1.5 border border-white"></span>
+            <span class="font-semibold">Approved by Officer</span>
+            <span id="step4Status" class="text-gray-500 ml-2">(Pending)</span>
+          </li>
+          <li class="mb-6 ml-6">
+            <span class="absolute w-3 h-3 bg-gray-300 rounded-full -left-1.5 border border-white"></span>
+            <span class="font-semibold">Ready for Download</span>
+            <span id="step5Status" class="text-gray-500 ml-2">(Pending)</span>
+          </li>
+        </ul>
+      </div>
+
+      <div id="expectedDate" class="text-center font-semibold text-gray-700 hidden mb-4"></div>
+
+      <div id="actions" class="text-center hidden space-x-4">
+        <button id="downloadReceipt" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-500">Download Receipt</button>
+        <button id="printStatus" class="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-500">Print Status</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const statusForm = document.getElementById("statusForm");
+    const statusTimeline = document.getElementById("statusTimeline");
+    const expectedDate = document.getElementById("expectedDate");
+    const actions = document.getElementById("actions");
+
+    const demoStatus = {
+      step1: "Completed",
+      step2: "Completed",
+      step3: "In Progress",
+      step4: "Pending",
+      step5: "Pending",
+      expectedCompletion: "2025-12-20"
+    };
+statusForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const appNumber = document.getElementById("appNumber").value.trim();
+  if (!appNumber) {
+    alert("Please enter an application number.");
+    return;
+  }
+
+  statusTimeline.classList.add("hidden");
+  expectedDate.classList.add("hidden");
+  actions.classList.add("hidden");
+
+  // ✅ MOVE FUNCTION HERE
+  function showDemoStatus() {
+    statusTimeline.classList.remove("hidden");
+    expectedDate.classList.remove("hidden");
+    actions.classList.remove("hidden");
+
+    document.getElementById("step1Status").textContent = demoStatus.step1;
+    document.getElementById("step2Status").textContent = demoStatus.step2;
+    document.getElementById("step3Status").textContent = demoStatus.step3;
+    document.getElementById("step4Status").textContent = demoStatus.step4;
+    document.getElementById("step5Status").textContent = demoStatus.step5;
+
+    expectedDate.textContent =
+      `Estimated Completion Date: ${demoStatus.expectedCompletion}`;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append("application_number", appNumber);
+
+    const response = await fetch("meeseva.php", {
+      method: "POST",
+      body: formData
+    });
+
+    const html = await response.text();
+
+    if (html.includes("Application Status") || html.includes("not found")) {
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = html;
+
+      const statusInfo = tempDiv.querySelector(".bg-blue-50, .bg-red-100");
+
+      if (statusInfo) {
+        statusTimeline.innerHTML =
+          `<div class="bg-white p-6 rounded-lg shadow">${statusInfo.innerHTML}</div>`;
+        statusTimeline.classList.remove("hidden");
+      } else {
+        showDemoStatus();
+      }
+    } else {
+      showDemoStatus();
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    showDemoStatus();
+  }
+});
+
+
+      function showDemoStatus() {
+        statusTimeline.classList.remove("hidden");
+        expectedDate.classList.remove("hidden");
+        actions.classList.remove("hidden");
+
+        document.getElementById("step1Status").textContent = demoStatus.step1;
+
+        document.getElementById("step2Status").textContent = demoStatus.step2;
+        document.getElementById("step3Status").textContent = demoStatus.step3;
+        document.getElementById("step4Status").textContent = demoStatus.step4;
+        document.getElementById("step5Status").textContent = demoStatus.step5;
+
+expectedDate.textContent = `Estimated Completion Date: ${demoStatus.expectedCompletion}`;
+      
+    }
+  
+
+    document.getElementById("downloadReceipt").addEventListener("click", () => {
+      alert('Receipt downloaded!');
+    });
+
+    document.getElementById("printStatus").addEventListener("click", () => {
+      window.print();
+    });
+  </script>
+
+  <!-- ====================== CENTER LOCATOR ====================== -->
+  <section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
+      <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">MeeSeva Center Locator</h3>
+
+      <div id="meesevaMap" class="w-full h-64 mb-6 rounded-lg shadow-md"></div>
+
+      <div id="centerInfo" class="space-y-6"></div>
+    </div>
+  </section>
+
+  <script>
+    const meesevaCenters = [
+      {
+        name: "Secunderabad MeeSeva",
+        lat: 17.4399,
+        lng: 78.4983,
+        hours: "09:00-18:00",
+        services: ["Passport", "Certificates", "Pension"],
+        crowd: "Moderate",
+        contact: "040-12345678",
+        parking: "Available",
+        rating: 4.3
+      },
+      {
+        name: "Hyderabad MeeSeva",
+        lat: 17.3850,
+        lng: 78.4867,
+        hours: "09:00-17:00",
+        services: ["Passport", "Certificates", "Property Registration"],
+        crowd: "Busy",
+        contact: "040-87654321",
+        parking: "Limited",
+        rating: 4.0
+      },
+      {
+        name: "Kukatpally MeeSeva",
+        lat: 17.4912,
+        lng: 78.3960,
+        hours: "10:00-17:00",
+        services: ["Certificates", "Vehicle Registration"],
+        crowd: "Less crowded",
+        contact: "040-55555555",
+        parking: "Available",
+        rating: 4.5
+      }
+    ];
+
+    const map = L.map('meesevaMap').setView([17.3850, 78.4867], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const centerInfo = document.getElementById("centerInfo");
+
+    meesevaCenters.forEach(center => {
+      const marker = L.marker([center.lat, center.lng]).addTo(map);
+
+      marker.on("click", () => {
+        centerInfo.innerHTML = `
+          <h4 class="text-xl font-semibold text-blue-700">${center.name}</h4>
+          <p><strong>Operating Hours:</strong> ${center.hours}</p>
+          <p><strong>Services:</strong> ${center.services.join(", ")}</p>
+          <p><strong>Crowd Level:</strong> ${center.crowd}</p>
+          <p><strong>Contact:</strong> ${center.contact}</p>
+          <p><strong>Parking:</strong> ${center.parking}</p>
+          <p><strong>Rating:</strong> ${center.rating} ⭐</p>
+          <button class="bg-green-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-green-500" onclick="alert('Appointment booked at ${center.name}')">
+            Book Appointment
+          </button>
+        `;
+      });
+    });
+  </script>
+
+
+
+  <!-- WhatsApp Float Button -->
+  <a href="https://wa.me/8897752518?text=Hello%20Legal%20Assist,%20I%20need%20help%20with%20your%20services" target="_blank" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="Chat with us on WhatsApp" style="width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.2); cursor: pointer;">
+  </a>
+
+  <!-- Footer -->
+  <footer class="bg-blue-900 text-white text-center py-4">
+    © 2025 Legal Assist | MeeSeva Services
+  </footer>
+
+</body>
+</html>
+ <section class="container mx-auto px-6 py-12">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-5xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">🎫 Real-Time Queue Management</h2>
+      <p class="text-center text-gray-600 mb-8">Check live queue status or book your token online to skip the wait!</p>
+
+      <!-- Select Center -->
+      <div class="mb-6">
+        <label class="block font-semibold mb-2">Select MeeSeva Center</label>
+        <select id="queueCenter" class="w-full p-4 border rounded-lg">
+          <option value="">Choose a center</option>
+          <option value="madhapur">Madhapur MeeSeva</option>
+          <option value="kukatpally">Kukatpally MeeSeva</option>
+          <option value="secunderabad">Secunderabad MeeSeva</option>
+          <option value="ameerpet">Ameerpet MeeSeva</option>
+        </select>
+      </div>
+
+      <!-- Live Queue Status -->
+      <div id="queueStatus" class="hidden">
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+          <!-- Current Token -->
+          <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-6 rounded-xl text-center shadow-lg">
+            <div class="text-5xl font-bold mb-2" id="currentToken">A-045</div>
+            <div class="text-sm">Current Token Being Served</div>
+            <div class="mt-2 text-xs opacity-80">Updated just now</div>
+          </div>
+
+          <!-- Waiting People -->
+          <div class="bg-gradient-to-br from-orange-500 to-orange-700 text-white p-6 rounded-xl text-center shadow-lg">
+            <div class="text-5xl font-bold mb-2" id="waitingCount">23</div>
+            <div class="text-sm">People in Queue</div>
+            <div class="mt-2 text-xs opacity-80">Est. wait: <span id="estWait">46 mins</span></div>
+          </div>
+
+          <!-- Your Token -->
+          <div class="bg-gradient-to-br from-green-500 to-green-700 text-white p-6 rounded-xl text-center shadow-lg">
+            <div class="text-5xl font-bold mb-2" id="yourToken">--</div>
+            <div class="text-sm">Your Token Number</div>
+            <div class="mt-2 text-xs opacity-80">Book online now!</div>
+          </div>
+        </div>
+
+        <!-- Counter Status -->
+        <div class="bg-blue-50 p-6 rounded-lg mb-6">
+          <h3 class="text-xl font-semibold text-blue-800 mb-4">📊 Live Counter Status</h3>
+          <div class="grid md:grid-cols-4 gap-4" id="counterStatus">
+            <!-- Counter cards will be generated here -->
+          </div>
+        </div>
+
+        <!-- Book Token Online -->
+        <div class="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border-2 border-green-300">
+          <h3 class="text-xl font-semibold text-green-800 mb-4">⚡ Skip the Queue - Book Token Online</h3>
+          
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block font-semibold mb-2">Service Type</label>
+              <select id="tokenService" class="w-full p-3 border rounded-lg">
+                <option value="">Select service</option>
+                <option value="certificate">Certificate Services</option>
+                <option value="aadhaar">Aadhaar Services</option>
+                <option value="pension">Pension Services</option>
+                <option value="property">Property Registration</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold mb-2">Your Mobile Number</label>
+              <input type="tel" id="tokenMobile" class="w-full p-3 border rounded-lg" placeholder="Enter 10-digit mobile">
+            </div>
+          </div>
+
+          <button id="bookTokenBtn" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 w-full transition">
+            🎟️ Book My Token Now
+          </button>
+
+          <p class="text-sm text-gray-600 mt-3 text-center">
+            ✓ Get SMS when your turn approaches (10 tokens before)<br>
+            ✓ Arrive just in time - No waiting!
+          </p>
+        </div>
+
+        <!-- Token Confirmation -->
+        <div id="tokenConfirmation" class="hidden mt-6 p-6 bg-green-100 border-2 border-green-500 rounded-lg">
+          <h4 class="text-xl font-bold text-green-800 mb-3 text-center">✅ Token Booked Successfully!</h4>
+          <div class="bg-white p-6 rounded-lg text-center">
+            <div class="text-6xl font-bold text-green-600 mb-2" id="bookedToken">A-068</div>
+            <p class="text-gray-700 mb-4">Your Token Number</p>
+            <div class="space-y-2 text-left">
+              <p><strong>Center:</strong> <span id="confirmedCenter"></span></p>
+              <p><strong>Service:</strong> <span id="confirmedService"></span></p>
+              <p><strong>Estimated Wait:</strong> <span id="confirmedWait"></span></p>
+              <p><strong>SMS Alert:</strong> Will be sent to <span id="confirmedMobile"></span></p>
+            </div>
+            <div class="mt-4 p-3 bg-yellow-50 border border-yellow-300 rounded">
+              <p class="text-sm text-yellow-800">💡 You'll receive SMS when token <strong id="alertToken"></strong> is being served (10 tokens before yours)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+   <script>
+    // ====================== QUEUE MANAGEMENT LOGIC ======================
+    
+    const queueCenter = document.getElementById('queueCenter');
+    const queueStatus = document.getElementById('queueStatus');
+    const bookTokenBtn = document.getElementById('bookTokenBtn');
+    const tokenConfirmation = document.getElementById('tokenConfirmation');
+
+    // Mock data for different centers
+    const centerData = {
+      madhapur: { current: 'A-045', waiting: 23, avgTime: 2 },
+      kukatpally: { current: 'B-032', waiting: 18, avgTime: 2.5 },
+      secunderabad: { current: 'C-056', waiting: 31, avgTime: 1.8 },
+      ameerpet: { current: 'D-041', waiting: 15, avgTime: 2.2 }
+    };
+
+    // Show queue status when center is selected
+    queueCenter.addEventListener('change', function() {
+      if (this.value) {
+        const data = centerData[this.value];
+        document.getElementById('currentToken').textContent = data.current;
+        document.getElementById('waitingCount').textContent = data.waiting;
+        document.getElementById('estWait').textContent = Math.round(data.waiting * data.avgTime) + ' mins';
+        
+        // Generate counter status
+        generateCounterStatus();
+        queueStatus.classList.remove('hidden');
+      } else {
+        queueStatus.classList.add('hidden');
+      }
+    });
+
+    // Generate counter status cards
+    function generateCounterStatus() {
+      const counterDiv = document.getElementById('counterStatus');
+      const counters = [
+        { num: 1, status: 'Active', serving: 'A-045', type: 'Certificates', time: '2 mins' },
+        { num: 2, status: 'Active', serving: 'A-043', type: 'Aadhaar', time: '5 mins' },
+        { num: 3, status: 'Break', serving: '--', type: 'All Services', time: '10 mins' },
+        { num: 4, status: 'Active', serving: 'A-042', type: 'Pension', time: '3 mins' }
+      ];
+
+      counterDiv.innerHTML = counters.map(c => `
+        <div class="bg-white p-4 rounded-lg border ${c.status === 'Active' ? 'border-green-300' : 'border-gray-300'}">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-lg">Counter ${c.num}</span>
+            <span class="text-xs px-2 py-1 rounded ${c.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}">
+              ${c.status}
+            </span>
+          </div>
+          <div class="text-2xl font-bold text-blue-600 mb-1">${c.serving}</div>
+          <div class="text-xs text-gray-600">${c.type}</div>
+          <div class="text-xs text-gray-500 mt-1">Avg: ${c.time}</div>
+        </div>
+      `).join('');
+    }
+
+    // Book token online
+    bookTokenBtn.addEventListener('click', function() {
+      const service = document.getElementById('tokenService').value;
+      const mobile = document.getElementById('tokenMobile').value;
+      const center = queueCenter.options[queueCenter.selectedIndex].text;
+
+      if (!service || !mobile || mobile.length !== 10) {
+        alert('Please fill all details correctly');
+        return;
+      }
+
+      // Generate token number
+      const prefix = ['A', 'B', 'C', 'D'][Math.floor(Math.random() * 4)];
+      const tokenNum = prefix + '-' + String(Math.floor(Math.random() * 900) + 100).padStart(3, '0');
+      const currentNum = parseInt(document.getElementById('currentToken').textContent.split('-')[1]);
+      const yourNum = parseInt(tokenNum.split('-')[1]);
+      const peopleAhead = yourNum - currentNum;
+      const waitTime = peopleAhead * 2;
+
+      document.getElementById('bookedToken').textContent = tokenNum;
+      document.getElementById('confirmedCenter').textContent = center;
+      document.getElementById('confirmedService').textContent = service;
+      document.getElementById('confirmedWait').textContent = waitTime + ' mins (approx)';
+      document.getElementById('confirmedMobile').textContent = mobile;
+      document.getElementById('alertToken').textContent = prefix + '-' + String(yourNum - 10).padStart(3, '0');
+      document.getElementById('yourToken').textContent = tokenNum;
+
+      tokenConfirmation.classList.remove('hidden');
+      tokenConfirmation.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Update current token every 30 seconds (simulation)
+    setInterval(() => {
+      if (!queueStatus.classList.contains('hidden')) {
+        const currentEl = document.getElementById('currentToken');
+        const parts = currentEl.textContent.split('-');
+        const newNum = String(parseInt(parts[1]) + 1).padStart(3, '0');
+        currentEl.textContent = parts[0] + '-' + newNum;
+      }
+    }, 30000);
+</script>
+        </body>
+    </head>
+ </html>
+ 

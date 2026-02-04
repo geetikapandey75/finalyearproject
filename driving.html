@@ -1,72 +1,782 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Driving Licence | Legal Assist</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driving Licence Services</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans">
+<body class="bg-gray-50 font-sans text-gray-900">
 
-  <!-- Header -->
-  <header class="bg-blue-900 text-white py-6">
-    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Legal Assist</h1>
+  <!-- Existing Navigation Bar -->
+  <header class="bg-gray-900 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">Legal Assist</h1>
       <nav class="space-x-4">
-        <a href="index.html" class="hover:underline">Home</a>
-        <a href="find-lawyer.html" class="hover:underline">Find Lawyer</a>
-        <a href="appointment-form.html" class="hover:underline">Appointments</a>
+        <a href="license.html" class="hover:underline">Home</a>
+        <a href="business.html" class="hover:underline">Business Licence</a>
+        <a href="trade.html" class="hover:underline">Trade Licence</a>
+        <a href="other.html" class="hover:underline">Other</a>
       </nav>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="max-w-4xl mx-auto px-6 py-10 bg-white mt-6 rounded-lg shadow">
-    <h2 class="text-3xl font-bold mb-4 text-blue-800">Driving Licence in India</h2>
-    <p class="mb-6 text-lg text-gray-700">
-      A Driving Licence (DL) is an official document issued by the Regional Transport Office (RTO) in India that permits an individual to drive a motor vehicle on public roads. It's mandatory for every driver to hold a valid licence.
-    </p>
+  <!-- Hero Section -->
+  <section class="text-center py-16 bg-gradient-to-r from-gray-800 to-gray-600 text-white">
+    <h2 class="text-4xl font-bold mb-4">Driving Licence Services</h2>
+    <p class="mb-6 text-lg">Apply, check status, upload documents, find agents & learn the rules — all in one place.</p>
+  </section>
 
-    <h3 class="text-2xl font-semibold text-blue-700 mb-2">Types of Driving Licences</h3>
-    <ul class="list-disc ml-6 text-gray-700 mb-6">
-      <li><strong>Learning Licence:</strong> Temporary and issued for learning purposes.</li>
-      <li><strong>Permanent Driving Licence:</strong> For private vehicle owners after passing a driving test.</li>
-      <li><strong>Commercial Licence:</strong> For professional drivers of commercial vehicles.</li>
-    </ul>
+  <!-- Content -->
+  <main class="container mx-auto px-6 py-12 space-y-12">
 
-    <h3 class="text-2xl font-semibold text-blue-700 mb-2">Eligibility Criteria</h3>
-    <ul class="list-disc ml-6 text-gray-700 mb-6">
-      <li>Must be at least 18 years old (for a private vehicle).</li>
-      <li>16 years for gearless two-wheelers (with parental consent).</li>
-      <li>Must have a valid Learner’s Licence for at least 30 days.</li>
-    </ul>
+    <!-- Two Huge Buttons for License Types -->
+    <section id="licenseChoice" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-6 text-center">Choose Your Licence Type</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <button onclick="showLearnerTest()" class="bg-blue-600 text-white px-12 py-16 rounded-xl font-bold text-3xl hover:bg-blue-500 transition shadow-xl">
+          🎓 LEARNER'S LICENCE
+        </button>
+        <button onclick="showPermanentTest()" class="bg-green-600 text-white px-12 py-16 rounded-xl font-bold text-3xl hover:bg-green-500 transition shadow-xl">
+          🚗 PERMANENT LICENCE
+        </button>
+      </div>
+    </section>
 
-    <h3 class="text-2xl font-semibold text-blue-700 mb-2">Documents Required</h3>
-    <ul class="list-disc ml-6 text-gray-700 mb-6">
-      <li>Proof of age (Aadhar Card, PAN Card, etc.)</li>
-      <li>Proof of address (Utility bills, Voter ID, etc.)</li>
-      <li>Passport-sized photographs</li>
-      <li>Application Form (Form 1, Form 2)</li>
-    </ul>
+    <!-- Learner's Licence Test Section -->
+    <section id="learnerTest" class="bg-white rounded-xl shadow-lg p-8 hidden">
+      <h3 class="text-2xl font-bold mb-4">Learner's Licence Test</h3>
+      <p class="mb-4 text-gray-700">Answer all 10 questions correctly. You need at least 5/10 to apply.</p>
 
-    <h3 class="text-2xl font-semibold text-blue-700 mb-2">Application Process</h3>
-    <ol class="list-decimal ml-6 text-gray-700 mb-6">
-      <li>Visit the official <a href="https://parivahan.gov.in/" class="text-blue-600 underline" target="_blank">Parivahan portal</a>.</li>
-      <li>Fill in the online application for Learner’s Licence.</li>
-      <li>Book a slot for the Learner’s test at the RTO.</li>
-      <li>After passing, apply for a Permanent Licence after 30 days.</li>
-      <li>Take a driving test at the RTO for final approval.</li>
-    </ol>
+      <div id="learnerQuiz" class="space-y-4 max-w-xl mx-auto">
+        <!-- Question 1 -->
+        <div>
+          <label class="block font-semibold mb-2">1. What does a red traffic light mean?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="stop" required>
+            <option value="">Select answer</option>
+            <option value="stop">Stop</option>
+            <option value="go">Go</option>
+            <option value="slow">Go Slow</option>
+          </select>
+        </div>
 
-    <div class="mt-8">
-      <a href="appointment-form.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-lg inline-block">Book a Legal Consultation</a>
+        <!-- Question 2 -->
+        <div>
+          <label class="block font-semibold mb-2">2. Wearing a helmet while riding a two-wheeler is?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="mandatory" required>
+            <option value="">Select answer</option>
+            <option value="mandatory">Mandatory</option>
+            <option value="optional">Optional</option>
+            <option value="not-required">Not Required</option>
+          </select>
+        </div>
+
+        <!-- Question 3 -->
+        <div>
+          <label class="block font-semibold mb-2">3. Speed limit in a city area is usually?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="50" required>
+            <option value="">Select answer</option>
+            <option value="50">50 km/h</option>
+            <option value="80">80 km/h</option>
+            <option value="100">100 km/h</option>
+          </select>
+        </div>
+
+        <!-- Question 4 -->
+        <div>
+          <label class="block font-semibold mb-2">4. What should you do at a yellow traffic light?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="slow" required>
+            <option value="">Select answer</option>
+            <option value="slow">Slow down / Prepare to stop</option>
+            <option value="stop">Stop immediately</option>
+            <option value="go">Go</option>
+          </select>
+        </div>
+
+        <!-- Question 5 -->
+        <div>
+          <label class="block font-semibold mb-2">5. Pedestrian crossing should be used by?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="pedestrians" required>
+            <option value="">Select answer</option>
+            <option value="pedestrians">Pedestrians only</option>
+            <option value="vehicles">Vehicles</option>
+            <option value="both">Both</option>
+          </select>
+        </div>
+
+        <!-- Question 6 -->
+        <div>
+          <label class="block font-semibold mb-2">6. Is it allowed to use a mobile phone while driving?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="no" required>
+            <option value="">Select answer</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+            <option value="handsfree">Hands-free only</option>
+          </select>
+        </div>
+
+        <!-- Question 7 -->
+        <div>
+          <label class="block font-semibold mb-2">7. What does a yield sign indicate?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="slow" required>
+            <option value="">Select answer</option>
+            <option value="slow">Give way / Slow down</option>
+            <option value="stop">Stop completely</option>
+            <option value="go">Go</option>
+          </select>
+        </div>
+
+        <!-- Question 8 -->
+        <div>
+          <label class="block font-semibold mb-2">8. Maximum penalty for drunk driving can include?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="both" required>
+            <option value="">Select answer</option>
+            <option value="fine">Fine only</option>
+            <option value="jail">Jail only</option>
+            <option value="both">Both fine and jail</option>
+          </select>
+        </div>
+
+        <!-- Question 9 -->
+        <div>
+          <label class="block font-semibold mb-2">9. At a roundabout, vehicles must?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="clockwise" required>
+            <option value="">Select answer</option>
+            <option value="anticlockwise">Move clockwise</option>
+            <option value="clockwise">Move anticlockwise</option>
+            <option value="stop">Stop in middle</option>
+          </select>
+        </div>
+
+        <!-- Question 10 -->
+        <div>
+          <label class="block font-semibold mb-2">10. Parking on a highway shoulder is?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="allowed" required>
+            <option value="">Select answer</option>
+            <option value="allowed">Allowed in emergencies only</option>
+            <option value="not-allowed">Not Allowed</option>
+            <option value="anytime">Allowed anytime</option>
+          </select>
+        </div>
+
+        <button onclick="checkLearnerTest()" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-500 w-full">
+          Submit Test
+        </button>
+      </div>
+
+      <p id="learnerResult" class="mt-4 font-bold text-center text-lg"></p>
+    </section>
+
+    <!-- Permanent Licence Test Section -->
+    <section id="permanentTest" class="bg-white rounded-xl shadow-lg p-8 hidden">
+      <h3 class="text-2xl font-bold mb-4">Permanent Licence Test</h3>
+      <p class="mb-4 text-gray-700">Answer all 10 questions correctly. You need at least 5/10 to apply.</p>
+
+      <div id="permanentQuiz" class="space-y-4 max-w-xl mx-auto">
+        <!-- Question 1 -->
+        <div>
+          <label class="block font-semibold mb-2">1. Maximum speed on a national highway in India is?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="100" required>
+            <option value="">Select answer</option>
+            <option value="100">100 km/h</option>
+            <option value="80">80 km/h</option>
+            <option value="60">60 km/h</option>
+          </select>
+        </div>
+
+        <!-- Question 2 -->
+        <div>
+          <label class="block font-semibold mb-2">2. When overtaking another vehicle, you should?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="right" required>
+            <option value="">Select answer</option>
+            <option value="right">Overtake from the right side</option>
+            <option value="left">Overtake from the left side</option>
+            <option value="any">Overtake from any side</option>
+          </select>
+        </div>
+
+        <!-- Question 3 -->
+        <div>
+          <label class="block font-semibold mb-2">3. At an uncontrolled intersection, you should?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="slow" required>
+            <option value="">Select answer</option>
+            <option value="slow">Slow down and give way to vehicles from the right</option>
+            <option value="speed">Speed up to cross quickly</option>
+            <option value="stop">Always stop completely</option>
+          </select>
+        </div>
+
+        <!-- Question 4 -->
+        <div>
+          <label class="block font-semibold mb-2">4. The safe following distance between vehicles is?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="2sec" required>
+            <option value="">Select answer</option>
+            <option value="1sec">1 second</option>
+            <option value="2sec">2-3 seconds</option>
+            <option value="5sec">5 seconds</option>
+          </select>
+        </div>
+
+        <!-- Question 5 -->
+        <div>
+          <label class="block font-semibold mb-2">5. When parking uphill without a curb, turn your wheels?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="right" required>
+            <option value="">Select answer</option>
+            <option value="left">To the left</option>
+            <option value="right">To the right</option>
+            <option value="straight">Keep them straight</option>
+          </select>
+        </div>
+
+        <!-- Question 6 -->
+        <div>
+          <label class="block font-semibold mb-2">6. Using high beam headlights in city areas is?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="not-allowed" required>
+            <option value="">Select answer</option>
+            <option value="allowed">Allowed</option>
+            <option value="not-allowed">Not allowed</option>
+            <option value="sometimes">Allowed only at night</option>
+          </select>
+        </div>
+
+        <!-- Question 7 -->
+        <div>
+          <label class="block font-semibold mb-2">7. A continuous yellow line on the road means?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="no-overtaking" required>
+            <option value="">Select answer</option>
+            <option value="overtaking">Overtaking allowed</option>
+            <option value="no-overtaking">No overtaking</option>
+            <option value="parking">Parking zone</option>
+          </select>
+        </div>
+
+        <!-- Question 8 -->
+        <div>
+          <label class="block font-semibold mb-2">8. Before changing lanes, you must?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="all" required>
+            <option value="">Select answer</option>
+            <option value="signal">Use turn signal</option>
+            <option value="mirror">Check mirrors</option>
+            <option value="all">Both signal and check mirrors</option>
+          </select>
+        </div>
+
+        <!-- Question 9 -->
+        <div>
+          <label class="block font-semibold mb-2">9. The validity of a permanent driving licence is?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="20years" required>
+            <option value="">Select answer</option>
+            <option value="5years">5 years</option>
+            <option value="10years">10 years</option>
+            <option value="20years">20 years (or until age 50)</option>
+          </select>
+        </div>
+
+        <!-- Question 10 -->
+        <div>
+          <label class="block font-semibold mb-2">10. When an ambulance is approaching with sirens, you should?</label>
+          <select class="w-full p-3 border rounded-lg" data-answer="give-way" required>
+            <option value="">Select answer</option>
+            <option value="continue">Continue at your speed</option>
+            <option value="give-way">Give way immediately</option>
+            <option value="speed">Speed up to clear the road</option>
+          </select>
+        </div>
+
+        <button onclick="checkPermanentTest()" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-500 w-full">
+          Submit Test
+        </button>
+      </div>
+
+      <p id="permanentResult" class="mt-4 font-bold text-center text-lg"></p>
+    </section>
+
+    <!-- Flashcards Section -->
+    <section id="flashcardsSection" class="bg-white rounded-xl shadow-lg p-8 hidden">
+      <h3 class="text-2xl font-bold mb-4">Traffic Signs Flashcards</h3>
+      <p class="mb-4 text-gray-700">Study these important traffic signs before your test.</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        
+        <!-- Flashcard 1 -->
+        <div class="perspective">
+          <div class="relative w-full h-40 transform-style-preserve-3d transition-transform duration-500 hover:rotate-y-180">
+            <div class="absolute w-full h-full bg-yellow-300 flex items-center justify-center rounded-lg backface-hidden font-bold text-3xl">
+              🚦
+            </div>
+            <div class="absolute w-full h-full bg-green-200 flex items-center justify-center rounded-lg backface-hidden rotate-y-180 font-semibold text-center px-2">
+              Traffic Light - Stop / Go / Slow
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcard 2 -->
+        <div class="perspective">
+          <div class="relative w-full h-40 transform-style-preserve-3d transition-transform duration-500 hover:rotate-y-180">
+            <div class="absolute w-full h-full bg-red-300 flex items-center justify-center rounded-lg backface-hidden font-bold text-3xl">
+              ⛔
+            </div>
+            <div class="absolute w-full h-full bg-blue-200 flex items-center justify-center rounded-lg backface-hidden rotate-y-180 font-semibold text-center px-2">
+              No Entry
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcard 3 -->
+        <div class="perspective">
+          <div class="relative w-full h-40 transform-style-preserve-3d transition-transform duration-500 hover:rotate-y-180">
+            <div class="absolute w-full h-full bg-orange-300 flex items-center justify-center rounded-lg backface-hidden font-bold text-3xl">
+              🛑
+            </div>
+            <div class="absolute w-full h-full bg-purple-200 flex items-center justify-center rounded-lg backface-hidden rotate-y-180 font-semibold text-center px-2">
+              Stop Sign
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcard 4 -->
+        <div class="perspective">
+          <div class="relative w-full h-40 transform-style-preserve-3d transition-transform duration-500 hover:rotate-y-180">
+            <div class="absolute w-full h-full bg-green-300 flex items-center justify-center rounded-lg backface-hidden font-bold text-3xl">
+              🛣️
+            </div>
+            <div class="absolute w-full h-full bg-yellow-200 flex items-center justify-center rounded-lg backface-hidden rotate-y-180 font-semibold text-center px-2">
+              Highway / Expressway
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="mt-6 text-center">
+        <button onclick="continueToTest()" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-500">
+          Continue to Test
+        </button>
+      </div>
+    </section>
+
+    <!-- Calendar Section -->
+    <section id="calendar" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-4">Test Schedule Calendar</h3>
+      <p class="mb-4 text-gray-700">View available test dates and plan your driving test accordingly.</p>
+      
+      <div class="max-w-3xl mx-auto">
+        <div class="flex justify-between items-center mb-4">
+          <button onclick="prevMonth()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500">← Previous</button>
+          <h4 id="monthYear" class="text-xl font-bold"></h4>
+          <button onclick="nextMonth()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500">Next →</button>
+        </div>
+        
+        <div class="grid grid-cols-7 gap-2">
+          <div class="text-center font-bold p-2 bg-gray-200 rounded">Sun</div>
+          <div class="text-center font-bold p-2 bg-gray-200 rounded">Mon</div>
+          <div class="text-center font-bold p-2 bg-gray-200 rounded">Tue</div>
+          <div class="text-center font-bold p-2 bg-gray-200 rounded">Wed</div>
+          <div class="text-center font-bold p-2 bg-gray-200 rounded">Thu</div>
+          <div class="text-center font-bold p-2 bg-gray-200 rounded">Fri</div>
+          <div class="text-center font-bold p-2 bg-gray-200 rounded">Sat</div>
+        </div>
+        
+        <div id="calendarDays" class="grid grid-cols-7 gap-2 mt-2"></div>
+        
+        <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+          <p class="font-semibold mb-2">Legend:</p>
+          <div class="flex flex-wrap gap-4">
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 bg-green-500 rounded"></div>
+              <span class="text-sm">Available</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 bg-red-500 rounded"></div>
+              <span class="text-sm">Fully Booked</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 bg-blue-500 rounded"></div>
+              <span class="text-sm">Today</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guidelines -->
+    <section id="guidelines" class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-2xl font-bold mb-4">Eligibility & Rules</h3>
+      <ul class="list-disc list-inside space-y-2 text-gray-700">
+        <li>Minimum age: 18 years for non-transport vehicles.</li>
+        <li>Must possess a valid learner's licence.</li>
+        <li>Medically fit to drive.</li>
+        <li>Knowledge of traffic rules and road safety.</li>
+        <li>Proof of age (birth certificate, school certificate, passport, etc.)</li>
+        <li>Proof of address (Aadhaar card, voter ID, utility bills, etc.)</li>
+        <li>Passport-size photographs.</li>
+      </ul>
+    </section>
+
+    <!-- Apply Form -->
+    <section id="apply" class="bg-white rounded-xl shadow-lg p-8 hidden">
+      <h3 class="text-2xl font-bold mb-6">Apply for Driving Licence</h3>
+
+      <div class="bg-green-100 border-l-4 border-green-500 p-4 mb-6">
+        <p class="font-semibold text-green-700">✓ Test Passed! You can now apply for your licence.</p>
+      </div>
+
+      <div class="space-y-6 max-w-2xl mx-auto">
+        <div>
+          <label class="block font-semibold mb-2">Full Name</label>
+          <input type="text" name="full_name" class="w-full p-4 border rounded-lg" placeholder="Enter your name" required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Date of Birth</label>
+          <input type="date" name="dob" class="w-full p-4 border rounded-lg" required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Email</label>
+          <input type="email" name="email" class="w-full p-4 border rounded-lg" placeholder="Enter your email" required>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-2">Phone Number</label>
+          <input type="tel" name="phone" class="w-full p-4 border rounded-lg" placeholder="Enter your phone number" required>
+        </div>
+
+        <button type="submit" class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full">
+          Submit Application
+        </button>
+      </div>
+    </section>
+
+    <!-- Sections below only shown when not in test mode -->
+    <div id="otherSections">
+      <!-- Application Status -->
+<section id="status" class="bg-white rounded-xl shadow-lg p-8">
+  <h3 class="text-2xl font-bold mb-4">Check Application Status</h3>
+
+  <form action="driving-form.php" method="POST" class="space-y-4 max-w-md mx-auto">
+    
+    <!-- tells backend what to do -->
+    <input type="hidden" name="action" value="check_status">
+
+    <input 
+      type="text" 
+      name="application_id"
+      class="w-full p-4 border rounded-lg"
+      placeholder="Enter Application ID"
+      required
+    >
+
+    <button 
+      type="submit"
+      class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full"
+    >
+      Check Status
+    </button>
+
+  </form>
+</section>
+
+
+      <!-- Upload Documents -->
+      <section id="upload" class="bg-white rounded-xl shadow-lg p-8">
+        <h3 class="text-2xl font-bold mb-4">Upload Required Documents</h3>
+        <div class="space-y-4 max-w-md mx-auto">
+          <input type="file" class="w-full p-4 border rounded-lg" required>
+          <button type="submit" class="bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-400 w-full">Upload</button>
+        </div>
+      </section>
+
+      <!-- Agents -->
+      <section id="agents" class="bg-white rounded-xl shadow-lg p-8">
+        <h3 class="text-2xl font-bold mb-4">Find a Driving Licence Agent</h3>
+        <p class="text-gray-700 mb-4">Need help with the process? Find registered agents near you.</p>
+        <a href="https://www.google.com/search?q=driving+licence+agent+near+me" target="_blank" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-500">Search Agents</a>
+      </section>
+
+      <!-- Slot Booking -->
+      <section id="slotBooking" class="bg-white rounded-xl shadow-lg p-8">
+  <h3 class="text-2xl font-bold mb-4">Book a Slot for Driving Test</h3>
+
+  <form action="driving-backend.php" method="POST" class="space-y-4 max-w-md mx-auto">
+
+    <!-- tells backend this is slot booking -->
+    <input type="hidden" name="action" value="book_slot">
+
+    <label class="block font-semibold">Select Date</label>
+    <input 
+      type="date" 
+      name="test_date" 
+      class="w-full p-4 border rounded-lg" 
+      required
+    >
+
+    <label class="block font-semibold">Select Time</label>
+    <select 
+      name="test_time" 
+      class="w-full p-4 border rounded-lg" 
+      required
+    >
+      <option value="">Select slot</option>
+      <option value="09:00">09:00 AM</option>
+      <option value="11:00">11:00 AM</option>
+      <option value="13:00">01:00 PM</option>
+      <option value="15:00">03:00 PM</option>
+    </select>
+
+    <label class="block font-semibold">Select Location</label>
+    <select 
+      name="test_location" 
+      class="w-full p-4 border rounded-lg" 
+      required
+    >
+      <option value="">Select RTO / Test Center</option>
+      <option value="KPHB RTO">KPHB RTO</option>
+      <option value="Amberpet RTO">Amberpet RTO</option>
+      <option value="HITEC City RTO">HITEC City RTO</option>
+      <option value="Nallakunta RTO">Nallakunta RTO</option>
+      <option value="Gachibowli Driving Test Center">Gachibowli Driving Test Center</option>
+      <option value="Malkajgiri RTO">Malkajgiri RTO</option>
+    </select>
+
+    <button 
+      type="submit" 
+      class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full"
+    >
+      Book Slot
+    </button>
+
+  </form>
+</section>
+
+
+      <!-- Acts -->
+      <section id="acts" class="bg-white rounded-xl shadow-lg p-8">
+        <h3 class="text-2xl font-bold mb-4">Acts & Rules</h3>
+        <ul class="list-disc list-inside space-y-2 text-gray-700">
+          <li><a href="https://parivahan.gov.in" class="text-blue-600 hover:underline" target="_blank">Motor Vehicles Act, 1988</a></li>
+          <li><a href="https://morth.nic.in" class="text-blue-600 hover:underline" target="_blank">Central Motor Vehicle Rules</a></li>
+        </ul>
+      </section>
     </div>
+
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-blue-900 text-white text-center py-6 mt-10">
-    <p>&copy; 2025 Legal Assist. All rights reserved.</p>
-  </footer>
+  <!-- WhatsApp Button -->
+  <a id="whatsapp-button" href="https://wa.me/1234567890" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+  </a>
+
+<style>
+.perspective {
+  perspective: 1000px;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+.hover\:rotate-y-180:hover {
+  transform: rotateY(180deg);
+}
+.transition-transform {
+  transition: transform 0.5s;
+}
+
+#whatsapp-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+#whatsapp-button img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+</style>
+
+<script>
+let currentLicenseType = '';
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+
+// Calendar functionality
+function renderCalendar() {
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+  
+  document.getElementById('monthYear').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+  
+  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  
+  const calendarDays = document.getElementById('calendarDays');
+  calendarDays.innerHTML = '';
+  
+  // Empty cells for days before month starts
+  for (let i = 0; i < firstDay; i++) {
+    const emptyDiv = document.createElement('div');
+    emptyDiv.className = 'p-2';
+    calendarDays.appendChild(emptyDiv);
+  }
+  
+  // Actual days
+  const today = new Date();
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dayDiv = document.createElement('div');
+    const isToday = day === today.getDate() && 
+                    currentMonth === today.getMonth() && 
+                    currentYear === today.getFullYear();
+    
+    // Random availability for demo (you can replace with actual data)
+    const isAvailable = Math.random() > 0.3;
+    
+    let bgColor = 'bg-gray-100 hover:bg-gray-200';
+    if (isToday) {
+      bgColor = 'bg-blue-500 text-white font-bold';
+    } else if (isAvailable) {
+      bgColor = 'bg-green-100 hover:bg-green-200';
+    } else {
+      bgColor = 'bg-red-100';
+    }
+    
+    dayDiv.className = `p-2 text-center rounded cursor-pointer ${bgColor}`;
+    dayDiv.textContent = day;
+    dayDiv.onclick = () => selectDate(day);
+    calendarDays.appendChild(dayDiv);
+  }
+}
+
+function prevMonth() {
+  currentMonth--;
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+  }
+  renderCalendar();
+}
+
+function nextMonth() {
+  currentMonth++;
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  }
+  renderCalendar();
+}
+
+function selectDate(day) {
+  alert(`Selected date: ${day}/${currentMonth + 1}/${currentYear}`);
+}
+
+// Initialize calendar on page load
+document.addEventListener('DOMContentLoaded', function() {
+  renderCalendar();
+});
+
+function showLearnerTest() {
+  currentLicenseType = 'learner';
+  document.getElementById('licenseChoice').classList.add('hidden');
+  document.getElementById('guidelines').classList.add('hidden');
+  document.getElementById('otherSections').classList.add('hidden');
+  document.getElementById('calendar').classList.add('hidden');
+  document.getElementById('flashcardsSection').classList.remove('hidden');
+}
+
+function showPermanentTest() {
+  currentLicenseType = 'permanent';
+  document.getElementById('licenseChoice').classList.add('hidden');
+  document.getElementById('guidelines').classList.add('hidden');
+  document.getElementById('otherSections').classList.add('hidden');
+  document.getElementById('calendar').classList.add('hidden');
+  document.getElementById('flashcardsSection').classList.remove('hidden');
+}
+
+function continueToTest() {
+  document.getElementById('flashcardsSection').classList.add('hidden');
+  if (currentLicenseType === 'learner') {
+    document.getElementById('learnerTest').classList.remove('hidden');
+  } else {
+    document.getElementById('permanentTest').classList.remove('hidden');
+  }
+}
+
+function checkLearnerTest() {
+  const selects = document.querySelectorAll('#learnerQuiz select');
+  let score = 0;
+  let allAnswered = true;
+
+  selects.forEach(select => {
+    if (!select.value) {
+      allAnswered = false;
+    } else if (select.value === select.getAttribute('data-answer')) {
+      score++;
+    }
+  });
+
+  const resultElement = document.getElementById('learnerResult');
+  
+  if (!allAnswered) {
+    resultElement.textContent = 'Please answer all questions!';
+    resultElement.className = 'mt-4 font-bold text-center text-lg text-red-600';
+    return;
+  }
+
+  if (score >= 5) {
+    resultElement.textContent = `Congratulations! You scored ${score}/10. You can now apply for Learner's Licence.`;
+    resultElement.className = 'mt-4 font-bold text-center text-lg text-green-600';
+    setTimeout(() => {
+      document.getElementById('learnerTest').classList.add('hidden');
+      document.getElementById('apply').classList.remove('hidden');
+      document.getElementById('apply').scrollIntoView({ behavior: 'smooth' });
+    }, 2000);
+  } else {
+    resultElement.textContent = `You scored ${score}/10. You need at least 5/10 to apply. Please study the rules and try again.`;
+    resultElement.className = 'mt-4 font-bold text-center text-lg text-red-600';
+  }
+}
+
+function checkPermanentTest() {
+  const selects = document.querySelectorAll('#permanentQuiz select');
+  let score = 0;
+  let allAnswered = true;
+
+  selects.forEach(select => {
+    if (!select.value) {
+      allAnswered = false;
+    } else if (select.value === select.getAttribute('data-answer')) {
+      score++;
+    }
+  });
+
+  const resultElement = document.getElementById('permanentResult');
+  
+  if (!allAnswered) {
+    resultElement.textContent = 'Please answer all questions!';
+    resultElement.className = 'mt-4 font-bold text-center text-lg text-red-600';
+    return;
+  }
+
+  if (score >= 5) {
+    resultElement.textContent = `Congratulations! You scored ${score}/10. You can now apply for Permanent Licence.`;
+    resultElement.className = 'mt-4 font-bold text-center text-lg text-green-600';
+    setTimeout(() => {
+      document.getElementById('permanentTest').classList.add('hidden');
+      document.getElementById('apply').classList.remove('hidden');
+      document.getElementById('apply').scrollIntoView({ behavior: 'smooth' });
+    }, 2000);
+  } else {
+    resultElement.textContent = `You scored ${score}/10. You need at least 5/10 to apply. Please study the rules and try again.`;
+    resultElement.className = 'mt-4 font-bold text-center text-lg text-red-600';
+  }
+}
+</script>
 
 </body>
 </html>

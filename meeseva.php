@@ -1,198 +1,172 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+session_start();
 
 // Database connection
-$host = "localhost";
-$user = "root";
-$password = "";
-$dbname = "legal_assist";
+$conn = new mysqli("localhost", "root", "", "legal_assist");
 
-$conn = new mysqli($host, $user, $password, $dbname);
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// ==================== HANDLE APPLICATION FORM SUBMISSION ====================
-if (isset($_POST['fullName'], $_POST['email'], $_POST['service'], $_POST['contactNumber'], 
-          $_POST['center'], $_POST['appointment_date'], $_POST['appointment_time'])) {
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['fullName'])) {
+    $fullName = $_POST['fullName'];
+    $email = $_POST['email'];
+    $contactNumber = $_POST['contactNumber'];
+    $service = $_POST['service'];
+    $center = $_POST['center'];
+    $appointmentDate = $_POST['appointment_date'];
+    $appointmentTime = $_POST['appointment_time'];
     
-    $full_name = $conn->real_escape_string($_POST['fullName']);
-    $email = $conn->real_escape_string($_POST['email']);
-    $service = $conn->real_escape_string($_POST['service']);
-    $contact_number = $conn->real_escape_string($_POST['contactNumber']);
-    $center = $conn->real_escape_string($_POST['center']);
-    $appointment_date = $conn->real_escape_string($_POST['appointment_date']);
-    $appointment_time = $conn->real_escape_string($_POST['appointment_time']);
-
-    // Validation
-    if (empty($full_name) || empty($email) || empty($service) || empty($contact_number) || 
-        empty($center) || empty($appointment_date) || empty($appointment_time)) {
-        die("<div class='bg-red-100 border border-red-400 text-red-700 p-4 rounded-lg max-w-2xl mx-auto mt-6'>
-                All fields are required.
-             </div>");
-    }
-
-    // Generate unique application number
-    $application_number = 'MS' . date('Y') . strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
-
+    // Generate application number
+    $applicationNumber = 'MS' . time() . rand(1000, 9999);
+    
     // Insert into database
-    $sql = "INSERT INTO meeseva_applications 
-            (full_name, email, service, contact_number, center_name, 
-             appointment_date, appointment_time, application_number, status) 
-            VALUES 
-            ('$full_name', '$email', '$service', '$contact_number', '$center', 
-             '$appointment_date', '$appointment_time', '$application_number', 'Appointment Booked')";
-
-    if ($conn->query($sql) === TRUE) {
-        ?>
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Appointment Confirmed - MeeSeva</title>
-            <script src="https://cdn.tailwindcss.com"></script>
-        </head>
-        <body class="bg-blue-50">
-            <div class="container mx-auto px-6 py-12">
-                <div class="bg-white rounded-xl shadow-2xl p-8 max-w-2xl mx-auto">
-                    <div class="text-center mb-6">
-                        <div class="inline-block p-4 bg-green-100 rounded-full mb-4">
-                            <svg class="w-20 h-20 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <h2 class="text-3xl font-bold text-green-600 mb-2">✅ Appointment Booked Successfully!</h2>
-                        <p class="text-gray-600">Your appointment has been confirmed</p>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 mb-6">
-                        <h3 class="text-xl font-bold text-blue-900 mb-4 text-center">📋 Appointment Details</h3>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between border-b pb-2">
-                                <span class="font-semibold text-blue-900">Application Number:</span>
-                                <span class="font-mono bg-yellow-100 px-3 py-1 rounded"><?php echo $application_number; ?></span>
-                            </div>
-                            <div class="flex justify-between border-b pb-2">
-                                <span class="font-semibold text-blue-900">Name:</span>
-                                <span><?php echo $full_name; ?></span>
-                            </div>
-                            <div class="flex justify-between border-b pb-2">
-                                <span class="font-semibold text-blue-900">Service:</span>
-                                <span><?php echo $service; ?></span>
-                            </div>
-                            <div class="flex justify-between border-b pb-2">
-                                <span class="font-semibold text-blue-900">Center:</span>
-                                <span><?php echo $center; ?></span>
-                            </div>
-                            <div class="flex justify-between border-b pb-2">
-                                <span class="font-semibold text-blue-900">Date:</span>
-                                <span><?php echo date('d F Y', strtotime($appointment_date)); ?></span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="font-semibold text-blue-900">Time:</span>
-                                <span><?php echo $appointment_time; ?></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-                        <p class="text-sm text-yellow-800">
-                            <strong>📧 Important:</strong> Save your Application Number: <strong><?php echo $application_number; ?></strong><br>
-                            You'll need it to download your appointment certificate.
-                        </p>
-                    </div>
-
-                    <div class="flex gap-4">
-                        <a href="meeseva.html#download" class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg text-center font-semibold hover:bg-blue-700 transition">
-                            📥 Download Certificate
-                        </a>
-                        <a href="meeseva.html" class="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg text-center font-semibold hover:bg-gray-300 transition">
-                            ← Back to Home
-                        </a>
-                    </div>
-                </div>
+    $stmt = $conn->prepare("INSERT INTO meeseva_applications (full_name, email, contact_number, service, center_name, appointment_date, appointment_time, application_number, status, payment_status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', 'pending', NOW())");
+    
+    $stmt->bind_param("ssssssss", $fullName, $email, $contactNumber, $service, $center, $appointmentDate, $appointmentTime, $applicationNumber);
+    
+    if ($stmt->execute()) {
+        $application_id = $conn->insert_id;
+        
+        // Store data in session for payment
+        $_SESSION['payment_data'] = [
+            'service_type' => 'meeseva',
+            'service_record_id' => $application_id,
+            'amount' => 0, // Will be set based on service selection in payment page
+            'name' => $fullName,
+            'email' => $email,
+            'phone' => $contactNumber,
+            'tracking_id' => $applicationNumber
+        ];
+        
+        echo '<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Submitted | Legal Assist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50">
+    <div class="container mx-auto px-6 py-12">
+        <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto text-center">
+            <div class="mb-6">
+                <svg class="w-20 h-20 text-green-600 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
             </div>
-        </body>
-        </html>
-        <?php
-        exit;
+            <h2 class="text-3xl font-bold text-green-600 mb-4">Application Submitted Successfully!</h2>
+            <div class="bg-blue-50 rounded-lg p-6 mb-6 text-left">
+                <p class="mb-2"><strong>Application Number:</strong> <span class="text-blue-600 font-mono text-lg">' . $applicationNumber . '</span></p>
+                <p class="mb-2"><strong>Name:</strong> ' . htmlspecialchars($fullName) . '</p>
+                <p class="mb-2"><strong>Service:</strong> ' . htmlspecialchars($service) . '</p>
+                <p class="mb-2"><strong>Center:</strong> ' . htmlspecialchars($center) . '</p>
+                <p class="mb-2"><strong>Date:</strong> ' . htmlspecialchars($appointmentDate) . '</p>
+                <p class="mb-2"><strong>Time:</strong> ' . htmlspecialchars($appointmentTime) . '</p>
+            </div>
+            <p class="text-gray-600 mb-6">Please note your application number for future reference. You can now proceed to payment.</p>
+            <a href="meeseva.html" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-500 transition">
+                Proceed to Payment
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Store data in sessionStorage for payment
+        sessionStorage.setItem("latest_meeseva_id", "' . $application_id . '");
+        sessionStorage.setItem("applicant_name", "' . addslashes($fullName) . '");
+        sessionStorage.setItem("applicant_email", "' . addslashes($email) . '");
+        sessionStorage.setItem("applicant_phone", "' . addslashes($contactNumber) . '");
+    </script>
+</body>
+</html>';
+        exit();
     } else {
-        echo "<div class='bg-red-100 border border-red-400 text-red-700 p-4 rounded-lg max-w-2xl mx-auto mt-6'>
-                Error: " . $conn->error . "
-              </div>";
+        echo "Error: " . $stmt->error;
     }
+    
+    $stmt->close();
 }
 
-// ==================== HANDLE STATUS CHECK ====================
-elseif (isset($_POST['application_number']) && !isset($_POST['action'])) {
-    $appNumber = $conn->real_escape_string($_POST['application_number']);
-
-    $sql = "SELECT * FROM meeseva_applications WHERE application_number = '$appNumber'";
-    $result = $conn->query($sql);
-
+// Handle application status check
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['application_number'])) {
+    $appNumber = $_POST['application_number'];
+    
+    $stmt = $conn->prepare("SELECT * FROM meeseva_applications WHERE application_number = ?");
+    $stmt->bind_param("s", $appNumber);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        ?>
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Application Status - MeeSeva</title>
-            <script src="https://cdn.tailwindcss.com"></script>
-        </head>
-        <body class="bg-blue-50">
-            <div class="container mx-auto px-6 py-12">
-                <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
-                    <h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">Application Status</h2>
-                    
-                    <div class="bg-blue-50 p-6 rounded-lg mb-6">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-sm text-gray-600">Application Number</p>
-                                <p class="font-bold text-lg"><?php echo $row['application_number']; ?></p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Status</p>
-                                <p class="font-bold text-lg text-green-600"><?php echo $row['status']; ?></p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Applicant Name</p>
-                                <p class="font-semibold"><?php echo $row['full_name']; ?></p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Service</p>
-                                <p class="font-semibold"><?php echo $row['service']; ?></p>
-                            </div>
-                            <?php if (!empty($row['center_name'])): ?>
-                            <div>
-                                <p class="text-sm text-gray-600">Center</p>
-                                <p class="font-semibold"><?php echo $row['center_name']; ?></p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Appointment Date</p>
-                                <p class="font-semibold"><?php echo date('d M Y', strtotime($row['appointment_date'])); ?></p>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-
-                    <a href="meeseva.html" class="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg text-center font-semibold hover:bg-blue-700">
-                        ← Back to Home
-                    </a>
-                </div>
+        
+        echo '<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Status | Legal Assist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50">
+    <div class="container mx-auto px-6 py-12">
+        <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+            <h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">Application Status</h2>
+            
+            <div class="bg-blue-50 rounded-lg p-6 mb-6">
+                <p class="mb-2"><strong>Application Number:</strong> ' . htmlspecialchars($row['application_number']) . '</p>
+                <p class="mb-2"><strong>Name:</strong> ' . htmlspecialchars($row['full_name']) . '</p>
+                <p class="mb-2"><strong>Service:</strong> ' . htmlspecialchars($row['service']) . '</p>
+                <p class="mb-2"><strong>Status:</strong> <span class="text-green-600 font-semibold">' . htmlspecialchars($row['status']) . '</span></p>
+                <p class="mb-2"><strong>Payment Status:</strong> <span class="text-' . ($row['payment_status'] == 'paid' ? 'green' : 'orange') . '-600 font-semibold">' . ucfirst($row['payment_status']) . '</span></p>
+                <p class="mb-2"><strong>Appointment Date:</strong> ' . htmlspecialchars($row['appointment_date']) . '</p>
+                <p class="mb-2"><strong>Appointment Time:</strong> ' . htmlspecialchars($row['appointment_time']) . '</p>
             </div>
-        </body>
-        </html>
-        <?php
+            
+            <div class="text-center">
+                <a href="meeseva.html" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-500 transition">
+                    Back to MeeSeva
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>';
+        exit();
     } else {
-        echo "<div class='bg-red-100 border border-red-400 text-red-700 p-4 rounded-lg max-w-2xl mx-auto mt-6'>
-                Application number not found!
-              </div>";
+        echo '<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Not Found | Legal Assist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50">
+    <div class="container mx-auto px-6 py-12">
+        <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto text-center">
+            <div class="mb-6">
+                <svg class="w-20 h-20 text-red-600 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-red-600 mb-4">Application Not Found</h2>
+            <p class="text-gray-600 mb-6">No application found with this number. Please check and try again.</p>
+            <a href="meeseva.html" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-500 transition">
+                Back to MeeSeva
+            </a>
+        </div>
+    </div>
+</body>
+</html>';
+        exit();
     }
+    
+    $stmt->close();
 }
+
 
 $conn->close();
 ?>

@@ -5,44 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Food Licence Services | Legal Assist</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.6s ease-out; }
+    .gradient-border {
+      position: relative;
+      background: white;
+      border-radius: 1rem;
+    }
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 1rem;
+      padding: 2px;
+      background: linear-gradient(135deg, #10b981, #3b82f6);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
+  </style>
 </head>
 
-<body class="bg-gray-50 font-sans text-gray-900">
+<body class="bg-gradient-to-br from-gray-50 via-green-50 to-blue-50 font-sans text-gray-900">
 
 <!-- NAVBAR -->
-<header class="bg-gray-900 text-white p-4">
+<header class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white p-5 sticky top-0 z-50 shadow-xl backdrop-blur-sm bg-opacity-95">
   <div class="container mx-auto flex justify-between items-center">
-    <h1 class="text-xl font-bold">Legal Assist</h1>
-    <nav class="space-x-4">
-      <a href="license.html" class="hover:underline">Home</a>
-      <a href="business.html" class="hover:underline">Business Licence</a>
-      <a href="trade.html" class="hover:underline">Trade Licence</a>
-      <a href="other.html" class="hover:underline">Other</a>
+    <h1 class="text-2xl font-bold tracking-wide bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">Legal Assist</h1>
+    <nav class="space-x-6 text-sm md:text-base">
+      <a href="license.html" class="hover:text-green-400 transition-colors duration-300">Home</a>
+      <a href="business.html" class="hover:text-green-400 transition-colors duration-300">Business Licence</a>
+      <a href="trade.html" class="hover:text-green-400 transition-colors duration-300">Trade Licence</a>
+      <a href="other.html" class="hover:text-green-400 transition-colors duration-300">Other</a>
     </nav>
   </div>
 </header>
 
 <!-- HERO -->
-<section class="text-center py-16 bg-gradient-to-r from-gray-800 to-gray-600 text-white">
-  <h2 class="text-4xl font-bold mb-4">Food Licence (FSSAI)</h2>
-  <p class="mb-6 text-lg">Eligibility • Cost • Documents • Apply Online</p>
-  <a href="#wizard" class="bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300">
-    Start Application
-  </a>
+<section class="relative text-center py-24 bg-gradient-to-br from-green-600 via-emerald-700 to-teal-800 text-white overflow-hidden">
+  <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
+  <div class="relative z-10 fade-in">
+    <div class="inline-block mb-4 px-4 py-2 bg-white bg-opacity-20 rounded-full text-sm font-semibold backdrop-blur-sm">
+      FSSAI Approved Partner
+    </div>
+    <h2 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight drop-shadow-lg">
+      Food Licence (FSSAI)
+    </h2>
+    <p class="mb-10 text-xl opacity-95 max-w-2xl mx-auto">
+      Eligibility • Cost • Documents • Apply Online
+    </p>
+    <a href="#wizard"
+       class="inline-block bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-10 py-4 rounded-full font-bold text-lg hover:from-yellow-300 hover:to-orange-300 transform hover:scale-105 transition-all duration-300 shadow-2xl">
+      Start Application →
+      <a href="inspector.php">
+  <button type="button" style="
+    background-color:#2563eb;
+    color:white;
+    padding:12px 24px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+  ">
+    Go to Inspector Page
+  </button>
+</a>
+    </a>
+  </div>
 </section>
 
-<main class="container mx-auto px-6 py-12 space-y-12">
+<main class="container mx-auto px-6 py-16 space-y-16">
 
 <!-- LICENCE WIZARD -->
-<section id="wizard" class="bg-white rounded-xl shadow-lg p-8">
-  <h3 class="text-2xl font-bold mb-6">Licence Type Calculator</h3>
+<section id="wizard"
+         class="bg-white rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500 p-10 border border-gray-100 fade-in">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white text-xl font-bold">
+      
+    </div>
+    <h3 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">Licence Type Calculator</h3>
+  </div>
 
-  <div class="grid md:grid-cols-3 gap-4">
-    <input id="turnover" type="number" placeholder="Annual Turnover (₹)"
-           class="p-4 border rounded-lg">
-    <input id="employees" type="number" placeholder="No. of Employees"
-           class="p-4 border rounded-lg">
-    <select id="businessType" class="p-4 border rounded-lg">
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="relative">
+      <input id="turnover" type="number" placeholder="Annual Turnover (₹)"
+             class="w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 focus:outline-none transition-all duration-300 hover:border-green-300">
+      <div class="absolute right-4 top-5 text-gray-400">₹</div>
+    </div>
+    <div class="relative">
+      <input id="employees" type="number" placeholder="No. of Employees"
+             class="w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 focus:outline-none transition-all duration-300 hover:border-green-300">
+      <div class="absolute right-4 top-5 text-gray-400"></div>
+    </div>
+    <select id="businessType"
+            class="p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 focus:outline-none transition-all duration-300 hover:border-green-300 bg-white">
       <option value="">Business Type</option>
       <option>Retail</option>
       <option>Restaurant</option>
@@ -51,121 +113,179 @@
   </div>
 
   <button onclick="checkLicence()"
-          class="mt-6 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-500">
-    Check Licence Type
+          class="mt-8 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:from-green-500 hover:to-emerald-500 active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl w-full md:w-auto">
+    Check Licence Type →
   </button>
 
-  <p id="licenceResult" class="mt-4 text-lg font-semibold"></p>
+  <div id="licenceResult" class="mt-6 p-6 rounded-xl bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 hidden">
+    <p class="text-xl font-bold text-gray-800"></p>
+  </div>
 </section>
 
 <!-- DOCUMENT CHECKLIST -->
-<section class="bg-white rounded-xl shadow-lg p-8">
-  <h3 class="text-2xl font-bold mb-4">Required Documents</h3>
-  <div id="documents" class="space-y-2 text-gray-700"></div>
+<section class="bg-white rounded-2xl shadow-2xl p-10 border border-gray-100 fade-in">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-xl font-bold">
+      
+    </div>
+    <h3 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Required Documents</h3>
+  </div>
+  <div id="documents" class="space-y-4 text-gray-700">
+    <p class="text-gray-500 italic">Select your business details above to see required documents</p>
+  </div>
 </section>
 
 <!-- COST CALCULATOR -->
-<section class="bg-white rounded-xl shadow-lg p-8">
-  <h3 class="text-2xl font-bold mb-4">Estimated Licence Cost</h3>
-  <p class="text-lg">Total Fee: <span id="fee" class="font-bold text-green-600">₹0</span></p>
+<section class="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl shadow-2xl p-10 text-white fade-in">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center text-2xl font-bold backdrop-blur-sm">
+      
+    </div>
+    <h3 class="text-3xl font-bold">Estimated Licence Cost</h3>
+  </div>
+  <div class="bg-white bg-opacity-10 backdrop-blur-md border-2 border-white border-opacity-30 p-8 rounded-xl">
+    <p class="text-lg mb-2 opacity-90">Total Fee:</p>
+    <span id="fee" class="font-extrabold text-6xl text-yellow-300 drop-shadow-lg">₹0</span>
+  </div>
 </section>
 
 <!-- APPLY FORM -->
-<section id="apply" class="bg-white rounded-xl shadow-lg p-8">
-  <h3 class="text-2xl font-bold mb-6">Apply for Food Licence</h3>
+<section id="apply" class="bg-white rounded-2xl shadow-2xl p-10 border border-gray-100 fade-in">
+  <div class="text-center mb-10">
+    <div class="inline-block w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center text-white text-3xl font-bold mb-4">
+      ✓
+    </div>
+    <h3 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Apply for Food Licence</h3>
+    <p class="text-gray-600 mt-2">Complete the form below to start your application</p>
+  </div>
 
-  <form action="food-form.php" method="POST" class="space-y-6 max-w-2xl mx-auto">
-  <input type="hidden" name="action" value="apply">
+  <form action="food-form.php" method="POST" class="space-y-6 max-w-3xl mx-auto">
+    <input type="hidden" name="action" value="apply">
 
-    <input name="full_name" required placeholder="Full Name"
-           class="w-full p-4 border rounded-lg">
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+        <input name="full_name" required placeholder="Enter your full name"
+               class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 focus:outline-none transition-all duration-300 hover:border-green-300">
+      </div>
 
-    <input name="business_name" required placeholder="Business Name"
-           class="w-full p-4 border rounded-lg">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Business Name</label>
+        <input name="business_name" required placeholder="Enter business name"
+               class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 focus:outline-none transition-all duration-300 hover:border-green-300">
+      </div>
+    </div>
 
-    <input type="email" name="email" required placeholder="Email"
-           class="w-full p-4 border rounded-lg">
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+      <input type="email" name="email" required placeholder="your.email@example.com"
+             class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 focus:outline-none transition-all duration-300 hover:border-green-300">
+    </div>
 
-    <input name="phone_number" required pattern="[0-9]{10}" maxlength="10"
-           placeholder="Phone Number"
-           class="w-full p-4 border rounded-lg">
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
+      <input name="phone_number" required pattern="[0-9]{10}" maxlength="10"
+             placeholder="10-digit mobile number"
+             class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 focus:outline-none transition-all duration-300 hover:border-green-300">
+    </div>
 
     <button type="submit"
-            class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-500 w-full">
-      Submit Application
+            class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:from-green-500 hover:to-emerald-500 active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl w-full">
+      Submit Application →
     </button>
-
   </form>
 </section>
-<!-- TRACK APPLICATION STATUS -->
-<section id="track-status" class="bg-white rounded-xl shadow-lg p-8">
-  <h3 class="text-2xl font-bold mb-6 text-center">🔍 Track Food Licence Application</h3>
 
-  <form action="food-form.php" method="POST" class="max-w-md mx-auto space-y-4">
+<!-- TRACK APPLICATION STATUS -->
+<section id="track-status" class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-2xl p-10 text-white fade-in">
+  <div class="text-center mb-8">
+    <div class="inline-block w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center text-3xl font-bold backdrop-blur-sm mb-4">
+      
+    </div>
+    <h3 class="text-3xl font-bold">Track Food Licence Application</h3>
+    <p class="text-blue-100 mt-2">Check your application status instantly</p>
+  </div>
+
+  <form action="food-form.php" method="POST"
+        class="max-w-lg mx-auto space-y-6">
     <input type="hidden" name="action" value="status">
 
-    <input
-      type="text"
-      name="application_id"
-      placeholder="Enter Application ID (e.g. FSSAI2025XXXXX)"
-      required
-      class="w-full p-4 border rounded-lg"
-    >
+    <div>
+      <label class="block text-sm font-semibold mb-2 text-blue-100">Application ID</label>
+      <input type="text" name="application_id"
+             placeholder="Enter Application ID (e.g. FSSAI2025XXXXX)"
+             required
+             class="w-full p-4 border-2 border-white border-opacity-30 bg-white bg-opacity-10 backdrop-blur-sm rounded-xl focus:ring-4 focus:ring-blue-300 focus:border-white focus:outline-none transition-all duration-300 text-white placeholder-blue-200">
+    </div>
 
-    <input
-      type="tel"
-      name="phone"
-      placeholder="Registered Phone Number"
-      pattern="[0-9]{10}"
-      maxlength="10"
-      required
-      class="w-full p-4 border rounded-lg"
-    >
+    <div>
+      <label class="block text-sm font-semibold mb-2 text-blue-100">Registered Phone Number</label>
+      <input type="tel" name="phone"
+             placeholder="10-digit mobile number"
+             pattern="[0-9]{10}" maxlength="10"
+             required
+             class="w-full p-4 border-2 border-white border-opacity-30 bg-white bg-opacity-10 backdrop-blur-sm rounded-xl focus:ring-4 focus:ring-blue-300 focus:border-white focus:outline-none transition-all duration-300 text-white placeholder-blue-200">
+    </div>
 
-    <button
-      type="submit"
-      class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 w-full">
-      Check Status
+    <button type="submit"
+            class="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-50 active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl w-full">
+      Check Status →
     </button>
   </form>
 </section>
 
-
 <!-- COMPARISON TABLE -->
-<section class="bg-white rounded-xl shadow-lg p-8">
-  <h3 class="text-2xl font-bold mb-4">Licence Comparison</h3>
+<section class="bg-white rounded-2xl shadow-2xl p-10 border border-gray-100 fade-in">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white text-xl font-bold">
+      
+    </div>
+    <h3 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Licence Comparison</h3>
+  </div>
 
-  <table class="w-full border text-center">
-    <tr class="bg-gray-200 font-semibold">
-      <td class="p-2">Licence</td>
-      <td class="p-2">Turnover</td>
-      <td class="p-2">Scope</td>
-    </tr>
-    <tr>
-      <td class="p-2">Basic</td>
-      <td class="p-2">Up to ₹12L</td>
-      <td class="p-2">Small businesses</td>
-    </tr>
-    <tr>
-      <td class="p-2">State</td>
-      <td class="p-2">₹12L–₹20Cr</td>
-      <td class="p-2">Medium businesses</td>
-    </tr>
-    <tr>
-      <td class="p-2">Central</td>
-      <td class="p-2">Above ₹20Cr</td>
-      <td class="p-2">Large / Import-Export</td>
-    </tr>
-  </table>
+  <div class="overflow-x-auto rounded-xl border-2 border-gray-200">
+    <table class="w-full text-center">
+      <thead>
+        <tr class="bg-gradient-to-r from-gray-800 to-gray-700 text-white">
+          <th class="p-5 text-left font-bold">Licence Type</th>
+          <th class="p-5 font-bold">Annual Turnover</th>
+          <th class="p-5 font-bold">Business Scope</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr class="hover:bg-green-50 transition-colors duration-200">
+          <td class="p-5 text-left font-semibold text-green-600">Basic Registration</td>
+          <td class="p-5 text-gray-700">Up to ₹12 Lakhs</td>
+          <td class="p-5 text-gray-700">Small businesses, petty retailers</td>
+        </tr>
+        <tr class="hover:bg-blue-50 transition-colors duration-200">
+          <td class="p-5 text-left font-semibold text-blue-600">State Licence</td>
+          <td class="p-5 text-gray-700">₹12L – ₹20 Crores</td>
+          <td class="p-5 text-gray-700">Medium-scale operations</td>
+        </tr>
+        <tr class="hover:bg-purple-50 transition-colors duration-200">
+          <td class="p-5 text-left font-semibold text-purple-600">Central Licence</td>
+          <td class="p-5 text-gray-700">Above ₹20 Crores</td>
+          <td class="p-5 text-gray-700">Large-scale, Import-Export</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 
 <!-- OFFICE FINDER -->
-<section class="bg-white rounded-xl shadow-lg p-8 text-center">
-  <h3 class="text-2xl font-bold mb-4">Find Nearest FSSAI Office</h3>
+<section class="bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl shadow-2xl p-10 text-white text-center fade-in">
+  <div class="inline-block w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center text-3xl font-bold backdrop-blur-sm mb-6">
+    
+  </div>
+  <h3 class="text-3xl font-bold mb-4">Find Nearest FSSAI Office</h3>
+  <p class="text-orange-100 mb-8 max-w-2xl mx-auto">
+    Locate the closest FSSAI office to submit your documents or get in-person assistance
+  </p>
   <a href="https://www.google.com/maps/search/FSSAI+office+near+me"
      target="_blank"
-     class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-500">
-     Open Google Maps
+     class="inline-block bg-white text-orange-600 px-10 py-4 rounded-xl font-bold text-lg hover:bg-orange-50 transform hover:scale-105 transition-all duration-300 shadow-lg">
+     Open Google Maps →
   </a>
 </section>
 
@@ -173,9 +293,12 @@
 
 <!-- WHATSAPP -->
 <a href="https://wa.me/8897752518"
-   class="fixed bottom-6 right-6">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-       class="w-14 h-14 rounded-full shadow-lg">
+   class="fixed bottom-8 right-8 hover:scale-110 transition-transform duration-300 z-50 group">
+  <div class="relative">
+    <div class="absolute inset-0 bg-green-500 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+         class="relative w-16 h-16 rounded-full shadow-2xl bg-white p-2">
+  </div>
 </a>
 
 <script>
@@ -186,22 +309,34 @@ function checkLicence(){
   if(t <= 1200000){
     result="Basic Registration";
     fee=2000;
-    docs=["Aadhaar","Photo","Address Proof"];
+    docs=["Aadhaar Card","Passport-size Photo","Address Proof"];
   } else if(t <= 200000000){
     result="State Licence";
     fee=5000;
-    docs=["PAN","GST","Layout Plan"];
+    docs=["PAN Card","GST Registration","Layout Plan","Address Proof"];
   } else {
     result="Central Licence";
     fee=8000;
-    docs=["PAN","GST","IEC","NOC"];
+    docs=["PAN Card","GST Registration","IEC Certificate","NOC from Local Authority"];
   }
 
-  document.getElementById("licenceResult").innerText="Recommended: "+result;
-  document.getElementById("fee").innerText="₹"+fee;
+  const resultDiv = document.getElementById("licenceResult");
+  resultDiv.classList.remove("hidden");
+  resultDiv.querySelector("p").innerHTML = `
+    <span class="text-2xl">Recommended:</span><br>
+    <span class="text-3xl font-extrabold text-green-600">${result}</span>
+  `;
+  
+  document.getElementById("fee").innerText = "₹" + fee.toLocaleString();
 
   document.getElementById("documents").innerHTML =
-    docs.map(d=>`<label><input type="checkbox"> ${d}</label>`).join("");
+    docs.map((d, i) => `
+      <label class="flex items-center gap-4 bg-gradient-to-r from-gray-50 to-blue-50 p-5 rounded-xl border-2 border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-300 cursor-pointer group">
+        <input type="checkbox" class="w-5 h-5 accent-green-600 cursor-pointer">
+        <span class="flex-1 font-medium text-gray-800 group-hover:text-blue-600 transition-colors">${d}</span>
+        <span class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm group-hover:bg-blue-600 group-hover:text-white transition-all">${i + 1}</span>
+      </label>
+    `).join("");
 }
 </script>
 

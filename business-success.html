@@ -1,32 +1,184 @@
+<?php
+session_start();
+
+// Check if session data exists
+if(!isset($_SESSION['application_id'])) {
+    header("Location: business.html");
+    exit();
+}
+
+$appId = $_SESSION['application_id'];
+$name = $_SESSION['applicant_name'];
+$email = $_SESSION['applicant_email'];
+$expectedDate = $_SESSION['expected_date'];
+
+// Clear session data
+unset($_SESSION['application_id']);
+unset($_SESSION['applicant_name']);
+unset($_SESSION['applicant_email']);
+unset($_SESSION['expected_date']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Application Submitted | Legal Assist</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Application Submitted Successfully | Legal Assist</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-gray-50 font-sans">
 
-<body class="bg-gray-100 flex items-center justify-center h-screen">
+<!-- Top Navigation Bar -->
+<nav class="bg-gray-800 text-white p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <h1 class="text-xl font-bold">Legal Assist</h1>
+    <ul class="flex space-x-6">
+      <li><a href="license.html" class="hover:underline">Home</a></li>
+      <li><a href="business.html" class="hover:underline">Business Licence</a></li>
+      <li><a href="driving-licence.html" class="hover:underline">Driving Licence</a></li>
+      <li><a href="trade.html" class="hover:underline">Trade Licence</a></li>
+    </ul>
+  </div>
+</nav>
 
-    <div class="bg-white shadow-xl rounded-2xl p-10 text-center max-w-lg">
-        <div class="flex justify-center mb-6">
-            <svg class="w-20 h-20 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2l4 -4m6 2a9 9 0 1 1 -18 0a9 9 0 0 1 18 0z" />
-            </svg>
+<!-- Success Section -->
+<div class="container mx-auto px-4 py-16">
+  <div class="max-w-3xl mx-auto">
+    
+    <!-- Success Card -->
+    <div class="bg-white shadow-2xl rounded-lg overflow-hidden">
+      
+      <!-- Success Header -->
+      <div class="bg-gradient-to-r from-green-600 to-green-500 text-white p-8 text-center">
+        <div class="text-6xl mb-4">✅</div>
+        <h1 class="text-3xl font-bold mb-2">Application Submitted Successfully!</h1>
+        <p class="text-green-100">Your business license application has been received and is being processed</p>
+      </div>
+      
+      <!-- Application Details -->
+      <div class="p-8">
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-6">
+          <h2 class="text-xl font-bold text-blue-900 mb-4">📋 Application Details</h2>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700 font-semibold">Application ID:</span>
+              <span class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($appId); ?></span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700 font-semibold">Applicant Name:</span>
+              <span class="text-gray-900"><?php echo htmlspecialchars($name); ?></span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700 font-semibold">Email:</span>
+              <span class="text-gray-900"><?php echo htmlspecialchars($email); ?></span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700 font-semibold">Submitted On:</span>
+              <span class="text-gray-900"><?php echo date('d M Y'); ?></span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700 font-semibold">Expected Completion:</span>
+              <span class="text-green-600 font-bold"><?php echo htmlspecialchars($expectedDate); ?></span>
+            </div>
+          </div>
         </div>
 
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">Application Submitted!</h1>
-        <p class="text-gray-600 text-lg mb-6">
-            Your business licence application has been submitted successfully.
-        </p>
+        <!-- Important Notice -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 mb-6">
+          <h3 class="font-bold text-yellow-900 mb-3 flex items-center">
+            <span class="text-2xl mr-2">⚠️</span>
+            Important - Save Your Application ID
+          </h3>
+          <p class="text-yellow-800 mb-3">Please save or note down your <strong>Application ID: <?php echo htmlspecialchars($appId); ?></strong></p>
+          <p class="text-yellow-800">You will need this ID to track your application status.</p>
+        </div>
 
-        <a href="license.html"
-            class="bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-900 transition">
-            Back to Home
-        </a>
+        <!-- Next Steps -->
+        <div class="bg-gray-50 p-6 rounded-lg mb-6">
+          <h3 class="font-bold text-xl mb-4">📌 What Happens Next?</h3>
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <div class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 mt-1 flex-shrink-0">1</div>
+              <div>
+                <h4 class="font-semibold">Email Confirmation</h4>
+                <p class="text-gray-600">You will receive a confirmation email at <strong><?php echo htmlspecialchars($email); ?></strong> within 24 hours.</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 mt-1 flex-shrink-0">2</div>
+              <div>
+                <h4 class="font-semibold">Document Verification</h4>
+                <p class="text-gray-600">Our team will verify all submitted documents within 3-5 business days.</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 mt-1 flex-shrink-0">3</div>
+              <div>
+                <h4 class="font-semibold">Physical Inspection (if required)</h4>
+                <p class="text-gray-600">For certain business types, an on-site inspection may be scheduled.</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 mt-1 flex-shrink-0">4</div>
+              <div>
+                <h4 class="font-semibold">License Issuance</h4>
+                <p class="text-gray-600">Once approved, your business license will be issued and sent to your email.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="grid md:grid-cols-2 gap-4">
+          <a href="business.html#statusCheck" class="bg-blue-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-500 text-center transition">
+            🔍 Track Application Status
+          </a>
+          <a href="business.html" class="bg-gray-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-gray-500 text-center transition">
+            🏠 Back to Home
+          </a>
+        </div>
+
+        <!-- Print Option -->
+        <div class="mt-6 text-center">
+          <button onclick="window.print()" class="text-blue-600 hover:text-blue-800 font-semibold">
+            🖨️ Print This Page
+          </button>
+        </div>
+      </div>
     </div>
+
+    <!-- Support Section -->
+    <div class="mt-8 bg-white shadow rounded-lg p-6">
+      <h3 class="font-bold text-lg mb-3">Need Help?</h3>
+      <p class="text-gray-600 mb-4">If you have any questions or need assistance, please contact us:</p>
+      <div class="grid md:grid-cols-3 gap-4 text-center">
+        <div>
+          <div class="text-2xl mb-2">📧</div>
+          <p class="text-sm font-semibold">Email</p>
+          <p class="text-sm text-blue-600">support@legalassist.com</p>
+        </div>
+        <div>
+          <div class="text-2xl mb-2">📞</div>
+          <p class="text-sm font-semibold">Phone</p>
+          <p class="text-sm text-blue-600">1800-123-4567</p>
+        </div>
+        <div>
+          <div class="text-2xl mb-2">⏰</div>
+          <p class="text-sm font-semibold">Hours</p>
+          <p class="text-sm text-gray-600">Mon-Fri: 9 AM - 6 PM</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @media print {
+    nav, button, a {
+      display: none;
+    }
+  }
+</style>
 
 </body>
 </html>
